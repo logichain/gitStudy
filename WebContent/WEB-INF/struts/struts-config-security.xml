@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="loginForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="accountForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="para" type="java.lang.String" />
+			<form-property name="paraPersonName" type="java.lang.String" />
+			<form-property name="department" type="java.lang.String" />
+			<form-property name="repassword" type="java.lang.String" />
+			<form-property name="account" type="org.king.security.domain.UsrAccount" />
+		</form-bean>
+						
+	</form-beans>
+
+	<action-mappings>	
+		<action path="/login" forward="loginDef"/>
+		<action path="/logoutAction" parameter="method" type="org.king.security.web.action.SecurityAction">
+			<forward name="success" path="/login.do" redirect="false" />
+			<forward name="faile" path="/login.do" redirect="false" />
+		</action>
+		<action path="/loginAction" parameter="method" type="org.king.security.web.action.SecurityAction" name="loginForm" scope="request" input="/login.do">
+			<forward name="success" path="casemanage.do?method=resetSearchTestCase" redirect="true" />
+			<forward name="faile" path="/login.do" redirect="false" />
+		</action>
+	
+		<!-- 用户管理 -->
+		<action path="/accountManager" type="org.king.security.web.action.SecurityAction" parameter="method" name="accountForm" validate="false" unknown="false">
+			<forward name="input" path="addAccountDef" redirect="false" />
+			<forward name="edit" path="editAccountDef" redirect="false" />
+			<forward name="success" path="listAccountDef" redirect="false" />
+			<forward name="changePWD" path="changePWDDef" redirect="false" />
+			<forward name="msg" path="systemMsgDef" redirect="false" />
+		</action>	
+		
+		<action path="/accountSecurityManager" type="org.king.security.web.action.SecurityAction" parameter="method" name="accountForm" validate="false" unknown="false">
+			<forward name="success" path="listAccount4GrantRoleDef" redirect="false" />
+		</action>
+		
+	</action-mappings>
+</struts-config>

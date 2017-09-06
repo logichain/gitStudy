@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="statisticsForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="projectInfo" type="org.mds.project.bean.Project" />
+			<form-property name="caseInfo" type="org.mds.test.bean.TestCase" />
+			<form-property name="cvrSearchInfo" type="org.mds.test.bean.CaseVersionReference" />
+		</form-bean>					
+	</form-beans>
+
+	<action-mappings>
+		<action path="/teststatistics" name="statisticsForm" parameter="method" type="org.mds.statistics.action.TestStatisticsAction" validate="false">
+			<forward name="versionStatistics" path="versionStatisticsPageDef" redirect="false" />
+			<forward name="moduleStatistics" path="moduleStatisticsPageDef" redirect="false" />
+			<forward name="statusStatistics" path="statusStatisticsPageDef" redirect="false" />
+			<forward name="resultStatistics" path="resultStatisticsPageDef" redirect="false" />
+			<forward name="importLevelStatistics" path="importLevelStatisticsPageDef" redirect="false" />
+			<forward name="bugTypeStatistics" path="bugTypeStatisticsPageDef" redirect="false" />
+			<forward name="functionStatistics" path="functionStatisticsPageDef" redirect="false" />	
+		</action>		
+	</action-mappings>
+</struts-config>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- ************************** DAO SETTING *********************************-->
+	<!-- DAO object: Hibernate implementation -->
+	<bean id="accountDAO" class="org.king.security.dao.hibernate.AccountDAOHibernate">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	<bean id="departmentDAO" class="org.king.security.dao.DepartmentDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
+
+	<!-- ************************** SERVICE SETTING *****************************-->
+	<!-- ***** security SERVICE *****-->
+	<bean id="securityService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<bean class="org.king.security.service.impl.SecurityServiceImpl">
+				<property name="accountDAO">
+					<ref local="accountDAO" />
+				</property>
+				
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="initSecurity">PROPAGATION_REQUIRED,-BusinessException</prop>
+				<prop key="login">PROPAGATION_REQUIRED,-BusinessException</prop>				
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="accountService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<bean class="org.king.security.service.impl.AccountServiceImpl">
+				<property name="accountDAO">
+					<ref local="accountDAO" />
+				</property>
+				<property name="departmentDAO">
+					<ref local="departmentDAO" />
+				</property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

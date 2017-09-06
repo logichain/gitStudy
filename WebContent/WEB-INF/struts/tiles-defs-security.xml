@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>	
+	<definition name="mainBaseDef" path="/WEB-INF/pages/common/main_baselayout.jsp">	
+		<put name="title" value="测试用例管理"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header.jsp" />			
+		<put name="body" value="/WEB-INF/pages/common/tiles/body.jsp" />
+		<put name="footer" value="/WEB-INF/pages/common/tiles/bottom.jsp" />
+		<put name="menu" value="/WEB-INF/pages/common/menu.jsp"/>
+	</definition>
+	
+	<definition name="inputBaseDef" path="/WEB-INF/pages/common/login_baselayout.jsp">	
+		<put name="title" value="信息输入"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />			
+		<put name="body" value="/WEB-INF/pages/common/tiles/body.jsp" />
+		<put name="footer" value="/WEB-INF/pages/common/tiles/bottom.jsp" />
+	</definition>
+		
+	<definition name="loginDef" path="/WEB-INF/pages/common/login_baselayout.jsp">	
+		<put name="title" value="MDS管理系统登录"/>			
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/security/login.jsp" />
+		<put name="footer" value="/WEB-INF/pages/common/tiles/bottom.jsp" />
+	</definition>
+	
+	<definition name="listAccount4GrantRoleDef" extends="mainBaseDef">
+		<put name="title" value="权限设置"/>
+		<put name="body" value="/WEB-INF/pages/security/accountListForGrant.jsp" />
+	</definition>
+	
+	<definition name="listAccountDef" extends="mainBaseDef">
+		<put name="title" value="用户管理"/>
+		<put name="body" value="/WEB-INF/pages/security/accountList.jsp" />
+	</definition>
+	
+	<definition name="changePWDDef" extends="mainBaseDef">
+		<put name="title" value="修改密码"/>
+		<put name="body" value="/WEB-INF/pages/security/changePWD.jsp" />
+	</definition>
+	
+	<definition name="addAccountDef" extends="mainBaseDef">
+		<put name="title" value="添加用户"/>
+		<put name="body" value="/WEB-INF/pages/security/accountForm.jsp" />
+	</definition>
+	
+	<definition name="editAccountDef" extends="mainBaseDef">
+		<put name="title" value="编辑用户"/>
+		<put name="body" value="/WEB-INF/pages/security/accountForm.jsp" />
+	</definition>
+	
+	<definition name="systemMsgDef" extends="mainBaseDef">
+		<put name="title" value="修改密码"/>
+		<put name="body" value="/WEB-INF/pages/msg.jsp" />
+	</definition>
+		    
+</tiles-definitions>

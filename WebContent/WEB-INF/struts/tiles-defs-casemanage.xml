@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>	
+	
+		
+	<definition name="caseListForTestDef" extends="mainBaseDef">
+		<put name="title" value="测试用例管理"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseListfortest.jsp" />
+	</definition>
+	
+	<definition name="caseListForCorrectDef" extends="mainBaseDef">
+		<put name="title" value="测试用例管理"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseListforcorrect.jsp" />
+	</definition>
+	
+	<definition name="inputPageDef" extends="mainBaseDef">
+		<put name="title" value="测试用例输入"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseInput.jsp" />
+	</definition>
+	
+	<definition name="editPageDef" extends="mainBaseDef">
+		<put name="title" value="测试用例编辑"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseEdit.jsp" />
+	</definition>	 
+	<definition name="testPageDef" extends="mainBaseDef">
+		<put name="title" value="测试用例测试"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseTest.jsp" />
+	</definition>
+	<definition name="correctPageDef" extends="mainBaseDef">
+		<put name="title" value="测试用例修正"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseCorrect.jsp" />
+	</definition>
+	<definition name="displayPageDef" extends="inputBaseDef">
+		<put name="title" value="测试用例"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseDisplay.jsp" />
+	</definition>
+	
+	<definition name="exportPageDef" extends="mainBaseDef">
+		<put name="title" value="测试用例导出"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseExport.jsp" />
+	</definition>   
+</tiles-definitions>

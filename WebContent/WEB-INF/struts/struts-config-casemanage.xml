@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="caseForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="projectInfo" type="org.mds.project.bean.Project" />
+			<form-property name="searchInfo" type="org.mds.test.bean.TestCase" />
+			<form-property name="caseInfo" type="org.mds.test.bean.TestCase" />
+			<form-property name="cvrSearchInfo" type="org.mds.test.bean.CaseVersionReference" />
+		</form-bean>					
+	</form-beans>
+
+	<action-mappings>
+		<action path="/casemanage" name="caseForm" parameter="method" type="org.mds.test.action.TestCaseManage" validate="false">
+			<forward name="first" path="mainBaseDef" redirect="false" />
+			<forward name="caseListForTest" path="caseListForTestDef" redirect="false" />
+			<forward name="caseListForCorrect" path="caseListForCorrectDef" redirect="false" />
+			<forward name="caseExport" path="exportPageDef" redirect="false" />
+			<forward name="caseInput" path="inputPageDef" redirect="false" />
+			<forward name="caseEdit" path="editPageDef" redirect="false" />
+			<forward name="caseTest" path="testPageDef" redirect="false" />
+			<forward name="caseCorrect" path="correctPageDef" redirect="false" />
+			<forward name="caseDisplay" path="displayPageDef" redirect="false" />	
+		</action>		
+	</action-mappings>
+</struts-config>

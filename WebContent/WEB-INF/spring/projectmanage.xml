@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- ************************** DAO SETTING *********************************-->
+	
+	<bean id="projectDAO" class="org.mds.project.bean.ProjectDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	<bean id="projectModuleDAO" class="org.mds.project.bean.ProjectModuleDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>	
+	<bean id="moduleFunctionDAO" class="org.mds.project.bean.ModuleFunctionDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	<bean id="teamMemberDAO" class="org.mds.project.bean.TeamMemberDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
+	<bean id="projectVersionDAO" class="org.mds.project.bean.ProjectVersionDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
+	<bean id="projectAttachmentDAO" class="org.mds.project.bean.ProjectAttachmentDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
+	<bean id="jobTaskDAO" class="org.mds.project.bean.JobTaskDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	<bean id="jobTaskStatusDAO" class="org.mds.project.bean.JobTaskStatusDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	<bean id="taskAttachmentDAO" class="org.mds.project.bean.TaskAttachmentDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	<!-- ************************** SERVICE SETTING *****************************-->
+	<bean id="projectService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<bean class="org.mds.project.service.impl.ProjectServiceImpl">				
+				<property name="projectDAO">
+					<ref local="projectDAO" />
+				</property>	
+				<property name="projectModuleDAO">
+					<ref local="projectModuleDAO" />
+				</property>
+				<property name="moduleFunctionDAO">
+					<ref local="moduleFunctionDAO" />
+				</property>		
+				<property name="teamMemberDAO">
+					<ref local="teamMemberDAO" />
+				</property>		
+				<property name="projectVersionDAO">
+					<ref local="projectVersionDAO" />
+				</property>
+				<property name="projectAttachmentDAO">
+					<ref local="projectAttachmentDAO" />
+				</property>
+				<property name="jobTaskDAO">
+					<ref local="jobTaskDAO" />
+				</property>
+				<property name="jobTaskStatusDAO">
+					<ref local="jobTaskStatusDAO" />
+				</property>
+				<property name="taskAttachmentDAO">
+					<ref local="taskAttachmentDAO" />
+				</property>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

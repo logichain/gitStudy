@@ -1,0 +1,458 @@
+body,td,th {
+	font-size: 14px;
+}
+
+.strong {
+	font-size: 20px;
+}
+
+.putinscroll0 {   
+    width: 480px;                                    
+    height:80px;                                   
+    color: ;                                        
+    font-family: ;                                  
+    padding-left: 0px;                              
+    padding-right: 0px;                             
+    padding-top: 0px;                               
+    padding-bottom: 0px;                          
+    overflow-x: hidden;                            
+    overflow-y: auto;                             
+               
+    scrollbar-face-color: #D4D4D4;                  
+    scrollbar-hightlight-color: #ffffff;                
+    scrollbar-shadow-color: #919192;               
+    scrollbar-3dlight-color: #ffffff;            
+    scrollbar-arrow-color: #919192;                
+    scrollbar-track-color: #ffffff;                
+    scrollbar-darkshadow-color: #ffffff;              
+	}
+
+.putinscroll1 {   
+    width: 480px;                                    
+    height:380px;                                   
+    color: ;                                        
+    font-family: ;                                  
+    padding-left: 0px;                              
+    padding-right: 0px;                             
+    padding-top: 0px;                               
+    padding-bottom: 0px;                          
+    overflow-x: hidden;                            
+    overflow-y: auto;                             
+               
+    scrollbar-face-color: #D4D4D4;                  
+    scrollbar-hightlight-color: #ffffff;                
+    scrollbar-shadow-color: #919192;               
+    scrollbar-3dlight-color: #ffffff;            
+    scrollbar-arrow-color: #919192;                
+    scrollbar-track-color: #ffffff;                
+    scrollbar-darkshadow-color: #ffffff;              
+	}
+    
+.putinscroll2 {   
+    width: 480px;                                    
+    height:786px;                                   
+    color: ;                                        
+    font-family: ;                                  
+    padding-left: 0px;                              
+    padding-right: 0px;                             
+    padding-top: 0px;                               
+    padding-bottom: 0px;                          
+    overflow-x: hidden;                            
+    overflow-y: auto;                             
+               
+    scrollbar-face-color: #D4D4D4;                  
+    scrollbar-hightlight-color: #ffffff;                
+    scrollbar-shadow-color: #919192;               
+    scrollbar-3dlight-color: #ffffff;            
+    scrollbar-arrow-color: #919192;                
+    scrollbar-track-color: #ffffff;                
+    scrollbar-darkshadow-color: #ffffff;              
+	}
+    
+ .putinscroll3 {   
+    width: 480px;                                    
+    height:490px;                                   
+    color: ;                                        
+    font-family: ;                                  
+    padding-left: 0px;                              
+    padding-right: 0px;                             
+    padding-top: 0px;                               
+    padding-bottom: 0px;                          
+    overflow-x: hidden;                            
+    overflow-y: auto;                             
+               
+    scrollbar-face-color: #D4D4D4;                  
+    scrollbar-hightlight-color: #ffffff;                
+    scrollbar-shadow-color: #919192;               
+    scrollbar-3dlight-color: #ffffff;            
+    scrollbar-arrow-color: #919192;                
+    scrollbar-track-color: #ffffff;                
+    scrollbar-darkshadow-color: #ffffff;              
+}
+
+.scroll {   
+        width: 100%;                                    
+        height:620px;                                   
+        color: ;                                        
+        font-family: ;                                  
+        padding-left: 0px;                              
+        padding-right: 0px;                             
+        padding-top: 0px;                               
+        padding-bottom: 0px;                          
+        overflow-x: hidden;                            
+        overflow-y: auto;       
+                   
+        scrollbar-face-color: #D4D4D4;                  
+        scrollbar-hightlight-color: #ffffff;                
+        scrollbar-shadow-color: #919192;               
+        scrollbar-3dlight-color: #ffffff;            
+        scrollbar-arrow-color: #919192;                
+        scrollbar-track-color: #ffffff;                
+        scrollbar-darkshadow-color: #ffffff;              
+    } 
+
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	text-align:center;
+	SCROLLBAR-FACE-COLOR:#D8D8D8;
+	SCROLLBAR-HIGHLIGHT-COLOR:#FFFFFF;
+	SCROLLBAR-SHADOW-COLOR:#FFFFFF;
+	SCROLLBAR-3DLIGHT-COLOR:#F3F3F3;
+	SCROLLBAR-ARROW-COLOR:#939393;
+	SCROLLBAR-TRACK-COLOR:#ffffff;
+	SCROLLBAR-DARKSHADOW-COLOR:#F3F3F3;
+	background-color:#99CCFF;
+}
+
+.sort-table {
+	BORDER-RIGHT: gray 1px solid;
+	BORDER-TOP: gray 1px solid;
+	BORDER-LEFT: gray 1px solid;	
+	BORDER-BOTTOM: gray 1px solid;
+	
+	border-collapse: collapse;
+	FONT: "宋体",Arial, Helvetica;	
+	COLOR: windowtext;	
+	table-layout:fixed;/* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */	
+}
+
+.sort-table TD {
+	BORDER-TOP: gray 1px solid;
+	BORDER-LEFT: gray 1px solid;	
+	
+	word-break:keep-all;/* 不换行 */
+	white-space:nowrap;/* 不换行 */
+	overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+	text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+.sort-table THEAD{	
+	BACKGROUND: #00317A;
+	COLOR:white;
+}
+.sort-table TR.odd {
+	BACKGROUND-COLOR: #D1FFFF;
+}
+.sort-table TR.even {
+	BACKGROUND-COLOR: rgb(242,242,242);
+}
+
+input.savebutton
+{
+	BACKGROUND: url(./mis/save.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+input.confirmbutton
+{
+	BACKGROUND: url(./mis/confirm.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+input.savenewbutton
+{
+	BACKGROUND: url(./mis/savenew.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+input.searchbutton
+{
+	BACKGROUND: url(./mis/search.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+input.resetbutton
+{
+	BACKGROUND: url(./mis/reset.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+input.addbutton
+{
+	BACKGROUND: url(./mis/add.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+input.exportbutton
+{
+	BACKGROUND: url(./mis/export.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+input.nextbutton
+{
+	BACKGROUND: url(./mis/next.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+input.previousbutton
+{
+	BACKGROUND: url(./mis/previous.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
+/**********************tab**********************************/
+TABLE.tab
+{
+  font-size: 12px;
+  border:    0px;
+  
+}
+
+
+TD.tabLeftUp1
+{
+  BACKGROUND: url(./images/tab/tlUp1.gif) no-repeat;
+  height:     33px; 
+  width:      12px;
+}
+
+
+TD.tabLeftUp2
+{
+  BACKGROUND: url(./images/tab/tlUp2.gif) repeat-x;
+  height:     33px; 
+}
+
+
+TD.tabLeftUp3
+{
+  BACKGROUND: url(./images/tab/tlUp3.gif) no-repeat;
+  height:     33px; 
+  width:      10px;
+}
+
+
+SPAN.tabLeftTitleUp
+{
+  position:       relative;
+  left:           0 px;
+  top:            -1px;
+  font-size:      12px;
+  text-align:     right;
+  letter-spacing: 1px;
+  color:          #000000;
+}
+
+
+SPAN.tabLeftTitleDown
+{
+  position:       relative;
+  left:           0 px;
+  top:            -1px;
+  font-size:      12px;
+  text-align:     right;
+  letter-spacing: 1px;
+  color:          #000000;
+}
+
+
+SPAN.tabTitleUp
+{
+  position:       relative;
+  left:           -1 px;
+  top:            -1px;
+  font-size:      12px;
+  text-align:     right;
+  letter-spacing: 1px;
+  color:          #000000;
+}
+
+
+SPAN.tabTitleDown
+{
+  position:       relative;
+  left:           0 px;
+  top:            -1px;
+  font-size:      12px;
+  text-align:     right;
+  letter-spacing: 1px;
+  color:          #000000;
+}
+
+
+TD.tabLeftDown1
+{
+  BACKGROUND: url(./images/tab/tlDown1.gif) no-repeat;
+  height:     33px; 
+  width:      12px;
+}
+
+
+TD.tabLeftDown2
+{
+  BACKGROUND: url(./images/tab/tlDown2.gif) repeat-x;
+  height:     33px; 
+}
+
+
+TD.tabLeftDown3
+{
+  BACKGROUND: url(./images/tab/tlDown3.gif) no-repeat;
+  height:     33px; 
+  width:      10px;
+}
+
+
+TD.tabUp1
+{
+  BACKGROUND: url(./images/tab/tUp1.gif) no-repeat;
+  height:     33px; 
+  width:      12px;
+}
+
+
+TD.tabUp2
+{
+  BACKGROUND: url(./images/tab/tUp2.gif) repeat-x;
+  height:     33px; 
+}
+
+
+TD.tabUp3
+{
+  BACKGROUND: url(./images/tab/tUp3.gif) no-repeat;
+  height:     33px; 
+  width:      10px;
+}
+
+TD.tabDown1
+{
+  BACKGROUND: url(./images/tab/tDown1.gif) no-repeat;
+  height:     33px; 
+  width:      11px;
+}
+
+
+TD.tabDown2
+{
+  BACKGROUND: url(./images/tab/tDown2.gif) repeat-x;
+  height:     33px; 
+}
+
+
+TD.tabDown3
+{
+  BACKGROUND: url(./images/tab/tDown3.gif) no-repeat;
+  height:     33px; 
+  width:      10px;
+}
+
+
+TD.tabLeft1
+{
+  BACKGROUND: url(./images/tab/tableft1.gif) repeat-x;
+  height:     33px; 
+}
+
+
+TD.tabLeft2
+{
+  
+  height:     33px; 
+  width:      12px;
+}
+
+
+TD.tabL
+{
+  BACKGROUND: url(./images/tab/tabL.gif) repeat-y;
+  width:      12px;
+}
+
+
+TD.tabR
+{
+  
+  width:      12px;
+}
+
+
+TD.tabLBot
+{
+  height:     33px; 
+  width:      12px;
+}
+
+
+TD.tabLBot
+{
+  height:     14px; 
+  width:      12px;
+}
+
+
+TD.tabBot
+{
+	
+  height:     14px; 
+}
+
+
+TD.tabRBot
+{
+  
+  height:     14px; 
+  width:      13px;
+}
+
+
+.lframe-t-mid { height:35px; background:url("./images/win/wT.gif"); text-align:left;}
+.lframe-t-left {  width:20px; background:url("./images/win/wTopL.gif");}
+.lframe-t-right {  width:20px; background:url("./images/win/wTopR.gif");}
+.lframe-t-text { color:#ffffff; font-weight:bold; padding-left:10px;  width:100% }
+.lframe-m-mid { background:#ffffff; padding:2px }
+.lframe-m-left { width:20px;  background:url("./images/win/wL.gif");}
+.lframe-m-right { width:20px; background:url("./images/win/wR.gif");}
+.lframe-b-mid {  height:15px;  background:url("./images/win/wBot.gif"); }
+.lframe-b-left { width:20px;  background:url("./images/win/wBotL.gif");  }
+.lframe-b-right { width:20px;  background:url("./images/win/wBotR.gif"); }
+
+.mframe-t-mid { height:35px;  background:url("./images/win/wT.gif"); text-align:left;}
+.mframe-t-left { width:20px;}
+.mframe-t-right {  width:20px; }
+.mframe-t-text { color:#ffffff; font-weight:bold; padding-left:10px; width:100% }
+.mframe-m-mid { background:#F0F0F0; padding:2px }
+.mframe-m-left { width:20px;  }
+.mframe-m-right { width:20px;  }
+.mframe-b-mid { height:15px;  }
+.mframe-b-left { width:20px;  }
+.mframe-b-right {  width:20px;   }

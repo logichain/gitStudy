@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>		
+	<definition name="projectListPageDef" extends="mainBaseDef">
+		<put name="title" value="项目信息管理"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/projectList.jsp" />
+	</definition>
+	
+	<definition name="projectInputPageDef" extends="mainBaseDef">
+		<put name="title" value="创建项目信息"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/projectInput.jsp" />
+	</definition>	
+	
+	<definition name="searchAccountPageDef" extends="inputBaseDef">
+		<put name="title" value="用户检索"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/searchAccount.jsp" />
+	</definition>
+	
+	<definition name="moduleInputPageDef" extends="inputBaseDef">		
+		<put name="title" value="模块信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/moduleInput.jsp" />
+	</definition>
+	<definition name="moduleFunctionInputPageDef" extends="inputBaseDef">
+		<put name="title" value="功能信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/moduleFunctionInput.jsp" />
+	</definition>
+	
+	<definition name="childFunctionInputPageDef" extends="inputBaseDef">
+		<put name="title" value="功能信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/childFunctionInput.jsp" />
+	</definition>
+	
+	<definition name="versionInputPageDef" extends="inputBaseDef">
+		<put name="title" value="版本信息编辑"/>		
+		<put name="body" value="/WEB-INF/pages/projectmanage/versionInput.jsp" />
+	</definition>
+	
+	<definition name="projectModulePageDef" extends="mainBaseDef">
+		<put name="title" value="项目模块管理"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/editModuleInfo.jsp" />
+	</definition>
+	
+	<definition name="projectMemberPageDef" extends="mainBaseDef">
+		<put name="title" value="项目成员管理"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/editMemberInfo.jsp" />
+	</definition>
+	  
+	<definition name="projectVersionPageDef" extends="mainBaseDef">
+		<put name="title" value="项目信息编辑"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/editVersionInfo.jsp" />
+	</definition>
+	
+	<definition name="projectCEPageDef" extends="mainBaseDef">
+		<put name="title" value="CE相关管理"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/editCEInfo.jsp" />
+	</definition>
+	
+	<definition name="projectCFDAPageDef" extends="mainBaseDef">
+		<put name="title" value="CFDA相关管理"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/editCFDAInfo.jsp" />
+	</definition>
+	
+	<definition name="attachmentInputPageDef" extends="inputBaseDef">		
+		<put name="title" value="附件信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/attachmentInput.jsp" />
+	</definition>
+	
+	<definition name="jobTaskInputPageDef" extends="inputBaseDef">		
+		<put name="title" value="工作任务信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/jobTaskInput.jsp" />
+	</definition>
+	
+	<definition name="taskAttachmentInputPageDef" extends="inputBaseDef">		
+		<put name="title" value="附件信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/taskAttachmentInput.jsp" />
+	</definition>
+	
+</tiles-definitions>

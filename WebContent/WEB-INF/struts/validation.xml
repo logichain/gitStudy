@@ -1,0 +1,164 @@
+<!DOCTYPE form-validation PUBLIC
+     "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.2.0//EN"
+     "http://jakarta.apache.org/commons/dtds/validator_1_2_0.dtd">
+
+<form-validation>
+	<global>
+		<constant>
+			<constant-name>phone</constant-name>
+			<constant-value>^[0-9,-]*$</constant-value>
+		</constant>
+		<constant>
+            <constant-name>datePattern</constant-name>
+            <constant-value>yyyy-MM-dd</constant-value>
+        </constant>
+        <constant>       
+            <constant-name>email</constant-name>
+            <constant-value>^\s*([A-Za-z0-9]+(\.\w+)*@([\w-]+\.)+\w{2,3})\s*$</constant-value>
+        </constant>
+	</global>
+	<formset>
+		<form name="loginForm">
+			<field property="name" depends="required, minlength,maxlength">
+				<arg position="0" bundle="security" key="user_name" />
+				<arg position="1" key="${var:minlength}" name="minlength" resource="false" />
+			    <arg position="2" key="${var:maxlength}" name="maxlength" resource="false" />
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>32</var-value>
+				</var>
+			</field>
+			<field property="password" depends="required, minlength,maxlength">
+				<arg position="0" bundle="security" key="password" />
+				<arg position="1" key="${var:minlength}" name="minlength" resource="false" />
+				<arg position="2" key="${var:maxlength}" name="maxlength" resource="false" />
+				
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>32</var-value>
+				</var>
+			</field>
+		</form>
+		<form name="accountForm">
+			<field property="account.accountName" depends="required, minlength,maxlength">
+				<arg position="0"  bundle="security" key="account.name" />
+				<arg position="1" name="minlength" key="${var:minlength}" resource="false" />
+				<arg position="2" name="maxlength" key="${var:maxlength}" resource="false" />
+
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+								<var>
+					<var-name>maxlength</var-name>
+					<var-value>32</var-value>
+				</var>
+			</field>
+			<field property="account.password" depends="required,minlength,maxlength,twofields">
+				<arg position="0" bundle="security" key="account.password" />
+				<arg position="1" name="minlength" key="${var:minlength}" resource="false" />
+				<arg position="2" name="maxlength" key="${var:maxlength}" resource="false" />
+				
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>32</var-value>
+				</var>
+				<var>
+					<var-name>secondProperty</var-name>
+					<var-value>account.repassword</var-value>
+				</var>
+			</field>
+			<field property="account.repassword" depends="required, minlength,maxlength">
+				
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>32</var-value>
+				</var>
+				<arg position="0" bundle="security" key="account.repassword" />
+				
+				<arg position="1" name="minlength" key="${var:minlength}" resource="false" />
+				<arg position="2" name="maxlength" key="${var:maxlength}" resource="false" />
+				
+			</field>
+			<field property="account.personName" depends="required">
+				<arg position="0" bundle="security" key="person.name" />
+			</field>
+			<field property="account.dept" depends="required">
+				<arg position="0" bundle="security" key="person.dept" />
+			</field>
+		</form>
+		<form name="documentItemForm">
+			<field property="documentItem.diSerial" depends="integer,required">
+				<arg position="0" key="documentItem.serial"  />
+			</field>
+			
+			<field property="documentItem.diContent" depends="maxlength">
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+				<arg position="0" key="documentItem.content"  />
+				<arg position="2" key="${var:maxlength}" resource="false"/>
+			</field>			
+		</form>
+		<form name="caseForm">
+			<field property="caseInfo.moduleId" depends="required">
+				<arg position="0" bundle="case" key="module"  />
+			</field>
+			<field property="caseInfo.tcModuleFunction" depends="required">
+				<arg position="0" bundle="case" key="module_function"  />
+			</field>
+			<field property="caseInfo.tcCode" depends="required">
+				<arg position="0" bundle="case" key="case_code"  />
+			</field>
+			<field property="caseInfo.tcTestObjective" depends="required">
+				<arg position="0" bundle="case" key="test_objective"  />
+			</field>
+			<field property="caseInfo.tcTestContent" depends="required">
+				<arg position="0" bundle="case" key="test_content"  />
+			</field>				
+		</form>
+		<form name="projectForm">
+			<field property="projectInfo.PName" depends="required">
+				<arg position="0" bundle="project" key="project_name"  />
+			</field>
+			<field property="projectInfo.initProjectVersion.vtrVersion" depends="required">
+				<arg position="0" bundle="project" key="version_code"  />
+			</field>
+			<field property="projectInfo.developLeader.personName" depends="required">
+				<arg position="0" bundle="project" key="develop_leader"  />
+			</field>
+			<field property="projectInfo.PDevelopBegin" depends="required">
+				<arg position="0" bundle="project" key="develop_begin"  />
+			</field>
+			<field property="projectInfo.PDevelopEnd" depends="required">
+				<arg position="0" bundle="project" key="develop_end"  />
+			</field>
+			<field property="projectInfo.testLeader.personName" depends="required">
+				<arg position="0" bundle="project" key="test_leader"  />
+			</field>
+			<field property="projectInfo.PTestBegin" depends="required">
+				<arg position="0" bundle="project" key="test_begin"  />
+			</field>
+			<field property="projectInfo.PTestEnd" depends="required">
+				<arg position="0" bundle="project" key="test_end"  />
+			</field>				
+		</form>
+	</formset>
+</form-validation>

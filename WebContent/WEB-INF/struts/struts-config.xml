@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+<struts-config>
+
+
+	<global-exceptions>
+		<exception type="java.lang.Exception" key="errors.general" handler="org.king.framework.web.action.ActionExceptionHandler" />
+	</global-exceptions>
+	
+	<global-forwards>
+		<forward name="staticjavascript" path="/pages/scripts/validator.jsp" redirect="false" />		
+	</global-forwards>
+		
+	<controller processorClass="org.king.framework.web.struts.ServiceAutowireRequestProcessor" />
+	
+	<message-resources parameter="resources.application" />
+	<message-resources parameter="resources.case" key="case"/>
+	<message-resources parameter="resources.security" key="security"/>
+	<message-resources parameter="resources.project" key="project"/>
+	
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config" value="	/WEB-INF/struts/tiles-defs-casemanage.xml,
+															/WEB-INF/struts/tiles-defs-projectmanage.xml,
+															/WEB-INF/struts/tiles-defs-statistics.xml,
+															/WEB-INF/struts/tiles-defs-security.xml"/>
+		<set-property property="moduleAware" value="true" />
+		<set-property property="definitions-parser-validate" value="true" />
+	</plug-in>
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property property="pathnames" 
+                      value="/WEB-INF/struts/validator-rules.xml,
+                             /WEB-INF/struts/validator-rules-custom.xml,
+                             /WEB-INF/struts/validation.xml"/>
+    </plug-in>
+	
+	
+</struts-config>
