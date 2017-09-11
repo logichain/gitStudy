@@ -6,34 +6,10 @@
 
 <tiles-definitions>		
 		
-	<definition name="versionStatisticsPageDef" extends="mainBaseDef">
+	<definition name="statisticsPageDef" extends="mainBaseDef">
 		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/versionInfo.jsp" />
+		<put name="body" value="/WEB-INF/pages/statistics/dataStatisticsInfo.jsp" />
 	</definition>	
-	<definition name="moduleStatisticsPageDef" extends="mainBaseDef">
-		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/moduleInfo.jsp" />
-	</definition>
-	<definition name="statusStatisticsPageDef" extends="mainBaseDef">
-		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/statusInfo.jsp" />
-	</definition>
-	<definition name="resultStatisticsPageDef" extends="mainBaseDef">
-		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/resultInfo.jsp" />
-	</definition>
-	<definition name="importLevelStatisticsPageDef" extends="mainBaseDef">
-		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/importLevelInfo.jsp" />
-	</definition>
-	<definition name="bugTypeStatisticsPageDef" extends="mainBaseDef">
-		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/bugTypeInfo.jsp" />
-	</definition>
 	
-	<definition name="functionStatisticsPageDef" extends="mainBaseDef">
-		<put name="title" value="测试统计信息"/>
-		<put name="body" value="/WEB-INF/pages/statistics/functionInfo.jsp" />
-	</definition>
 	 
 </tiles-definitions>

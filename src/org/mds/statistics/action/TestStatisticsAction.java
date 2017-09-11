@@ -33,54 +33,40 @@ public class TestStatisticsAction extends BaseAction {
 	private TestCaseService testCaseService;
 	private ProjectService projectService;
 
-	synchronized public ActionForward resetVersionStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	synchronized public ActionForward resetDataStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
+		String pid = request.getParameter("pid");
+		
+		if(pid != null && !"".equals(pid))
+		{
+			projectInfo = projectService.getProjectById(Integer.valueOf(pid));
+			dform.set("projectInfo", projectInfo);
+		}
 	
 		TestCase caseInfo = new TestCase();
 		dform.set("caseInfo",caseInfo);
-		CaseVersionReference cvrSearchInfo = new CaseVersionReference() ;
-		dform.set("cvrSearchInfo",cvrSearchInfo);		
-		
-		List<Integer> countList = new ArrayList<Integer>();
-		List<String> dataInfoList = new ArrayList<String>();
-		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
-		
-		for(ProjectVersion pv:projectInfo.getProjectVersionList())
-		{
-			cvrSearchInfo.setCvrProjectVersion(pv.getPvId());			
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo});
-			if(count <= 0)
-			{
-				continue;
-			}
-			countList.add(count);
-			dataInfoList.add(pv.getPvVersion() +":" + count);
-			statisticsDataList.add(new StatisticsData(pv.getPvVersion(),count));
-			allCount = allCount+ count;
-		}
-		
-		double[] dataPercent = CakySvg.getPercent(countList);
-		String svgStr = CakySvg.initialize(dataPercent,dataInfoList);
-		request.setAttribute("versionSvgStr", svgStr);		
-		cvrSearchInfo.setCvrProjectVersion(null);
-		
-		if(allCount != 0)
-		{
-			for(StatisticsData d:statisticsDataList)
-			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
-		}
-		request.setAttribute("versionDataList", statisticsDataList);
-				
-		return mapping.findForward("versionStatistics");
+						
+		return this.dataStatistics(mapping, dform, request, response);
 	}
 		
-	synchronized public ActionForward versionStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	synchronized public ActionForward dataStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	{		
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+				
+		this.versionStatistics(dform, request);
+		this.bugTypeStatistics(dform, request);
+		this.functionStatistics(dform, request);
+		this.importLevelStatistics(dform, request);
+		this.moduleStatistics(dform, request);
+		this.resultStatistics(dform, request);
+		this.statusStatistics(dform, request);
+				
+		return mapping.findForward("statistics");
+	}
+	
+	private void versionStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -136,11 +122,9 @@ public class TestStatisticsAction extends BaseAction {
 			statisticsDataList.add(new StatisticsData("All",allCount,1));
 		}
 		request.setAttribute("versionDataList", statisticsDataList);
-				
-		return mapping.findForward("versionStatistics");
 	}
 	
-	synchronized public ActionForward moduleStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	private void moduleStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -183,10 +167,9 @@ public class TestStatisticsAction extends BaseAction {
 		}
 		request.setAttribute("moduleDataList", statisticsDataList);
 				
-		return mapping.findForward("moduleStatistics");
 	}
 	
-	synchronized public ActionForward statusStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	private void statusStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -235,10 +218,9 @@ public class TestStatisticsAction extends BaseAction {
 		}
 		request.setAttribute("statusDataList", statisticsDataList);
 				
-		return mapping.findForward("statusStatistics");
 	}
 	
-	synchronized public ActionForward resultStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	private void resultStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -287,10 +269,9 @@ public class TestStatisticsAction extends BaseAction {
 		}
 		request.setAttribute("resultDataList", statisticsDataList);
 				
-		return mapping.findForward("resultStatistics");
 	}
 	
-	synchronized public ActionForward importLevelStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	private void importLevelStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -339,10 +320,9 @@ public class TestStatisticsAction extends BaseAction {
 		}
 		request.setAttribute("importLevelDataList", statisticsDataList);
 				
-		return mapping.findForward("importLevelStatistics");
 	}
 	
-	synchronized public ActionForward bugTypeStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	private void bugTypeStatistics( ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -392,10 +372,9 @@ public class TestStatisticsAction extends BaseAction {
 		
 		request.setAttribute("bugTypeDataList", statisticsDataList);
 				
-		return mapping.findForward("bugTypeStatistics");
 	}
 	
-	synchronized public ActionForward functionStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	private void functionStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
@@ -448,7 +427,6 @@ public class TestStatisticsAction extends BaseAction {
 		
 		request.setAttribute("functionDataList", statisticsDataList);
 				
-		return mapping.findForward("functionStatistics");
 	}
 
 	public void setTestStatisticsService(TestStatisticsService testStatisticsService) {

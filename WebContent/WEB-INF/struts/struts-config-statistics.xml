@@ -15,13 +15,8 @@
 
 	<action-mappings>
 		<action path="/teststatistics" name="statisticsForm" parameter="method" type="org.mds.statistics.action.TestStatisticsAction" validate="false">
-			<forward name="versionStatistics" path="versionStatisticsPageDef" redirect="false" />
-			<forward name="moduleStatistics" path="moduleStatisticsPageDef" redirect="false" />
-			<forward name="statusStatistics" path="statusStatisticsPageDef" redirect="false" />
-			<forward name="resultStatistics" path="resultStatisticsPageDef" redirect="false" />
-			<forward name="importLevelStatistics" path="importLevelStatisticsPageDef" redirect="false" />
-			<forward name="bugTypeStatistics" path="bugTypeStatisticsPageDef" redirect="false" />
-			<forward name="functionStatistics" path="functionStatisticsPageDef" redirect="false" />	
+			<forward name="statistics" path="statisticsPageDef" redirect="false" />
+			
 		</action>		
 	</action-mappings>
 </struts-config>

@@ -33,7 +33,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/pager-taglib.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/pow2Toolkit.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/pow2WebGui.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-aop.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-context.jar"/>
@@ -53,10 +52,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts-legacy.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/velocity-1.4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

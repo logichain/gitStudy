@@ -27,11 +27,7 @@
 			<forward name="moduleFunctionInput" path="moduleFunctionInputPageDef" redirect="false" />
 			<forward name="childFunctionInput" path="childFunctionInputPageDef" redirect="false" />
 			<forward name="versionInput" path="versionInputPageDef" redirect="false" />
-			<forward name="editVersionInfo" path="projectVersionPageDef" redirect="false" />
-			<forward name="editMemberInfo" path="projectMemberPageDef" redirect="false" />
-			<forward name="editModuleInfo" path="projectModulePageDef" redirect="false" />
-			<forward name="editCEInfo" path="projectCEPageDef" redirect="false" />
-			<forward name="editCFDAInfo" path="projectCFDAPageDef" redirect="false" />
+			<forward name="editProjectInfo" path="projectEditPageDef" redirect="false" />
 			
 			<forward name="refreshVersionInput" path="/WEB-INF/pages/projectmanage/refreshVersionInput.jsp" redirect="false"/>
 			<forward name="refreshProjectVersion" path="/WEB-INF/pages/projectmanage/refreshProjectVersion.jsp" redirect="false"/>
@@ -39,8 +35,6 @@
 			<forward name="refreshTeamMember" path="/WEB-INF/pages/projectmanage/refreshTeamMember.jsp" redirect="false"/>
 			<forward name="refreshProjectInput" path="/WEB-INF/pages/projectmanage/refreshProjectInput.jsp" redirect="false"/>
 			<forward name="refreshJobTaskInput" path="/WEB-INF/pages/projectmanage/refreshJobTaskInput.jsp" redirect="false"/>
-			<forward name="refreshProjectCE" path="/WEB-INF/pages/projectmanage/refreshProjectCEInfo.jsp" redirect="false"/>
-			<forward name="refreshProjectCFDA" path="/WEB-INF/pages/projectmanage/refreshProjectCFDAInfo.jsp" redirect="false"/>			
 			
 			<forward name="attachmentInput" path="attachmentInputPageDef" redirect="false" />
 			<forward name="jobTaskInput" path="jobTaskInputPageDef" redirect="false" />

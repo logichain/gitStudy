@@ -2,8 +2,6 @@ package org.mds.test.bean;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -282,13 +280,6 @@ public class TestCase extends org.king.framework.domain.BaseObject implements
 	}
 
 	public ArrayList<CaseVersionReference> getCaseVersionReferenceList() {
-
-		Collections.sort(caseVersionReferenceList,new Comparator<CaseVersionReference>(){
-			@Override
-			public int compare(CaseVersionReference o1, CaseVersionReference o2) {
-				// TODO Auto-generated method stub
-				return o1.getCvrProjectVersion().compareTo(o2.getCvrProjectVersion());
-			}});
 		
 		return caseVersionReferenceList;
 	}

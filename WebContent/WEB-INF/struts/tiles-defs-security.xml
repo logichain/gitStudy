@@ -6,7 +6,7 @@
 
 <tiles-definitions>	
 	<definition name="mainBaseDef" path="/WEB-INF/pages/common/main_baselayout.jsp">	
-		<put name="title" value="测试用例管理"/>
+		<put name="title" value="测试管理系统"/>
 		<put name="header" value="/WEB-INF/pages/common/tiles/header.jsp" />			
 		<put name="body" value="/WEB-INF/pages/common/tiles/body.jsp" />
 		<put name="footer" value="/WEB-INF/pages/common/tiles/bottom.jsp" />
@@ -21,7 +21,7 @@
 	</definition>
 		
 	<definition name="loginDef" path="/WEB-INF/pages/common/login_baselayout.jsp">	
-		<put name="title" value="MDS管理系统登录"/>			
+		<put name="title" value="测试管理系统登录"/>			
 		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
 		<put name="body" value="/WEB-INF/pages/security/login.jsp" />
 		<put name="footer" value="/WEB-INF/pages/common/tiles/bottom.jsp" />

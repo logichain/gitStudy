@@ -405,17 +405,6 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("projectInput");
 	}
 	
-	public ActionForward refreshProjectCEInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{		
-		
-		return mapping.findForward("editCEInfo");
-	}
-	
-	public ActionForward refreshProjectCFDAInfo(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{		
-		
-		return mapping.findForward("editCFDAInfo");
-	}
 	
 	public ActionForward deleteTeamMember(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{		
@@ -476,45 +465,10 @@ public class ProjectManage extends BaseAction {
 		Project project = projectService.getProjectById(Integer.parseInt(id));
 				
 		dform.set("projectInfo", project);
-		
-		return mapping.findForward("editVersionInfo");
+				
+		return mapping.findForward("editProjectInfo");
 	}
-	
-	public ActionForward editProjectVersionInfo(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
 		
-		return mapping.findForward("editVersionInfo");
-	}
-	
-	public ActionForward editProjectMemberInfo(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		
-		return mapping.findForward("editMemberInfo");
-	}
-	
-	public ActionForward editProjectCEInfo(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		
-		return mapping.findForward("editCEInfo");
-	}
-	
-	public ActionForward editProjectCFDAInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		
-		return mapping.findForward("editCFDAInfo");
-	}
-	
-	public ActionForward editProjectModuleInfo(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		
-		return mapping.findForward("editModuleInfo");
-	}
-	
 	
 	public ActionForward deleteProject(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{

@@ -110,7 +110,7 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 			m.setId(String.valueOf(100+p.getPId()));
 			m.setPid("3");
 			m.setMenuName(p.getPName());
-			m.setUrl("teststatistics.do?method=versionStatistics&pid=" + p.getPId());
+			m.setUrl("teststatistics.do?method=resetDataStatistics&pid=" + p.getPId());
 						
 			menuList.add(m);
 		}

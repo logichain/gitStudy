@@ -43,29 +43,9 @@
 		<put name="body" value="/WEB-INF/pages/projectmanage/versionInput.jsp" />
 	</definition>
 	
-	<definition name="projectModulePageDef" extends="mainBaseDef">
-		<put name="title" value="项目模块管理"/>
-		<put name="body" value="/WEB-INF/pages/projectmanage/editModuleInfo.jsp" />
-	</definition>
-	
-	<definition name="projectMemberPageDef" extends="mainBaseDef">
-		<put name="title" value="项目成员管理"/>
-		<put name="body" value="/WEB-INF/pages/projectmanage/editMemberInfo.jsp" />
-	</definition>
-	  
-	<definition name="projectVersionPageDef" extends="mainBaseDef">
+	<definition name="projectEditPageDef" extends="mainBaseDef">
 		<put name="title" value="项目信息编辑"/>
-		<put name="body" value="/WEB-INF/pages/projectmanage/editVersionInfo.jsp" />
-	</definition>
-	
-	<definition name="projectCEPageDef" extends="mainBaseDef">
-		<put name="title" value="CE相关管理"/>
-		<put name="body" value="/WEB-INF/pages/projectmanage/editCEInfo.jsp" />
-	</definition>
-	
-	<definition name="projectCFDAPageDef" extends="mainBaseDef">
-		<put name="title" value="CFDA相关管理"/>
-		<put name="body" value="/WEB-INF/pages/projectmanage/editCFDAInfo.jsp" />
+		<put name="body" value="/WEB-INF/pages/projectmanage/projectEdit.jsp" />
 	</definition>
 	
 	<definition name="attachmentInputPageDef" extends="inputBaseDef">		

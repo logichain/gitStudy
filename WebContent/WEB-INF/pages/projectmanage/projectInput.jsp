@@ -5,13 +5,12 @@
 	<bean:message bundle="project" key="project_info" />
 </bean:define>
 
-<gui:window title='<%=infoTitle%>' prototype="boWindow">
 <html:form action="projectmanage.do" onsubmit="return validateProjectForm(this);">
 	<html:errors />
 	
 	<input type="hidden" name="method" value="saveProject">	
 	<input type="hidden" name="id">	
-	<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
+	<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="90%" border="0">
 		<tr><td>&nbsp;</td></tr>	
 		<tr><td width="70%">&nbsp;</td>						
 			<td align="center" width="12%">
@@ -22,6 +21,7 @@
 					
 		</tr>
 	</table>	
+	<fieldset style="width:90%;float:left;border-color:blue;">
 	<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 		<tr>
 			<td width="50%"></td>
@@ -123,10 +123,9 @@
 		</tr>					
 				
 	</table>
-		
+	</fieldset>	
 
 </html:form>
-</gui:window>
 		
 <html:javascript formName="projectForm" dynamicJavascript="true" staticJavascript="false" />
 <script type="text/javascript" src="<html:rewrite forward='staticjavascript'/>"></script>
