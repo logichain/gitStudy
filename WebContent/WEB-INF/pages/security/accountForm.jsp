@@ -67,11 +67,14 @@
 		
 		<tr>
 			<td align="right">
-				<bean:message bundle="security" key="person.birthday" />£º
+				<bean:message bundle="security" key="person.dept" />£º
 			</td>
 
 			<td align="left">
-				<html:text property="account.birthdayStr" readonly="true" size="18" maxlength="32" onclick="SelectDate(this)"/>
+				<html:select property="account.dept" style="width:120px">	
+					<html:option value=""></html:option>
+					<html:options collection="departmentList" property="DId" labelProperty="DName"/>
+				</html:select>				
 			</td>
 			<td align="right">
 				<bean:message bundle="security" key="person.entrydate" />£º
@@ -82,17 +85,6 @@
 			</td>
 			
 		</tr>
-		
-		<tr>
-			<td align="right">
-				<bean:message bundle="security" key="person.email" />£º
-			</td>
-
-			<td align="left" colspan="3">
-				<html:text property="account.email" size="50" maxlength="100" />
-			</td>
-		</tr>
-	
 		<tr>
 			<td align="right">
 				<bean:message bundle="security" key="person.phone" />£º
@@ -104,25 +96,17 @@
 		</tr>
 		<tr>
 			<td align="right">
-				<bean:message bundle="security" key="person.dept" />£º
-			</td>
-
-			<td align="left">
-				<html:select property="account.dept" style="width:120px">	
-					<html:option value=""></html:option>
-					<html:options collection="departmentList" property="DId" labelProperty="DName"/>
-				</html:select>				
-			</td>
-		</tr>
-		<tr>
-			<td align="right">
-				<bean:message bundle="security" key="person.address" />£º
+				<bean:message bundle="security" key="person.email" />£º
 			</td>
 
 			<td align="left" colspan="3">
-				<html:text property="account.address" size="86" maxlength="100" />
+				<html:text property="account.email" size="50" maxlength="100" />
 			</td>
 		</tr>
+	
+		
+		
+		
 		<tr>
 			<td colspan="3"></td>
 			<td align="center">

@@ -880,6 +880,7 @@ public class TestCaseManage extends BaseAction {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
 		String pid = request.getParameter("pid");
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		
 		if(projectInfo.getPId() == null && pid == null)
 		{	
@@ -903,9 +904,10 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvrSearchInfo = new CaseVersionReference();
 		dform.set("cvrSearchInfo", cvrSearchInfo);
 		
+		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		if(functionList.length() > 2)
+		if((projectInfo.isTeamMember(ua) || ua.getId().equals(1)) && functionList.length() > 2)
 		{
 			Object[] args = {searchInfo,page,projectInfo,cvrSearchInfo,functionList};
 			
@@ -926,8 +928,7 @@ public class TestCaseManage extends BaseAction {
 		return this.getForwardByUser(mapping, dform, request, response);
 	}
 	
-	private ActionForward getForwardByUser(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	private ActionForward getForwardByUser(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		

@@ -47,6 +47,8 @@
 			<tr>
 				<td rowspan="2" width="4%"></td>
 				<td rowspan="2" width="10%" align="center"><bean:message bundle="project" key="project_name"/></td>
+				<td rowspan="2" width="10%" align="center">≥ı º<bean:message bundle="project" key="project_version"/></td>
+				
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="develop"/></td>
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="test"/></td>
 				<td rowspan="2" align="center"><bean:message bundle="project" key="remark"/></td>
@@ -80,13 +82,14 @@
 							<td align="center">										
 								<%=i+1 %>
 							</td>							
-							<td align="center"><bean:write name="p" property="PName"/></td>							
-							<td align="center"><bean:write name="p" property="developLeader.personName"/></td>
-							<td align="center"><bean:write name="p" property="PDevelopBegin"/></td>
-							<td align="center"><bean:write name="p" property="PDevelopEnd"/></td>
-							<td align="center"><bean:write name="p" property="testLeader.personName"/></td>
-							<td align="center"><bean:write name="p" property="PTestBegin"/></td>
-							<td align="center"><bean:write name="p" property="PTestEnd"/></td>
+							<td align="center"><bean:write name="p" property="PName"/></td>					
+							<td align="center"><bean:write name="p" property="initProjectVersion.pvVersion"/></td>		
+							<td align="center"><bean:write name="p" property="initProjectVersion.developLeader.personName"/></td>
+							<td align="center"><bean:write name="p" property="initProjectVersion.pvDevelopBegin"/></td>
+							<td align="center"><bean:write name="p" property="initProjectVersion.pvDevelopEnd"/></td>
+							<td align="center"><bean:write name="p" property="initProjectVersion.testLeader.personName"/></td>
+							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestBegin"/></td>
+							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestEnd"/></td>
 							<td align="center"><bean:write name="p" property="PRemark"/></td>
 							<td align="center">								
 								<a href='projectmanage.do?method=editProject&id=<bean:write name="p" property="PId"/>'><img border="0" src="pages\images\icon\16x16\modify.gif"></a>

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.king.security.domain.UsrAccount;
+import org.mds.common.CommonService;
 import org.mds.project.service.impl.ProjectServiceImpl;
 
 /**
@@ -23,12 +24,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	private static final long serialVersionUID = 1L;
 	private Integer PId;
 	private String PName;
-	private String PDevelopBegin;
-	private String PDevelopEnd;	
-	private String PTestBegin;
-	private String PTestEnd;
-	private Integer PDevelopLeader;
-	private Integer PTestLeader;
+
 	private Integer PFlag = 0;
 	private String PRemark;
 	private Integer PCreateUser;
@@ -38,9 +34,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	private ArrayList<ProjectModule> moduleList = new ArrayList<ProjectModule>();
 	private ArrayList<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
 	private ArrayList<TeamMember> memberList = new ArrayList<TeamMember>();
-	
-	private ArrayList<JobTask> jobTaskList = new ArrayList<JobTask>();
-	
+		
 	private ProjectModule selectedProjectModule = new ProjectModule();
 		
 	private UsrAccount developLeader;
@@ -128,51 +122,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	public void setModuleList(ArrayList<ProjectModule> moduleList) {
 		this.moduleList = moduleList;
 	}
-	
-	public void setJobTaskSet(Set<JobTask> jobTaskSet) {
-		jobTaskList.clear();
-		jobTaskList.addAll(jobTaskSet);
-	}
-
-	public Set<JobTask> getJobTaskSet() {
-		Set<JobTask> set = new HashSet<JobTask>();
-		set.addAll(jobTaskList);
-		
-		return set;
-	}
-	
-	public ArrayList<JobTask> getJobTaskList() {
-		return jobTaskList;
-	}
-
-	public void setJobTaskList(ArrayList<JobTask> jobTaskList) {
-		this.jobTaskList = jobTaskList;
-	}
-	
-	public ArrayList<JobTask> getCEJobTaskList() {
-		ArrayList<JobTask> rtn = new ArrayList<JobTask>();
-		for(JobTask jt:jobTaskList)
-		{
-			if(jt.getJtType().equals(JobTask.JOBTASK_TYPE_CE))
-			{
-				rtn.add(jt);
-			}
-		}		
-		return rtn;
-	}
-	
-	public ArrayList<JobTask> getCFDAJobTaskList() {
-		ArrayList<JobTask> rtn = new ArrayList<JobTask>();
-		for(JobTask jt:jobTaskList)
-		{
-			if(jt.getJtType().equals(JobTask.JOBTASK_TYPE_CFDA))
-			{
-				rtn.add(jt);
-			}
-		}		
-		return rtn;
-	}
-	
+			
 	public void setMemberSet(Set<TeamMember> memberSet) {
 		memberList.clear();
 		memberList.addAll(memberSet);
@@ -191,55 +141,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 
 	public void setMemberList(ArrayList<TeamMember> memberList) {
 		this.memberList = memberList;
-	}
-	
-	public String getPDevelopBegin() {
-		return PDevelopBegin;
-	}
-
-	public void setPDevelopBegin(String developBegin) {
-		PDevelopBegin = developBegin;
-	}
-
-	public String getPDevelopEnd() {
-		return PDevelopEnd;
-	}
-
-	public void setPDevelopEnd(String developEnd) {
-		PDevelopEnd = developEnd;
-	}
-
-	public String getPTestBegin() {
-		return PTestBegin;
-	}
-
-	public void setPTestBegin(String testBegin) {
-		PTestBegin = testBegin;
-	}
-
-	public String getPTestEnd() {
-		return PTestEnd;
-	}
-
-	public void setPTestEnd(String testEnd) {
-		PTestEnd = testEnd;
-	}
-
-	public Integer getPDevelopLeader() {
-		return PDevelopLeader;
-	}
-
-	public void setPDevelopLeader(Integer developLeader) {
-		PDevelopLeader = developLeader;
-	}
-
-	public Integer getPTestLeader() {
-		return PTestLeader;
-	}
-
-	public void setPTestLeader(Integer testLeader) {
-		PTestLeader = testLeader;
-	}
+	}	
 
 	public void setDevelopLeader(UsrAccount developLeader) {
 		this.developLeader = developLeader;
@@ -348,6 +250,22 @@ public class Project extends org.king.framework.domain.BaseObject implements
 		 return rtn;
 	}
 	
+	
+	public boolean isTeamMember(UsrAccount ua)
+	{
+		boolean rtn = false;
+		
+		for(TeamMember tm:this.memberList)
+		{
+			if(tm.getTmFlag() != CommonService.DELETE_FLAG && tm.getTmAccount() != null && ua.getId().equals(tm.getTmAccount()))
+			{
+				rtn = true;
+				break;
+			}
+		}
+		
+		return rtn;
+	}
 	
 
 }

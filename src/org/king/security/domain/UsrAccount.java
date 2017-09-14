@@ -26,8 +26,6 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 	private String sex;
 	private String email;
 	private String phone;
-	private String address;
-	private Date birthday;
 	private Integer dept;
 	private Integer status;
 	private Date entryDate;
@@ -37,6 +35,7 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 
     private String repassword;
     private Department department;
+    
 	// Constructors
 
 	/** default constructor */
@@ -53,7 +52,7 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 	/** full constructor */
 	public UsrAccount(String accountName, String password, String enabled,
 			String personCode, String personName, String sex, String email,
-			String phone, String address, Date birthday, Integer dept,
+			String phone, Integer dept,
 			Integer status, Date entryDate) {
 		this.accountName = accountName;
 		this.password = password;
@@ -63,8 +62,6 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 		this.sex = sex;
 		this.email = email;
 		this.phone = phone;
-		this.address = address;
-		this.birthday = birthday;
 		this.dept = dept;
 		this.status = status;
 		this.entryDate = entryDate;
@@ -144,21 +141,7 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 		this.phone = phone;
 	}
 
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Date getBirthday() {
-		return this.birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
+	
 
 	public Integer getDept() {
 		if(dept != null && dept.equals(0))
@@ -220,27 +203,6 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 		return repassword;
 	}
 
-	public void setBirthdayStr(String birthdayStr) {
-		if(!"".equals(birthdayStr))
-		{
-			try {
-				birthday = DateFormat.getDateInstance().parse(birthdayStr);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		this.birthdayStr = birthdayStr;
-	}
-
-	public String getBirthdayStr() {
-		if(birthday != null)
-		{
-			return DateFormat.getDateInstance().format(birthday);
-		}
-		return birthdayStr;
-	}
-
 	public void setEntryDateStr(String entryDateStr) {
 		if(!"".equals(entryDateStr))
 		{
@@ -269,5 +231,4 @@ public class UsrAccount extends org.king.framework.domain.BaseObject implements
 	public Department getDepartment() {
 		return department;
 	}
-
 }

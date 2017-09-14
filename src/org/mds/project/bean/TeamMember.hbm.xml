@@ -13,6 +13,9 @@
         <property name="tmProject" type="java.lang.Integer">
             <column name="tm_project" />
         </property>
+        <property name="tmModuleFunction" type="java.lang.Integer">
+            <column name="tm_module_function" />
+        </property>
         <property name="tmAccount" type="java.lang.Integer">
             <column name="tm_account" />
         </property>
@@ -20,6 +23,8 @@
             <column name="tm_flag" />
         </property>
         
+        <many-to-one name="moduleFunction" lazy="false" column="tm_module_function" class="org.mds.project.bean.ModuleFunction" cascade="none" unique="true" insert="false" update="false">
+        </many-to-one>
         <many-to-one name="account" lazy="false" column="tm_account" class="org.king.security.domain.UsrAccount" cascade="none" unique="true" insert="false" update="false">
         </many-to-one>
     </class>

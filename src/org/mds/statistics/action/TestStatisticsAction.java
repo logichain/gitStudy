@@ -11,19 +11,21 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorForm;
 import org.king.framework.web.action.BaseAction;
+import org.king.security.domain.Department;
+import org.king.security.domain.UsrAccount;
+import org.mds.common.CommonService;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectModule;
 import org.mds.project.bean.ProjectVersion;
+import org.mds.project.bean.TeamMember;
 import org.mds.project.service.ProjectService;
 import org.mds.project.service.impl.ProjectServiceImpl;
 import org.mds.statistics.bean.StatisticsData;
 import org.mds.statistics.service.TestStatisticsService;
 import org.mds.statistics.svg.CakySvg;
-import org.mds.test.bean.BugType;
 import org.mds.test.bean.CaseStatus;
 import org.mds.test.bean.CaseVersionReference;
-import org.mds.test.bean.ImportantLevel;
 import org.mds.test.bean.TestCase;
 import org.mds.test.bean.TestResult;
 import org.mds.test.service.TestCaseService;
@@ -45,8 +47,8 @@ public class TestStatisticsAction extends BaseAction {
 			dform.set("projectInfo", projectInfo);
 		}
 	
-		TestCase caseInfo = new TestCase();
-		dform.set("caseInfo",caseInfo);
+		dform.set("caseInfo",new TestCase());
+		dform.set("cvrSearchInfo",new CaseVersionReference());
 						
 		return this.dataStatistics(mapping, dform, request, response);
 	}
@@ -54,14 +56,17 @@ public class TestStatisticsAction extends BaseAction {
 	synchronized public ActionForward dataStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{		
 		DynaValidatorForm dform = (DynaValidatorForm) form;
+		
+		Project projectInfo = (Project) dform.get("projectInfo");
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 				
-		this.versionStatistics(dform, request);
-		this.bugTypeStatistics(dform, request);
-		this.functionStatistics(dform, request);
-		this.importLevelStatistics(dform, request);
-		this.moduleStatistics(dform, request);
-		this.resultStatistics(dform, request);
-		this.statusStatistics(dform, request);
+		if(projectInfo.isTeamMember(ua))
+		{
+			this.versionStatistics(dform, request);
+			this.moduleStatistics(dform, request);
+			this.functionStatistics(dform, request);
+			this.userStatistics(dform, request);			
+		}		
 				
 		return mapping.findForward("statistics");
 	}
@@ -85,7 +90,10 @@ public class TestStatisticsAction extends BaseAction {
 		List<Integer> countList = new ArrayList<Integer>();
 		List<String> dataInfoList = new ArrayList<String>();
 		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
+		Integer allDesignCount = 0;
+		Integer allTestCount = 0;
+		Integer allUnpassCount = 0;
+		Integer allCorrectCount = 0;
 		
 		String functionList = "";
 		if(caseInfo.getModuleId() != null)
@@ -97,15 +105,43 @@ public class TestStatisticsAction extends BaseAction {
 		for(ProjectVersion pv:projectInfo.getProjectVersionList())
 		{
 			cvrSearchInfo.setCvrProjectVersion(pv.getPvId());			
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(count <= 0)
+			Integer designCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(designCaseCount >= 0)
 			{
-				continue;
+				countList.add(designCaseCount);
+				dataInfoList.add(pv.getPvVersion() +":" + designCaseCount);				
+				allDesignCount = allDesignCount+ designCaseCount;
 			}
-			countList.add(count);
-			dataInfoList.add(pv.getPvVersion() +":" + count);
-			statisticsDataList.add(new StatisticsData(pv.getPvVersion(),count));
-			allCount = allCount+ count;
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(testCaseCount >= 0)
+			{							
+				allTestCount = allTestCount+ testCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
+			Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(unpassCaseCount >= 0)
+			{							
+				allUnpassCount = allUnpassCount+ unpassCaseCount;
+			}			
+			cvrSearchInfo.setCvrCaseStatus(null);
+			cvrSearchInfo.setCvrCaseResult(null);
+			
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CORRECT_STATUS);			
+			Integer correctCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(correctCaseCount >= 0)
+			{							
+				allCorrectCount = allCorrectCount+ correctCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			statisticsDataList.add(new StatisticsData(pv.getPvVersion(),designCaseCount,testCaseCount,unpassCaseCount,correctCaseCount));
 		}
 		
 		double[] dataPercent = CakySvg.getPercent(countList);
@@ -113,14 +149,15 @@ public class TestStatisticsAction extends BaseAction {
 		request.setAttribute("versionSvgStr", svgStr);		
 		cvrSearchInfo.setCvrProjectVersion(oldProjectVersion);
 		
-		if(allCount != 0)
+		if(allDesignCount != 0)
 		{
 			for(StatisticsData d:statisticsDataList)
 			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
+				d.setPercent(d.getDesignCaseCount()*1.0/allDesignCount);
+			}			
 		}
+		
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allCorrectCount));
 		request.setAttribute("versionDataList", statisticsDataList);
 	}
 	
@@ -135,21 +172,51 @@ public class TestStatisticsAction extends BaseAction {
 		List<Integer> countList = new ArrayList<Integer>();
 		List<String> dataInfoList = new ArrayList<String>();
 		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
+		Integer allDesignCount = 0;
+		Integer allTestCount = 0;
+		Integer allUnpassCount = 0;
+		Integer allCorrectCount = 0;
 				
 		for(ProjectModule pm:projectInfo.getModuleList())
 		{
-			String functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);			
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			
-			if(count <= 0)
+			String functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
+						
+			Integer designCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(designCaseCount > 0)
 			{
-				continue;
+				countList.add(designCaseCount);
+				dataInfoList.add(pm.getPmName() +":" + designCaseCount);
+				allDesignCount = allDesignCount+ designCaseCount;
 			}
-			countList.add(count);
-			dataInfoList.add(pm.getPmName() +":" + count);
-			statisticsDataList.add(new StatisticsData(pm.getPmName(),count));
-			allCount = allCount+ count;
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(testCaseCount >= 0)
+			{							
+				allTestCount = allTestCount+ testCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
+			Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(unpassCaseCount >= 0)
+			{							
+				allUnpassCount = allUnpassCount+ unpassCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			cvrSearchInfo.setCvrCaseResult(null);
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CORRECT_STATUS);			
+			Integer correctCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(correctCaseCount >= 0)
+			{							
+				allCorrectCount = allCorrectCount+ correctCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);	
+			
+			statisticsDataList.add(new StatisticsData(pm.getPmName(),designCaseCount,testCaseCount,unpassCaseCount,correctCaseCount));
+			
 		}
 		
 		double[] dataPercent = CakySvg.getPercent(countList);
@@ -157,80 +224,34 @@ public class TestStatisticsAction extends BaseAction {
 		request.setAttribute("moduleSvgStr", svgStr);		
 		caseInfo.setModuleId(oldModule);
 		
-		if(allCount != 0)
+		if(allDesignCount != 0)
 		{
 			for(StatisticsData d:statisticsDataList)
 			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
+				d.setPercent(d.getDesignCaseCount()*1.0/allDesignCount);
+			}			
 		}
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allCorrectCount));
+		
 		request.setAttribute("moduleDataList", statisticsDataList);
 				
 	}
 	
-	private void statusStatistics(ActionForm form,HttpServletRequest request)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		Project projectInfo = (Project) dform.get("projectInfo");
-
-		TestCase caseInfo = (TestCase) dform.get("caseInfo");
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
-		List<Integer> countList = new ArrayList<Integer>();
-		List<String> dataInfoList = new ArrayList<String>();
-		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
-		
-		String functionList = "";
-		if(caseInfo.getModuleId() != null)
-		{
-			ProjectModule pm = projectService.getProjectModuleById(caseInfo.getModuleId());
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
-		}
-				
-		List<CaseStatus> statusList = testCaseService.getCaseStatusList();
-		for(CaseStatus s:statusList)
-		{
-			cvrSearchInfo.setCvrCaseStatus(s.getCsId());
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(count <= 0)
-			{
-				continue;
-			}
-			countList.add(count);
-			dataInfoList.add(s.getCsName() +":" + count);
-			statisticsDataList.add(new StatisticsData(s.getCsName(),count));
-			allCount = allCount+ count;
-		}
-		
-		double[]  dataPercent = CakySvg.getPercent(countList);
-		String svgStr = CakySvg.initialize(dataPercent,dataInfoList);
-		request.setAttribute("statusSvgStr", svgStr);		
-		cvrSearchInfo.setCvrCaseStatus(null);
-		
-		if(allCount != 0)
-		{
-			for(StatisticsData d:statisticsDataList)
-			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
-		}
-		request.setAttribute("statusDataList", statisticsDataList);
-				
-	}
 	
-	private void resultStatistics(ActionForm form,HttpServletRequest request)
+	private void userStatistics( ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");
-
+	
 		TestCase caseInfo = (TestCase) dform.get("caseInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 		List<Integer> countList = new ArrayList<Integer>();
 		List<String> dataInfoList = new ArrayList<String>();
 		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
+		Integer allDesignCount = 0;
+		Integer allTestCount = 0;
+		Integer allUnpassCount = 0;
+		Integer allCorrectCount = 0;
 		
 		String functionList = "";
 		if(caseInfo.getModuleId() != null)
@@ -239,138 +260,71 @@ public class TestStatisticsAction extends BaseAction {
 			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
 		}
 				
-		List<TestResult> resultList = testCaseService.getTestResultList();		
-		for(TestResult s:resultList)
+		ArrayList<TeamMember> tmList = projectInfo.getMemberList();		
+		for(TeamMember tm:tmList)
 		{
-			cvrSearchInfo.setCvrCaseResult(s.getTrId());
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(count <= 0)
+			if(tm.getTmFlag().equals(CommonService.DELETE_FLAG) || tm.getAccount().getDept().equals(Department.DEPART_DEVELOP))
 			{
 				continue;
 			}
-			countList.add(count);
-			dataInfoList.add(s.getTrName() +":" + count);
-			statisticsDataList.add(new StatisticsData(s.getTrName(),count));
-			allCount = allCount+ count;
+			
+			caseInfo.setTcCreateUser(tm.getTmAccount());
+			Integer designCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(designCaseCount > 0)
+			{
+				countList.add(designCaseCount);
+				dataInfoList.add(tm.getAccount().getPersonName() +":" + designCaseCount);				
+				allDesignCount = allDesignCount+ designCaseCount;
+			}			
+			caseInfo.setTcCreateUser(null);
+			
+			cvrSearchInfo.setCvrTestUser(tm.getTmAccount());
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(testCaseCount > 0)
+			{							
+				allTestCount = allTestCount+ testCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+						
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
+			Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(unpassCaseCount >= 0)
+			{							
+				allUnpassCount = allUnpassCount+ unpassCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			cvrSearchInfo.setCvrCaseResult(null);
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CORRECT_STATUS);			
+			Integer correctCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(correctCaseCount >= 0)
+			{							
+				allCorrectCount = allCorrectCount+ correctCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			cvrSearchInfo.setCvrTestUser(null);
+			
+			statisticsDataList.add(new StatisticsData(tm.getAccount().getPersonName(),designCaseCount,testCaseCount,unpassCaseCount,correctCaseCount));
 		}
 		
 		double[] dataPercent = CakySvg.getPercent(countList);
 		String svgStr = CakySvg.initialize(dataPercent,dataInfoList);
-		request.setAttribute("resultSvgStr", svgStr);		
-		cvrSearchInfo.setCvrCaseResult(null);
-		
-		if(allCount != 0)
+		request.setAttribute("userSvgStr", svgStr);
+				
+		if(allDesignCount != 0)
 		{
 			for(StatisticsData d:statisticsDataList)
 			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
+				d.setPercent(d.getDesignCaseCount()*1.0/allDesignCount);
+			}			
 		}
-		request.setAttribute("resultDataList", statisticsDataList);
-				
-	}
-	
-	private void importLevelStatistics(ActionForm form,HttpServletRequest request)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		Project projectInfo = (Project) dform.get("projectInfo");
-
-		TestCase caseInfo = (TestCase) dform.get("caseInfo");
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
-		List<Integer> countList = new ArrayList<Integer>();
-		List<String> dataInfoList = new ArrayList<String>();
-		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allCorrectCount));
 		
-		String functionList = "";
-		if(caseInfo.getModuleId() != null)
-		{
-			ProjectModule pm = projectService.getProjectModuleById(caseInfo.getModuleId());
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
-		}
-				
-		List<ImportantLevel> levelList = testCaseService.getImportantLevelList();		
-		for(ImportantLevel s:levelList)
-		{
-			cvrSearchInfo.setCvrImportantLevel(s.getIlId());
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(count <= 0)
-			{
-				continue;
-			}
-			countList.add(count);
-			dataInfoList.add(s.getIlName() +":" + count);
-			statisticsDataList.add(new StatisticsData(s.getIlName(),count));
-			allCount = allCount+ count;
-		}
-
-		double[] dataPercent = CakySvg.getPercent(countList);
-		String svgStr = CakySvg.initialize(dataPercent,dataInfoList);
-		request.setAttribute("importLevelSvgStr", svgStr);		
-		cvrSearchInfo.setCvrImportantLevel(null);
-		
-		if(allCount != 0)
-		{
-			for(StatisticsData d:statisticsDataList)
-			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
-		}
-		request.setAttribute("importLevelDataList", statisticsDataList);
-				
-	}
-	
-	private void bugTypeStatistics( ActionForm form,HttpServletRequest request)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		Project projectInfo = (Project) dform.get("projectInfo");
-	
-		TestCase caseInfo = (TestCase) dform.get("caseInfo");
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
-		List<Integer> countList = new ArrayList<Integer>();
-		List<String> dataInfoList = new ArrayList<String>();
-		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
-		
-		String functionList = "";
-		if(caseInfo.getModuleId() != null)
-		{
-			ProjectModule pm = projectService.getProjectModuleById(caseInfo.getModuleId());
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
-		}
-				
-		List<BugType> typeList = testCaseService.getBugTypeList();		
-		for(BugType s:typeList)
-		{
-			cvrSearchInfo.setCvrBugType(s.getBtId());
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(count <= 0)
-			{
-				continue;
-			}
-			countList.add(count);
-			dataInfoList.add(s.getBtName() +":" + count);
-			statisticsDataList.add(new StatisticsData(s.getBtName(),count));
-			allCount = allCount+ count;
-		}
-		
-		double[] dataPercent = CakySvg.getPercent(countList);
-		String svgStr = CakySvg.initialize(dataPercent,dataInfoList);
-		request.setAttribute("bugTypeSvgStr", svgStr);
-		cvrSearchInfo.setCvrBugType(null);
-		
-		if(allCount != 0)
-		{
-			for(StatisticsData d:statisticsDataList)
-			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
-		}
-		
-		request.setAttribute("bugTypeDataList", statisticsDataList);
+		request.setAttribute("userDataList", statisticsDataList);
 				
 	}
 	
@@ -384,7 +338,10 @@ public class TestStatisticsAction extends BaseAction {
 		List<Integer> countList = new ArrayList<Integer>();
 		List<String> dataInfoList = new ArrayList<String>();
 		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allCount = 0;
+		Integer allDesignCount = 0;
+		Integer allTestCount = 0;
+		Integer allUnpassCount = 0;
+		Integer allCorrectCount = 0;
 		
 		ArrayList<ModuleFunction> mfList = null;
 		if(caseInfo.getModuleId() == null)
@@ -399,16 +356,42 @@ public class TestStatisticsAction extends BaseAction {
 		for(ModuleFunction mf:mfList)
 		{					
 			caseInfo.setTcModuleFunction(mf.getMuId());
-			Integer count = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo});
-			
-			if(count <= 0)
+						
+			Integer designCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo});
+			if(designCaseCount > 0)
 			{
-				continue;
+				countList.add(designCaseCount);
+				dataInfoList.add(mf.getEntireName() +":" + designCaseCount);
+				allDesignCount = allDesignCount+ designCaseCount;
 			}
-			countList.add(count);
-			dataInfoList.add(mf.getEntireName() +":" + count);
-			statisticsDataList.add(new StatisticsData(mf.getEntireName(),count));
-			allCount = allCount+ count;
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo});
+			if(testCaseCount >= 0)
+			{							
+				allTestCount = allTestCount+ testCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
+			Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo});
+			if(unpassCaseCount >= 0)
+			{							
+				allUnpassCount = allUnpassCount+ unpassCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			cvrSearchInfo.setCvrCaseResult(null);
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CORRECT_STATUS);			
+			Integer correctCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo});
+			if(correctCaseCount >= 0)
+			{							
+				allCorrectCount = allCorrectCount+ correctCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);	
+			
+			statisticsDataList.add(new StatisticsData(mf.getEntireName(),designCaseCount,testCaseCount,unpassCaseCount,correctCaseCount));
 		}
 		
 		double[] dataPercent = CakySvg.getPercent(countList);
@@ -416,17 +399,16 @@ public class TestStatisticsAction extends BaseAction {
 		request.setAttribute("functionSvgStr", svgStr);
 		caseInfo.setTcModuleFunction(null);
 		
-		if(allCount != 0)
+		if(allDesignCount != 0)
 		{
 			for(StatisticsData d:statisticsDataList)
 			{
-				d.setPercent(d.getCount()*1.0/allCount);
-			}
-			statisticsDataList.add(new StatisticsData("All",allCount,1));
+				d.setPercent(d.getDesignCaseCount()*1.0/allDesignCount);
+			}			
 		}
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allCorrectCount));
 		
-		request.setAttribute("functionDataList", statisticsDataList);
-				
+		request.setAttribute("functionDataList", statisticsDataList);				
 	}
 
 	public void setTestStatisticsService(TestStatisticsService testStatisticsService) {

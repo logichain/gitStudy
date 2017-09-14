@@ -175,11 +175,15 @@
 					<td align="center"><bean:write name="c" property="tcCreateTimeStr"/></td>
 					
 					<td align="center">
-						<a href='javascript:chgAction(document.all.id,"<bean:write  name="c" property="tcId" />");chgAction(document.all.method,"editTestCase");caseForm.submit();'><img border="0" src="pages\images\icon\16x16\modify.gif"></a>						
+						<logic:equal name="c" property="tcCreateUser" value='<%=request.getSession().getAttribute("accountPersonId").toString() %>'>
+						<a href='javascript:chgAction(document.all.id,"<bean:write  name="c" property="tcId" />");chgAction(document.all.method,"editTestCase");caseForm.submit();'><img border="0" src="pages\images\icon\16x16\modify.gif"></a>
+						</logic:equal>						
 					</td>
 					
 					<td align="center">
+						<logic:equal name="c" property="tcCreateUser" value='<%=request.getSession().getAttribute("accountPersonId").toString() %>'>
 						<a href='javascript:if(confirm("确认要删除这条信息吗?")) {chgAction(document.all.id,"<bean:write  name="c" property="tcId" />");chgAction(document.all.method,"deleteTestCase");caseForm.submit();}'><img border="0" src="pages\images\icon\16x16\delete.gif"></a>
+						</logic:equal>
 					</td>
 					<td align="center">
 						<a href="javascript:openDialog('casemanage.do?method=displayTestCase&id=<bean:write name="c" property="tcId"/>',960,800);"><img border="0" src="pages\images\icon\16x16\authority.gif"></a> 								

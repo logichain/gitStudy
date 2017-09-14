@@ -267,7 +267,7 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 		return CaseStatus.TESTED_STATUS.equals(cvrCaseStatus) && TestResult.TestResult_FAILED.equals(cvrCaseResult);
 	}
 	public boolean isCloseable() {
-		return CaseStatus.TESTED_STATUS.equals(cvrCaseStatus) && TestResult.TestResult_PASSED.equals(cvrCaseResult);
+		return CaseStatus.TESTED_STATUS.equals(cvrCaseStatus) && TestResult.TestResult_FAILED.equals(cvrCaseResult);
 	}
 	public boolean isDeleteable() {
 		return CaseStatus.WAIT_TEST_STATUS.equals(cvrCaseStatus);

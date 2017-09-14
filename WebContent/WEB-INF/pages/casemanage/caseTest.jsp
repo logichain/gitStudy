@@ -110,22 +110,22 @@
 		</table>
 	</fieldset>
 	
-	<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>						
+	<bean:define id="ci" name="caseForm" property="caseInfo"></bean:define>						
 	<table width="100%">
 		<tr>
-			<td width="50%" align="center">				
+			<td width="50%" align="center" rowspan="2">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<div class="putinscroll1">
-						<bean:write name="c" property="tcTestStep" filter="false"/>
+					<div class="putinscroll2">
+						<bean:write name="ci" property="tcTestStep" filter="false"/>
 					</div>								
 				</fieldset>	
 			</td>
-			<td align="center" rowspan="2">
+			<td align="center">
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_remark"/></legend>
-					<div class="putinscroll3">						
-						<textarea class="putinscroll3" id="remarkeditor" name="caseInfo.tcRemark"><%=((org.mds.test.bean.TestCase)c).getTcRemark()%></textarea>
+					<div class="putinscroll1">		
+						<bean:write name="ci" property="tcRemark" filter="false"/>			
 					</div>							
 				</fieldset>
 			</td>
@@ -134,15 +134,15 @@
 			<td align="center">	
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<div class="putinscroll0">
-						<bean:write name="c" property="tcIntendOutput" filter="false"/>
+					<div class="putinscroll1">
+						<bean:write name="ci" property="tcIntendOutput" filter="false"/>
 					</div>						
 				</fieldset>					
 			</td>
 		</tr>
 				
 
-		<c:set var="${caseInfo}" value="${c}" scope="request" />
+		<c:set var="caseInfo" value="${ci}" scope="request" />
 		<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
 	</table>
 			 

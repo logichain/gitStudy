@@ -35,8 +35,8 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	private Date pvCreateTime;
 	private boolean selected;
 	
-	private UsrAccount developLeader;
-	private UsrAccount testLeader;
+	private UsrAccount developLeader = new UsrAccount();
+	private UsrAccount testLeader = new UsrAccount();
 	
 	private ArrayList<TestCase> applyCaseList = new ArrayList<TestCase>();
 	private ArrayList<ProjectAttachment> attachmentList = new ArrayList<ProjectAttachment>();

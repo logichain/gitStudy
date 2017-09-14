@@ -72,16 +72,12 @@
     <label for="radio1"><bean:message bundle="project" key="project_version" /></label>	
     <input type="radio" id="radio2" name="radios" onchange="displayChange(this.value);" value="moduleRefer">
     <label for="radio2"><bean:message bundle="case" key="module" /></label>	
-    <input type="radio" id="radio3" name="radios" onchange="displayChange(this.value);" value="caseStatusRefer">
-    <label for="radio3"><bean:message bundle="case" key="case_status" /></label> 
-    <input type="radio" id="radio4" name="radios" onchange="displayChange(this.value);" value="testResultRefer">
-    <label for="radio4"><bean:message bundle="case" key="test_result" /></label>	
-    <input type="radio" id="radio5" name="radios" onchange="displayChange(this.value);" value="importLevelRefer">
-    <label for="radio5"><bean:message bundle="case" key="important_level" /></label>	
-    <input type="radio" id="radio6" name="radios" onchange="displayChange(this.value);" value="bugTypeRefer">
-    <label for="radio6"><bean:message bundle="case" key="bug_type" /></label> 
-    <input type="radio" id="radio7" name="radios" onchange="displayChange(this.value);" value="functionRefer">
-    <label for="radio7"><bean:message bundle="case" key="function" /></label> 
+    <input type="radio" id="radio3" name="radios" onchange="displayChange(this.value);" value="functionRefer">
+    <label for="radio3"><bean:message bundle="case" key="module_function" /></label>
+     
+    <input type="radio" id="radio4" name="radios" onchange="displayChange(this.value);" value="userRefer">
+    <label for="radio4"><bean:message bundle="case" key="test_user" /></label>	
+     
 </div>
 
 <fieldset style="width:90%;float:left;">
@@ -89,25 +85,33 @@
 		<table width="100%">
 			<tr>
 				<td width="60%">
+				<logic:notEmpty name="versionSvgStr">
 					<%=request.getAttribute("versionSvgStr") %>
+				</logic:notEmpty>
 				</td>
 				<td>
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
 							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
+							<td><bean:message bundle="case" key="case_count"/></td>
+							<td><bean:message bundle="case" key="test_count"/></td>
+							<td><bean:message bundle="case" key="bug_count"/></td>
+							<td><bean:message bundle="case" key="correct_count"/></td>
 						</tr>
 					</thead>
 					<tbody>
-						<logic:iterate id="data" name="versionDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
-						</tr>
-						</logic:iterate>
+						<logic:present name="versionDataList">
+							<logic:iterate id="data" name="versionDataList">
+								<tr>
+									<td><bean:write name="data" property="title"/></td>
+									<td><bean:write name="data" property="designCaseCount"/></td>
+									<td><bean:write name="data" property="testCaseCount"/></td>
+									<td><bean:write name="data" property="unpassCaseCount"/></td>
+									<td><bean:write name="data" property="correctCaseCount"/></td>
+								</tr>
+							</logic:iterate>
+						</logic:present>
 					</tbody>
 					</table>
 				</td>
@@ -118,141 +122,33 @@
 		<table width="100%">
 			<tr>
 				<td width="60%">
+				<logic:notEmpty name="moduleSvgStr">
 					<%=request.getAttribute("moduleSvgStr") %>
+				</logic:notEmpty>
 				</td>
 				<td>
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
 							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
+							<td><bean:message bundle="case" key="case_count"/></td>
+							<td><bean:message bundle="case" key="test_count"/></td>
+							<td><bean:message bundle="case" key="bug_count"/></td>
+							<td><bean:message bundle="case" key="correct_count"/></td>
 						</tr>
 					</thead>
 					<tbody>
-						<logic:iterate id="data" name="moduleDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
-						</tr>
-						</logic:iterate>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div id="caseStatusRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-					<%=request.getAttribute("statusSvgStr") %>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
-						</tr>
-					</thead>
-					<tbody>
-						<logic:iterate id="data" name="statusDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
-						</tr>
-						</logic:iterate>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>		
-	<div id="testResultRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-					<%=request.getAttribute("resultSvgStr") %>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
-						</tr>
-					</thead>
-					<tbody>
-						<logic:iterate id="data" name="resultDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
-						</tr>
-						</logic:iterate>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div id="importLevelRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-					<%=request.getAttribute("importLevelSvgStr") %>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
-						</tr>
-					</thead>
-					<tbody>
-						<logic:iterate id="data" name="importLevelDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
-						</tr>
-						</logic:iterate>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div id="bugTypeRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-					<%=request.getAttribute("bugTypeSvgStr") %>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
-						</tr>
-					</thead>
-					<tbody>
-						<logic:iterate id="data" name="bugTypeDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
-						</tr>
-						</logic:iterate>
+						<logic:present name="versionDataList">
+							<logic:iterate id="data" name="moduleDataList">
+								<tr>
+									<td><bean:write name="data" property="title"/></td>
+									<td><bean:write name="data" property="designCaseCount"/></td>
+									<td><bean:write name="data" property="testCaseCount"/></td>
+									<td><bean:write name="data" property="unpassCaseCount"/></td>
+									<td><bean:write name="data" property="correctCaseCount"/></td>
+								</tr>
+							</logic:iterate>
+						</logic:present>
 					</tbody>
 					</table>
 				</td>
@@ -263,31 +159,79 @@
 		<table width="100%">
 			<tr>
 				<td width="60%">
+				<logic:notEmpty name="functionSvgStr">
 					<%=request.getAttribute("functionSvgStr") %>
+				</logic:notEmpty>
 				</td>
 				<td>
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
 							<td><bean:message bundle="case" key="class_name"/></td>
-							<td><bean:message bundle="case" key="data_count"/></td>
-							<td><bean:message bundle="case" key="data_percent"/></td>
+							<td><bean:message bundle="case" key="case_count"/></td>
+							<td><bean:message bundle="case" key="test_count"/></td>
+							<td><bean:message bundle="case" key="bug_count"/></td>
+							<td><bean:message bundle="case" key="correct_count"/></td>
 						</tr>
 					</thead>
 					<tbody>
+					<logic:present name="functionDataList">
 						<logic:iterate id="data" name="functionDataList">
 						<tr>
 							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="count"/></td>
-							<td><bean:write name="data" property="percentStr"/></td>
+							<td><bean:write name="data" property="designCaseCount"/></td>
+							<td><bean:write name="data" property="testCaseCount"/></td>
+							<td><bean:write name="data" property="unpassCaseCount"/></td>
+							<td><bean:write name="data" property="correctCaseCount"/></td>
 						</tr>
 						</logic:iterate>
+					</logic:present>
 					</tbody>
 					</table>
 				</td>
 			</tr>
 		</table>
 	</div>
+	
+	<div id="userRefer" style="display:none;">
+		<table width="100%">
+			<tr>
+				<td width="60%">
+				<logic:notEmpty name="userSvgStr">
+					<%=request.getAttribute("userSvgStr") %>
+				</logic:notEmpty>
+				</td>
+				<td>
+					<table class="sort-table" width="100%">
+					<thead>	
+						<tr>
+							<td><bean:message bundle="case" key="class_name"/></td>
+							<td><bean:message bundle="case" key="case_count"/></td>
+							<td><bean:message bundle="case" key="test_count"/></td>
+							<td><bean:message bundle="case" key="bug_count"/></td>
+							<td><bean:message bundle="case" key="correct_count"/></td>
+						</tr>
+					</thead>
+					<tbody>
+					<logic:present name="userDataList">
+						<logic:iterate id="data" name="userDataList">
+						<tr>
+							<td><bean:write name="data" property="title"/></td>
+							<td><bean:write name="data" property="designCaseCount"/></td>
+							<td><bean:write name="data" property="testCaseCount"/></td>
+							<td><bean:write name="data" property="unpassCaseCount"/></td>
+							<td><bean:write name="data" property="correctCaseCount"/></td>
+						</tr>
+						</logic:iterate>
+					</logic:present>
+					</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	
 </fieldset>
 <script language="JavaScript">
 
@@ -297,7 +241,7 @@
 
  function displayChange(divId)
  {
- 	var divList = ["versionRefer","moduleRefer","caseStatusRefer","testResultRefer","importLevelRefer","bugTypeRefer","functionRefer"];
+ 	var divList = ["versionRefer","moduleRefer","functionRefer","userRefer"];
  	for(var i=0;i<divList.length;i++)
  	{
  		if(divList[i] == divId)

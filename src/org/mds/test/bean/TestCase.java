@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.king.security.domain.UsrAccount;
+import org.mds.common.CommonService;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.ProjectVersion;
 
@@ -31,7 +32,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements
 	private String tcTestContent;
 	private String tcTestStep = "";
 	private String tcIntendOutput="";
-	private Integer tcFlag;
+	private Integer tcFlag = CommonService.NORMAL_FLAG;
 	private String tcRemark = "";
 	
 	private Integer tcCreateUser;

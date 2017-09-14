@@ -13,26 +13,7 @@
         <property name="PName" type="java.lang.String">
             <column name="p_name" length="45" />
         </property>
-        
-        <property name="PDevelopBegin" type="string">
-            <column name="p_develop_begin" length="13" />
-        </property>
-        <property name="PDevelopEnd" type="string">
-            <column name="p_develop_end" length="13" />
-        </property>
-        <property name="PTestBegin" type="string">
-            <column name="p_test_begin" length="13" />
-        </property>
-        <property name="PTestEnd" type="string">
-            <column name="p_test_end" length="13" />
-        </property>
-        
-        <property name="PDevelopLeader" type="integer">
-            <column name="p_develop_leader"/>
-        </property>
-        <property name="PTestLeader" type="integer">
-            <column name="p_test_leader"/>
-        </property>
+              
         
         <property name="PFlag" type="java.lang.Integer">
             <column name="p_flag" />
@@ -72,13 +53,7 @@
             </key>
             <one-to-many class="org.mds.project.bean.ProjectVersion" />
         </set>
-        
-        <set name="jobTaskSet" inverse="true" where=" jt_status != -1" order-by="jt_id">
-            <key>
-                <column name="jt_project" not-null="true"/>
-            </key>
-            <one-to-many class="org.mds.project.bean.JobTask" />
-        </set>
+              
         
     </class>
 </hibernate-mapping>

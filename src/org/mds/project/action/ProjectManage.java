@@ -21,14 +21,11 @@ import org.king.security.domain.UsrAccount;
 import org.king.security.service.AccountService;
 import org.king.util.FileUtil;
 import org.mds.common.CommonService;
-import org.mds.project.bean.JobTask;
-import org.mds.project.bean.JobTaskStatus;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectAttachment;
 import org.mds.project.bean.ProjectModule;
 import org.mds.project.bean.ProjectVersion;
-import org.mds.project.bean.TaskAttachment;
 import org.mds.project.bean.TeamMember;
 import org.mds.project.service.ProjectService;
 import org.mds.project.service.impl.ProjectServiceImpl;
@@ -36,85 +33,7 @@ import org.mds.project.service.impl.ProjectServiceImpl;
 public class ProjectManage extends BaseAction {
 	private AccountService accountService;
 	private ProjectService projectService;
-
-	public ActionForward addTaskAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
-		
-		Project project = (Project) dform.get("projectInfo");
-		String id = request.getParameter("id");
-		
-		for(JobTask jt:project.getJobTaskList())
-		{
-			if(jt.getJtId().equals(Integer.valueOf(id)))
-			{
-				TaskAttachment ta = new TaskAttachment();
-				ta.setTaFlag(CommonService.NORMAL_FLAG);
-				ta.setTaCreateTime(new Date());
-				ta.setTaCreateUser(ua.getId());
-				ta.setTaJobTask(jt.getJtId());
-				ta.setJobTask(jt);
 				
-				jt.setCurrentAttachment(ta);
-				dform.set("jobTaskInfo",jt);
-				
-				break;
-			}
-		}
-								
-		return  mapping.findForward("taskAttachmentInput");
-	}
-	
-	public ActionForward editTaskAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-				
-		Project project = (Project) dform.get("projectInfo");
-		String id = request.getParameter("id");
-		
-		for(JobTask jt:project.getJobTaskList())
-		{
-			for(TaskAttachment ta:jt.getTaskAttachmentList())
-			{
-				if(ta.getTaId().equals(Integer.valueOf(id)))
-				{					
-					jt.setCurrentAttachment(ta);
-					dform.set("jobTaskInfo",jt);
-					
-					break;
-				}
-			}			
-		}
-								
-		return  mapping.findForward("taskAttachmentInput");
-	}
-	
-	public ActionForward deleteTaskAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		
-		Project project = (Project) dform.get("projectInfo");
-		String id = request.getParameter("id");
-		
-		for(JobTask jt:project.getJobTaskList())
-		{
-			for(TaskAttachment ta:jt.getTaskAttachmentList())
-			{
-				if(ta.getTaId().equals(Integer.valueOf(id)))
-				{					
-					ta.setTaFlag(CommonService.DELETE_FLAG);
-					projectService.saveTaskAttachment(ta);
-					
-					jt.getTaskAttachmentList().remove(ta);
-					break;
-				}
-			}			
-		}
-						
-		return  mapping.findForward("editCEInfo");
-	}
-	
 	public ActionForward addAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -163,35 +82,7 @@ public class ProjectManage extends BaseAction {
 				
 		return null;
 	}
-	
-	public ActionForward confirmTaskAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
-		if(!uploadPath.endsWith("\\"))
-		{
-			uploadPath = uploadPath + "\\";
-		}
-				
-		JobTask task = (JobTask) dform.get("jobTaskInfo");
-		TaskAttachment ta = task.getCurrentAttachment();
-		projectService.saveTaskAttachment(ta, uploadPath);
-		
-		task.getTaskAttachmentList().add(ta);
-		
-		if(ta.getJobTask().getJtType().equals(JobTask.JOBTASK_TYPE_CE))
-		{
-			return mapping.findForward("refreshProjectCE");
-		}
-		else if(ta.getJobTask().getJtType().equals(JobTask.JOBTASK_TYPE_CFDA))
-		{
-			return mapping.findForward("refreshProjectCFDA");
-		}
-																			
-		return null;
-	}
-	
-		
+			
 	public ActionForward deleteAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -287,7 +178,6 @@ public class ProjectManage extends BaseAction {
 	private void prepareMetaData(HttpServletRequest request)
 	{
 		request.setAttribute("departmentList", accountService.getDepartmentList());
-		request.setAttribute("statusList", projectService.getJobTaskStatusList());
 	}
 	
 	public ActionForward resetSearchAccount(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
@@ -296,7 +186,6 @@ public class ProjectManage extends BaseAction {
 			log.debug("Entering 'securityAction->listAccount' method");
 		}
 		DynaValidatorForm dform = (DynaValidatorForm) form;
-		dform.set("para", null);
 		dform.set("paraPersonName", null);
 		dform.set("department", null);
 		
@@ -324,20 +213,22 @@ public class ProjectManage extends BaseAction {
 		UsrAccount ua = accountService.findAccountById(Integer.parseInt(id));
 		if("dl".equals(opType))
 		{
-			project.setDevelopLeader(ua);
-			project.setPDevelopLeader(ua.getId());
+			project.getInitProjectVersion().setDevelopLeader(ua);
+			project.getInitProjectVersion().setPvDevelopLeader(ua.getId());
 		}
 		else if("tl".equals(opType))
 		{
-			project.setTestLeader(ua);
-			project.setPTestLeader(ua.getId());
+			project.getInitProjectVersion().setTestLeader(ua);
+			project.getInitProjectVersion().setPvTestLeader(ua.getId());
 		}
 		else if("tm".equals(opType))
 		{
 			TeamMember tm = this.saveTeamMember(ua, project.getPId());
 			project.getMemberList().add(tm);
+			
+			request.setAttribute("tabpageId","memberInfo");
 						
-			return mapping.findForward("refreshTeamMember");
+			return mapping.findForward("refreshProjectInfo");
 		}
 		else if("vdl".equals(opType))
 		{
@@ -355,14 +246,7 @@ public class ProjectManage extends BaseAction {
 			
 			return mapping.findForward("refreshVersionInput");
 		}
-		else if("jtl".equals(opType))
-		{
-			JobTask jobTaskInfo = (JobTask)dform.get("jobTaskInfo");			
-			jobTaskInfo.setLeader(ua);
-			jobTaskInfo.setJtLeader(ua.getId());
-						
-			return mapping.findForward("refreshJobTaskInput");
-		}
+		
 		
 		return mapping.findForward("refreshProjectInput");
 	}
@@ -379,23 +263,10 @@ public class ProjectManage extends BaseAction {
 		return tm;
 	}
 	
-	public ActionForward refreshProjectVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{		
-		
-		return mapping.findForward("editVersionInfo");
-	}
-	
 	public ActionForward refreshVersionInput(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{		
 		
 		return mapping.findForward("versionInput");
-	}
-	
-	public ActionForward refreshJobTaskInput(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{				
-		this.prepareMetaData(request);
-		
-		return mapping.findForward("jobTaskInput");
 	}
 	
 	
@@ -405,6 +276,26 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("projectInput");
 	}
 	
+	public ActionForward modifyTeamMember(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	{		
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		Project project = (Project) dform.get("projectInfo");
+		
+		String id = request.getParameter("id");
+		TeamMember ctm = null;
+		for(TeamMember tm:project.getMemberList())
+		{
+			if(tm.getTmId().equals(Integer.valueOf(id)))
+			{
+				ctm = tm;
+				break;
+			}
+		}
+		
+		request.setAttribute("currentTeamMember",ctm);
+								
+		return mapping.findForward("editTeamMember");
+	}
 	
 	public ActionForward deleteTeamMember(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{		
@@ -426,13 +317,20 @@ public class ProjectManage extends BaseAction {
 						
 		project.getMemberList().remove(ctm);
 		
-		return mapping.findForward("editMemberInfo");
+		request.setAttribute("tabpageId","memberInfo");
+		
+		return mapping.findForward("editProjectInfo");
 	}
-	public ActionForward refreshTeamMember(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	public ActionForward refreshProjectInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{		
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		
-		return mapping.findForward("editMemberInfo");
+		Project project = (Project) dform.get("projectInfo");
+		project = projectService.getProjectById(project.getPId());		
+		dform.set("projectInfo", project);
+		request.setAttribute("tabpageId",request.getParameter("tabpageId"));
+		
+		return mapping.findForward("editProjectInfo");
 	}
 	
 	public ActionForward createProject(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
@@ -546,13 +444,7 @@ public class ProjectManage extends BaseAction {
 		ProjectVersion vtr = project.getInitProjectVersion();
 		if(vtr.getPvId() == null)
 		{			
-			vtr.setPvProject(project.getPId());
-			vtr.setPvDevelopLeader(project.getPDevelopLeader());
-			vtr.setPvTestLeader(project.getPTestLeader());
-			vtr.setPvDevelopBegin(project.getPDevelopBegin());
-			vtr.setPvDevelopEnd(project.getPDevelopEnd());
-			vtr.setPvTestBegin(project.getPTestBegin());
-			vtr.setPvTestEnd(project.getPTestEnd());			
+			vtr.setPvProject(project.getPId());			
 		}	
 		
 		projectService.saveProjectVersion(vtr,uploadPath);
@@ -560,8 +452,8 @@ public class ProjectManage extends BaseAction {
 		project.setProjectVersionList(vtrList);
 		
 		//当开发、测试leader不是项目成员时，自动添加为项目成员
-		this.autoAddTeamMember(project, project.getDevelopLeader());	
-		this.autoAddTeamMember(project, project.getTestLeader());
+		this.autoAddTeamMember(project, project.getInitProjectVersion().getDevelopLeader());	
+		this.autoAddTeamMember(project, project.getInitProjectVersion().getTestLeader());
 		
 		return this.resetSearchProject(mapping, dform, request, response);
 	}
@@ -587,13 +479,15 @@ public class ProjectManage extends BaseAction {
 		//当开发、测试leader不是项目成员时，自动添加为项目成员
 		this.autoAddTeamMember(project, vtr.getDevelopLeader());	
 		this.autoAddTeamMember(project, vtr.getTestLeader());
+		
+		request.setAttribute("tabpageId","versionInfo");
 						
-		return mapping.findForward("refreshProjectVersion");
+		return mapping.findForward("refreshProjectInfo");
 	}
 	
 	private void autoAddTeamMember(Project project,UsrAccount ua)
 	{
-		boolean tmflag = projectService.isTeamMember(project.getPId(), ua.getId());
+		boolean tmflag = project.isTeamMember(ua);
 		if(!tmflag)
 		{
 			TeamMember tm = this.saveTeamMember( ua, project.getPId());
@@ -638,12 +532,7 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("projectList");
 	}
 	
-	public ActionForward refreshProjectModule(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		
-		return mapping.findForward("editModuleInfo");
-	}
+	
 	
 	public ActionForward addProjectModule(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{
@@ -660,77 +549,7 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("moduleInput");
 	}
 	
-	public ActionForward addCEJobTask(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		String pid = request.getParameter("pid");
-		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
-				
-		Project project = projectService.getProjectById(Integer.parseInt(pid));
-		JobTask jt = this.createJobTask(project);
-		jt.setJtType(JobTask.JOBTASK_TYPE_CE);				
-		jt.setJtCreateUser(ua.getId());
-				
-		dform.set("jobTaskInfo", jt);
-		
-		this.prepareMetaData(request);
-		
-		return mapping.findForward("jobTaskInput");
-	}
-	
-	public ActionForward addCFDAJobTask(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		String pid = request.getParameter("pid");
-		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
-				
-		Project project = projectService.getProjectById(Integer.parseInt(pid));
-		JobTask jt = this.createJobTask(project);
-		jt.setJtType(JobTask.JOBTASK_TYPE_CFDA);				
-		jt.setJtCreateUser(ua.getId());
-				
-		dform.set("jobTaskInfo", jt);
-		
-		this.prepareMetaData(request);
-		
-		return mapping.findForward("jobTaskInput");
-	}
-	
-	public ActionForward editJobTask(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		String id = request.getParameter("id");
-		
-		Project project = (Project) dform.get("projectInfo");
-		
-		for(JobTask jt:project.getJobTaskList())
-		{
-			if(jt.getJtId().equals(Integer.valueOf(id)))
-			{
-				dform.set("jobTaskInfo", jt);
-				break;
-			}
-		}
-						
-		this.prepareMetaData(request);
-		
-		return mapping.findForward("jobTaskInput");
-	}
-	
-	private JobTask createJobTask(Project project)
-	{
-		Date createTime = new Date();
-		
-		JobTask jt = new JobTask();
-		jt.setJtProject(project.getPId());
-		jt.setProject(project);
-		jt.setJtStatus(JobTaskStatus.JOBTASK_STATUS_INIT);
-				
-		jt.setJtCreateTime(createTime);
-		jt.setLeader(new UsrAccount());
-		
-		return jt;
-	}
+
 	
 	public ActionForward addProjectVersion(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
@@ -759,44 +578,11 @@ public class ProjectManage extends BaseAction {
 		ProjectModule pm = (ProjectModule)dform.get("moduleInfo");
 		projectService.saveProjectModule(pm);
 		
-		return mapping.findForward("refreshProjectModule");
+		request.setAttribute("tabpageId","moduleInfo");
+		
+		return mapping.findForward("refreshProjectInfo");
 	}
-	
-	public ActionForward saveJobTask(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-		Project project = (Project)dform.get("projectInfo");
 		
-		JobTask jt = (JobTask)dform.get("jobTaskInfo");
-		if(jt.getJtId() == null)
-		{			
-			project.getJobTaskList().add(jt);
-		}
-		
-		List<JobTaskStatus> list = projectService.getJobTaskStatusList();
-		for(JobTaskStatus jts:list)
-		{
-			if(jts.getJtsId().equals(jt.getJtStatus()))
-			{
-				jt.setStatus(jts);
-				break;
-			}
-		}
-		
-		projectService.saveJobTask(jt);
-		
-		if(jt.getJtType().equals(JobTask.JOBTASK_TYPE_CE))
-		{
-			return mapping.findForward("refreshProjectCE");
-		}
-		else if(jt.getJtType().equals(JobTask.JOBTASK_TYPE_CFDA))
-		{
-			return mapping.findForward("refreshProjectCFDA");
-		}
-		
-		return null;		
-	}	
-	
 	public ActionForward editProjectModule(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -833,9 +619,11 @@ public class ProjectManage extends BaseAction {
 			}
 		}		
 
-		project.getModuleList().remove(cpm);				
+		project.getModuleList().remove(cpm);		
 		
-		return mapping.findForward("editModuleInfo");
+		request.setAttribute("tabpageId","moduleInfo");
+		
+		return mapping.findForward("editProjectInfo");
 	}
 	
 	public ActionForward addModuleFunction(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
@@ -921,7 +709,9 @@ public class ProjectManage extends BaseAction {
 		
 		projectService.saveModuleFunction(mu);		
 		
-		return mapping.findForward("refreshProjectModule");
+		request.setAttribute("tabpageId","moduleInfo");
+		
+		return mapping.findForward("refreshProjectInfo");
 	}
 	
 	public ActionForward editModuleFunction(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
@@ -997,8 +787,10 @@ public class ProjectManage extends BaseAction {
 		{
 			cmu.getProjectModule().getModuleFunctionList().remove(cmu);
 		}
+		
+		request.setAttribute("tabpageId","moduleInfo");
 							
-		return mapping.findForward("editModuleInfo");
+		return mapping.findForward("editProjectInfo");
 	}
 	
 	public AccountService getAccountService() {

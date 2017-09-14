@@ -54,16 +54,5 @@
 		<put name="body" value="/WEB-INF/pages/projectmanage/attachmentInput.jsp" />
 	</definition>
 	
-	<definition name="jobTaskInputPageDef" extends="inputBaseDef">		
-		<put name="title" value="工作任务信息编辑"/>
-		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
-		<put name="body" value="/WEB-INF/pages/projectmanage/jobTaskInput.jsp" />
-	</definition>
-	
-	<definition name="taskAttachmentInputPageDef" extends="inputBaseDef">		
-		<put name="title" value="附件信息编辑"/>
-		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
-		<put name="body" value="/WEB-INF/pages/projectmanage/taskAttachmentInput.jsp" />
-	</definition>
-	
+		
 </tiles-definitions>

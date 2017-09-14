@@ -41,22 +41,20 @@
 					<td width="10%" align="center">
 						<bean:message bundle="security" key="person.code" />
 					</td>
-					<td width="20%" align="center">
+					<td align="center">
 						<bean:message bundle="security" key="person.name" />
 					</td>
-					<td width="10%" align="center">
-						<bean:message bundle="security" key="person.birthday" />
-					</td>
-					<td width="10%" align="center">
+					
+					<td align="center">
 						<bean:message bundle="security" key="person.dept" />
 					</td>
-					<td width="25%" align="center">
+					<td width="30%" align="center">
 						<bean:message bundle="security" key="person.email" />
 					</td>
 					<td width="5%" align="center">
 						<bean:message key="button.edit" />
 					</td>
-					<td align="center">
+					<td width="5%" align="center">
 						<bean:message key="button.delete" />
 					</td>
 				</tr>
@@ -86,9 +84,7 @@
 							<td>
 								<bean:write name="account" property="personName" />
 							</td>
-							<td>
-								<bean:write name="account" property="birthdayStr" />
-							</td>
+							
 							<td>
 								<bean:write name="account" property="department.DName" />
 							</td>

@@ -103,20 +103,7 @@
 				<arg position="0" bundle="security" key="person.dept" />
 			</field>
 		</form>
-		<form name="documentItemForm">
-			<field property="documentItem.diSerial" depends="integer,required">
-				<arg position="0" key="documentItem.serial"  />
-			</field>
-			
-			<field property="documentItem.diContent" depends="maxlength">
-				<var>
-					<var-name>maxlength</var-name>
-					<var-value>2000</var-value>
-				</var>
-				<arg position="0" key="documentItem.content"  />
-				<arg position="2" key="${var:maxlength}" resource="false"/>
-			</field>			
-		</form>
+		
 		<form name="caseForm">
 			<field property="caseInfo.moduleId" depends="required">
 				<arg position="0" bundle="case" key="module"  />
@@ -138,25 +125,25 @@
 			<field property="projectInfo.PName" depends="required">
 				<arg position="0" bundle="project" key="project_name"  />
 			</field>
-			<field property="projectInfo.initProjectVersion.vtrVersion" depends="required">
+			<field property="projectInfo.initProjectVersion.pvVersion" depends="required">
 				<arg position="0" bundle="project" key="version_code"  />
 			</field>
-			<field property="projectInfo.developLeader.personName" depends="required">
+			<field property="projectInfo.initProjectVersion.developLeader.personName" depends="required">
 				<arg position="0" bundle="project" key="develop_leader"  />
 			</field>
-			<field property="projectInfo.PDevelopBegin" depends="required">
+			<field property="projectInfo.initProjectVersion.pvDevelopBegin" depends="required">
 				<arg position="0" bundle="project" key="develop_begin"  />
 			</field>
-			<field property="projectInfo.PDevelopEnd" depends="required">
+			<field property="projectInfo.initProjectVersion.pvDevelopEnd" depends="required">
 				<arg position="0" bundle="project" key="develop_end"  />
 			</field>
-			<field property="projectInfo.testLeader.personName" depends="required">
+			<field property="projectInfo.initProjectVersion.testLeader.personName" depends="required">
 				<arg position="0" bundle="project" key="test_leader"  />
 			</field>
-			<field property="projectInfo.PTestBegin" depends="required">
+			<field property="projectInfo.initProjectVersion.pvTestBegin" depends="required">
 				<arg position="0" bundle="project" key="test_begin"  />
 			</field>
-			<field property="projectInfo.PTestEnd" depends="required">
+			<field property="projectInfo.initProjectVersion.pvTestEnd" depends="required">
 				<arg position="0" bundle="project" key="test_end"  />
 			</field>				
 		</form>

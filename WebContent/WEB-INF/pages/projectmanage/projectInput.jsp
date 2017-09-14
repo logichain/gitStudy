@@ -33,7 +33,7 @@
 				<html:text property="projectInfo.PName" size="45" maxlength="45"/>
 			</td>			
 			<td align="left">
-				<bean:message bundle="project" key="version_code" />£∫			
+				≥ı º<bean:message bundle="project" key="version_code" />£∫			
 				<html:text property="projectInfo.initProjectVersion.pvVersion" size="30" maxlength="45"/>
 			</td>			
 		</tr>
@@ -46,17 +46,17 @@
 					<tr>
 						<td align="right" width="20%"><bean:message bundle="project" key="leader"/>£∫</td>
 						<td align="left">
-							<html:text property="projectInfo.developLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
-							<html:button property="" onclick="openDialog('projectmanage.do?method=searchAccount&opType=dl',800,420);">...</html:button>			
+							<html:text property="projectInfo.initProjectVersion.developLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
+							<html:button property="" onclick="openDialog('projectmanage.do?method=searchAccount&opType=dl',700,420);">...</html:button>			
 						</td>
 					</tr>
 					<tr>
 						<td align="right"><bean:message bundle="project" key="begin"/>£∫</td>
-						<td align="left"><html:text property="projectInfo.PDevelopBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
+						<td align="left"><html:text property="projectInfo.initProjectVersion.pvDevelopBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
 					</tr>
 					<tr>
 						<td align="right"><bean:message bundle="project" key="end"/>£∫</td>
-						<td align="left"><html:text property="projectInfo.PDevelopEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
+						<td align="left"><html:text property="projectInfo.initProjectVersion.pvDevelopEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
 					</tr>
 				</table>
 			</fieldset>
@@ -68,17 +68,17 @@
 					<tr>
 						<td align="right" width="20%"><bean:message bundle="project" key="leader"/>£∫</td>
 						<td align="left">
-							<html:text property="projectInfo.testLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
-							<html:button property="" onclick="openDialog('projectmanage.do?method=searchAccount&opType=tl',800,420);">...</html:button>			
+							<html:text property="projectInfo.initProjectVersion.testLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
+							<html:button property="" onclick="openDialog('projectmanage.do?method=searchAccount&opType=tl',700,420);">...</html:button>			
 						</td>
 					</tr>
 					<tr>
 						<td align="right"><bean:message bundle="project" key="begin"/>£∫</td>
-						<td align="left"><html:text property="projectInfo.PTestBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
+						<td align="left"><html:text property="projectInfo.initProjectVersion.pvTestBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
 					</tr>
 					<tr>
 						<td align="right"><bean:message bundle="project" key="end"/>£∫</td>
-						<td align="left"><html:text property="projectInfo.PTestEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
+						<td align="left"><html:text property="projectInfo.initProjectVersion.pvTestEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
 					</tr>
 				</table>
 			</fieldset>
@@ -115,7 +115,7 @@
 						</div>
 					</td>			
 					<td width="20%" align="left">
-						<html:button property="" onclick="openDialog('projectmanage.do?method=addAttachment&opType=projectInput',500,180);"><bean:message bundle="project" key="button_addattachment"/></html:button>
+						<html:button property="" onclick="openDialog('projectmanage.do?method=addAttachment&opType=projectInput',600,240);"><bean:message bundle="project" key="button_addattachment"/></html:button>
 					</td>
 				</tr>	
 			</table>

@@ -9,6 +9,8 @@ public class Department extends org.king.framework.domain.BaseObject implements
 
 	// Fields
 
+	public static Integer DEPART_DEVELOP = 1;
+	public static Integer DEPART_QUALITY = 2;
 	/**
 	 * 
 	 */

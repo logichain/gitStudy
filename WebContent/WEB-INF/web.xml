@@ -131,19 +131,6 @@
 		<servlet-name>CheckCodeImage</servlet-name>
 		<servlet-class>org.king.security.web.servlet.CheckCodeImage</servlet-class>
 	</servlet>
-	<servlet>
-		<servlet-name>webGui-init</servlet-name>
-		<servlet-class>com.pow2.webgui.resources.WebGuiInit</servlet-class>
-		<init-param>
-			<param-name>webGui.prototypes.properties</param-name>
-			<param-value>/WEB-INF/webgui/wgPrototypes.properties</param-value>
-		</init-param>
-		<init-param>
-			<param-name>webGui.velocity.properties</param-name>
-			<param-value>/WEB-INF/webgui/velocity.properties</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
 
 	<!-- Standard Action Servlet Mapping -->
 	<servlet-mapping>
@@ -209,9 +196,6 @@
 			<taglib-uri>/tags/pager</taglib-uri>
 			<taglib-location>/WEB-INF/taglib/pager-taglib.tld</taglib-location>
 		</taglib>
-		<taglib>
-			<taglib-uri>/tags/pow2webgui</taglib-uri>
-			<taglib-location>/WEB-INF/taglib/pow2webgui.tld</taglib-location>
-		</taglib>
+		
 </web-app>
 

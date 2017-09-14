@@ -148,6 +148,10 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		{
 			hqlStr = hqlStr + " and e.testUser.personName like '%" + cvr.getCvrTestUserStr() + "%'";
 		}
+		if(cvr.getCvrTestUser() != null)
+		{
+			hqlStr = hqlStr + " and e.cvrTestUser = " + cvr.getCvrTestUser();
+		}
 		if(cvr.getCvrCorrectTimeStr()  != null && !cvr.getCvrCorrectTimeStr().isEmpty())
 		{
 			hqlStr = hqlStr + " and e.cvrCorrectTime like '%" + cvr.getCvrCorrectTimeStr() + "%'";
@@ -208,6 +212,11 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		if(searchInfo.getTcCreateUserStr() != null && !searchInfo.getTcCreateUserStr().isEmpty())
 		{
 			hqlStr = hqlStr + " and a.createUser.personName like '%" + searchInfo.getTcCreateUserStr() + "%'";
+		}
+		
+		if(searchInfo.getTcCreateUser() != null)
+		{
+			hqlStr = hqlStr + " and a.tcCreateUser = " + searchInfo.getTcCreateUser();
 		}
 
 		

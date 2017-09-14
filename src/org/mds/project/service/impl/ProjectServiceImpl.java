@@ -10,10 +10,6 @@ import org.king.framework.service.impl.BaseService;
 import org.king.security.domain.UsrAccount;
 import org.king.util.FileUtil;
 import org.mds.common.CommonService;
-import org.mds.project.bean.JobTask;
-import org.mds.project.bean.JobTaskDAO;
-import org.mds.project.bean.JobTaskStatus;
-import org.mds.project.bean.JobTaskStatusDAO;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.ModuleFunctionDAO;
 import org.mds.project.bean.Project;
@@ -24,8 +20,6 @@ import org.mds.project.bean.ProjectModule;
 import org.mds.project.bean.ProjectModuleDAO;
 import org.mds.project.bean.ProjectVersion;
 import org.mds.project.bean.ProjectVersionDAO;
-import org.mds.project.bean.TaskAttachment;
-import org.mds.project.bean.TaskAttachmentDAO;
 import org.mds.project.bean.TeamMember;
 import org.mds.project.bean.TeamMemberDAO;
 import org.mds.project.service.ProjectService;
@@ -38,9 +32,6 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 	private TeamMemberDAO teamMemberDAO;
 	private ProjectVersionDAO projectVersionDAO;
 	private ProjectAttachmentDAO projectAttachmentDAO; 
-	private JobTaskDAO jobTaskDAO;
-	private JobTaskStatusDAO jobTaskStatusDAO;
-	private TaskAttachmentDAO taskAttachmentDAO;
 
 
 
@@ -154,19 +145,7 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 	}
 
 	
-	public boolean isTeamMember(Integer projectId,Integer accountId)
-	{
-		boolean rtn = false;
-		String query = "from TeamMember a where a.tmFlag != " + CommonService.DELETE_FLAG + " and a.tmProject = " + projectId + " and a.tmAccount = " + accountId;
-		
-		List<TeamMember> list = teamMemberDAO.find(query);
-		if(list.size() > 0)
-		{
-			rtn = true;
-		}					
-		
-		return rtn;
-	}
+
 
 	public void setTeamMemberDAO(TeamMemberDAO teamMemberDAO) {
 		this.teamMemberDAO = teamMemberDAO;
@@ -187,39 +166,8 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 			teamMemberDAO.update(tm);
 		}
 	}
-	
-	public boolean isTeamMember(Project p, UsrAccount a) {
-		// TODO Auto-generated method stub
-		String query = "select count(a) from TeamMember a where a.tmFlag != " + CommonService.DELETE_FLAG + " and a.tmProject = " + p.getPId() + " and a.tmAccount = " + a.getId();
-		
-		return teamMemberDAO.getFindCount(query) > 0;
-	}
-	
-	public void saveTaskAttachment(TaskAttachment ta,String uploadPath)
-	{
-		Date createTime = new Date();
 
-		String fileName = FileUtil.saveUploadFile(ta.getAttachmentFile(),uploadPath + "task\\" + ta.getTaJobTask());
-					
-		ta.setTaCreateTime(createTime);
-		ta.setTaUrl(uploadPath + "task\\" + ta.getTaJobTask()  + "\\" + fileName);
-						
-		taskAttachmentDAO.save(ta);	
-	}
-	
-	public void saveTaskAttachment(TaskAttachment ta)
-	{
-		if(ta.getTaId() == null)
-		{
-			taskAttachmentDAO.save(ta);
-		}
-		else
-		{
-			taskAttachmentDAO.update(ta);
-		}
-			
-	}
-	
+		
 	public void saveProjectVersion(ProjectVersion vtr,String uploadPath) {
 		// TODO Auto-generated method stub
 		ArrayList<ProjectAttachment> attachmentList = vtr.getAttachmentList();
@@ -277,60 +225,7 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 	public void setProjectAttachmentDAO(ProjectAttachmentDAO projectAttachmentDAO) {
 		this.projectAttachmentDAO = projectAttachmentDAO;
 	}
-
-	@Override
-	public void saveJobTask(JobTask jobTask) {
-		// TODO Auto-generated method stub
-		if(jobTask.getJtId() == null)
-		{
-			jobTaskDAO.save(jobTask);
-		}
-		else
-		{
-			jobTaskDAO.update(jobTask);
-		}
-	}
-
-
-	public JobTaskDAO getJobTaskDAO() {
-		return jobTaskDAO;
-	}
-
-
-	public void setJobTaskDAO(JobTaskDAO jobTaskDAO) {
-		this.jobTaskDAO = jobTaskDAO;
-	}
-
-
-	@Override
-	public List<JobTaskStatus> getJobTaskStatusList() {
-		// TODO Auto-generated method stub
-		String query = "from JobTaskStatus a where a.jtsFlag != " + CommonService.DELETE_FLAG;
-		
-		return jobTaskStatusDAO.find(query);		
-	}
-
-
-	public JobTaskStatusDAO getJobTaskStatusDAO() {
-		return jobTaskStatusDAO;
-	}
-
-
-	public void setJobTaskStatusDAO(JobTaskStatusDAO jobTaskStatusDAO) {
-		this.jobTaskStatusDAO = jobTaskStatusDAO;
-	}
 	
-	
-	public TaskAttachmentDAO getTaskAttachmentDAO() {
-		return taskAttachmentDAO;
-	}
-
-
-	public void setTaskAttachmentDAO(TaskAttachmentDAO taskAttachmentDAO) {
-		this.taskAttachmentDAO = taskAttachmentDAO;
-	}
-
-
 	public ProjectVersionDAO getProjectVersionDAO() {
 		return projectVersionDAO;
 	}

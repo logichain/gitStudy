@@ -111,7 +111,7 @@
 		<td align="center" rowspan="2">
 			<fieldset style="width:98%;float:left;">
 				<legend><bean:message bundle="case" key="test_remark"/></legend>
-				<textarea class="putinscroll3" id="remarkeditor" name="caseInfo.tcRemark"><%=((org.mds.test.bean.TestCase)c).getTcRemark()%></textarea>
+				<textarea class="putinscroll2" id="remarkeditor" name="caseInfo.tcRemark"><%=((org.mds.test.bean.TestCase)c).getTcRemark()%></textarea>
 			</fieldset>
 		</td>
 	</tr>
@@ -119,14 +119,14 @@
 		<td align="center">				
 			<fieldset style="width:98%;float:left;">
 				<legend><bean:message bundle="case" key="intend_output"/></legend>
-				<div class="putinscroll0">
+				<div class="putinscroll1">
 				<bean:write name="c" property="tcIntendOutput" filter="false"/>
 				</div>
 			</fieldset>
 		</td>
 	</tr>
 	
-	<c:set var="${caseInfo}" value="${c}" scope="request" />
+	<c:set var="caseInfo" value="${c}" scope="request" />
 	<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
 </table>
 			 

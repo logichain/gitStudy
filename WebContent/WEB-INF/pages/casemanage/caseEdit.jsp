@@ -18,7 +18,7 @@
 			
 			<td align="center"><html:submit styleClass="savebutton">&nbsp;</html:submit></td>
 			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseEditNext');">&nbsp;</html:submit></td>
-			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseCopy');">&nbsp;</html:submit></td>						
+			<td align="center"><html:submit styleClass="" onclick="chgAction(document.all.method,'saveTestCaseCopy');">copy new</html:submit></td>						
 			<td align="center"><html:reset styleClass="resetbutton">&nbsp;</html:reset></td>				
 		</tr>
 		<tr>
@@ -78,24 +78,34 @@
 				<tr>	
 					<td align="center"><bean:write name="cvr" property="projectVersion.pvVersion"/></td>				
 					<td align="center">	
-						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseResult"%>' style="width:120px">	
-							<html:option value=""></html:option>									
-							<html:optionsCollection name="testResultList" value="trId" label="trName"/>									
-						</html:select>
+						<logic:notEmpty name="cvr" property="testResult"><bean:write name="cvr" property="testResult.trName"/></logic:notEmpty>
+						
+<%-- 						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseResult"%>' style="width:120px">	 --%>
+<%-- 							<html:option value=""></html:option>									 --%>
+<%-- 							<html:optionsCollection name="testResultList" value="trId" label="trName"/>									 --%>
+<%-- 						</html:select> --%>
 					</td>				
 					<td align="center">
-						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrImportantLevel"%>' style="width:120px">	
-							<html:option value=""></html:option>									
-							<html:optionsCollection name="importantLevelList" value="ilId" label="ilName"/>									
-						</html:select>
+						<logic:notEmpty name="cvr" property="importantLevel"><bean:write name="cvr" property="importantLevel.ilName"/></logic:notEmpty>
+						
+<%-- 						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrImportantLevel"%>' style="width:120px">	 --%>
+<%-- 							<html:option value=""></html:option>									 --%>
+<%-- 							<html:optionsCollection name="importantLevelList" value="ilId" label="ilName"/>									 --%>
+<%-- 						</html:select> --%>
 					</td>				
 					<td align="center">
-						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrBugType"%>' style="width:120px">	
-							<html:option value=""></html:option>									
-							<html:optionsCollection name="bugTypeList" value="btId" label="btName"/>									
-						</html:select>
+						<logic:notEmpty name="cvr" property="bugType"><bean:write name="cvr" property="bugType.btName"/></logic:notEmpty>
+						
+<%-- 						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrBugType"%>' style="width:120px">	 --%>
+<%-- 							<html:option value=""></html:option>									 --%>
+<%-- 							<html:optionsCollection name="bugTypeList" value="btId" label="btName"/>									 --%>
+<%-- 						</html:select> --%>
 					</td>
-					<td align="left"><html:text name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseOutput"%>' size="93" maxlength="200"/></td>
+					<td align="left">
+						<bean:write name="cvr" property="cvrCaseOutput"/>
+<%-- 						<html:text name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseOutput"%>' size="93" maxlength="200"/> --%>
+						
+					</td>
 				</tr>		
 				</logic:notEqual>
 			</logic:iterate>		

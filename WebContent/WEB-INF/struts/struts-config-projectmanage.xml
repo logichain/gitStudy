@@ -6,15 +6,14 @@
 
 <struts-config>
 	<form-beans>
-		<form-bean name="projectForm" type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="para" type="java.lang.String" />
+		<form-bean name="projectForm" type="org.apache.struts.validator.DynaValidatorForm">			
 			<form-property name="paraPersonName" type="java.lang.String" />
 			<form-property name="department" type="java.lang.String" />
 			<form-property name="projectInfo" type="org.mds.project.bean.Project" />
 			<form-property name="moduleInfo" type="org.mds.project.bean.ProjectModule" />
 			<form-property name="moduleFunctionInfo" type="org.mds.project.bean.ModuleFunction" />
 			<form-property name="versionInfo" type="org.mds.project.bean.ProjectVersion" />
-			<form-property name="jobTaskInfo" type="org.mds.project.bean.JobTask" />
+			
 		</form-bean>					
 	</form-beans>
 
@@ -30,15 +29,10 @@
 			<forward name="editProjectInfo" path="projectEditPageDef" redirect="false" />
 			
 			<forward name="refreshVersionInput" path="/WEB-INF/pages/projectmanage/refreshVersionInput.jsp" redirect="false"/>
-			<forward name="refreshProjectVersion" path="/WEB-INF/pages/projectmanage/refreshProjectVersion.jsp" redirect="false"/>
-			<forward name="refreshProjectModule" path="/WEB-INF/pages/projectmanage/refreshProjectModule.jsp" redirect="false"/>
-			<forward name="refreshTeamMember" path="/WEB-INF/pages/projectmanage/refreshTeamMember.jsp" redirect="false"/>
+			<forward name="refreshProjectInfo" path="/WEB-INF/pages/projectmanage/refreshProjectInfo.jsp" redirect="false"/>
 			<forward name="refreshProjectInput" path="/WEB-INF/pages/projectmanage/refreshProjectInput.jsp" redirect="false"/>
-			<forward name="refreshJobTaskInput" path="/WEB-INF/pages/projectmanage/refreshJobTaskInput.jsp" redirect="false"/>
-			
 			<forward name="attachmentInput" path="attachmentInputPageDef" redirect="false" />
-			<forward name="jobTaskInput" path="jobTaskInputPageDef" redirect="false" />
-			<forward name="taskAttachmentInput" path="taskAttachmentInputPageDef" redirect="false" />
+			
 		</action>		
 	</action-mappings>
 </struts-config>

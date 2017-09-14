@@ -17,10 +17,12 @@ public class TeamMember extends org.king.framework.domain.BaseObject implements
 	private static final long serialVersionUID = 1L;
 	private Integer tmId;
 	private Integer tmProject;
+	private Integer tmModuleFunction;
 	private Integer tmAccount;
 	private Integer tmFlag = 0;
 	
-	private UsrAccount account;
+	private ModuleFunction moduleFunction;
+	private UsrAccount account = new UsrAccount();
 
 	// Constructors
 
@@ -99,6 +101,22 @@ public class TeamMember extends org.king.framework.domain.BaseObject implements
 
 	public UsrAccount getAccount() {
 		return account;
+	}
+
+	public Integer getTmModuleFunction() {
+		return tmModuleFunction;
+	}
+
+	public void setTmModuleFunction(Integer tmModuleFunction) {
+		this.tmModuleFunction = tmModuleFunction;
+	}
+
+	public ModuleFunction getModuleFunction() {
+		return moduleFunction;
+	}
+
+	public void setModuleFunction(ModuleFunction moduleFunction) {
+		this.moduleFunction = moduleFunction;
 	}
 
 }

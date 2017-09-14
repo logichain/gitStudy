@@ -4,34 +4,35 @@ import java.text.NumberFormat;
 
 public class StatisticsData {
 	private String title;
-	private Integer count;
+	private Integer designCaseCount;
+	private Integer testCaseCount;
+	private Integer unpassCaseCount;
+	private Integer correctCaseCount;
 	private double percent;
 	
-	public StatisticsData(String title,Integer count)
+	public StatisticsData(String title,Integer designCaseCount,Integer testCaseCount,Integer unpassCaseCount,Integer correctCaseCount)
 	{
 		this.title = title;
-		this.count = count;
+		this.designCaseCount = designCaseCount;
+		this.testCaseCount = testCaseCount;
+		this.unpassCaseCount = unpassCaseCount;
+		this.correctCaseCount = correctCaseCount;
 	}
 	
-	public StatisticsData(String title,Integer count,double percent)
+	public StatisticsData(String title,Integer designCaseCount)
 	{
 		this.title = title;
-		this.count = count;
-		this.percent = percent;
+		this.designCaseCount = designCaseCount;
 	}
 	
+		
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Integer getCount() {
-		return count;
-	}
-	public void setCount(Integer count) {
-		this.count = count;
-	}
+	
 	public double getPercent() {
 		return percent;
 	}
@@ -44,5 +45,37 @@ public class StatisticsData {
         nf.setMaximumFractionDigits(2); //设置小数点保留几位
         
 		return nf.format(percent);
+	}
+
+	public Integer getDesignCaseCount() {
+		return designCaseCount;
+	}
+
+	public void setDesignCaseCount(Integer designCaseCount) {
+		this.designCaseCount = designCaseCount;
+	}
+
+	public Integer getTestCaseCount() {
+		return testCaseCount;
+	}
+
+	public void setTestCaseCount(Integer testCaseCount) {
+		this.testCaseCount = testCaseCount;
+	}
+
+	public Integer getUnpassCaseCount() {
+		return unpassCaseCount;
+	}
+
+	public void setUnpassCaseCount(Integer unpassCaseCount) {
+		this.unpassCaseCount = unpassCaseCount;
+	}
+
+	public Integer getCorrectCaseCount() {
+		return correctCaseCount;
+	}
+
+	public void setCorrectCaseCount(Integer correctCaseCount) {
+		this.correctCaseCount = correctCaseCount;
 	}
 }

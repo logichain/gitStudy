@@ -132,6 +132,9 @@ public class SecurityAction extends BaseAction {
 
 		// Set account Object to session
 		session.setAttribute("accountPerson", account);
+		//”√¿˝±‡º≠»®œﬁ∆•≈‰
+		session.setAttribute("accountPersonId", account.getId());
+		
 		commonService.createSystemTreeMenu(request, projectService);
 				
 		String destinatedUrl = request.getParameter("DEST_URL");

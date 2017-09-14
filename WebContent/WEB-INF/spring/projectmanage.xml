@@ -37,21 +37,6 @@
 		</property>
 	</bean>
 	
-	<bean id="jobTaskDAO" class="org.mds.project.bean.JobTaskDAO">
-		<property name="baseDAO">
-			<ref bean="baseDAO" />
-		</property>
-	</bean>
-	<bean id="jobTaskStatusDAO" class="org.mds.project.bean.JobTaskStatusDAO">
-		<property name="baseDAO">
-			<ref bean="baseDAO" />
-		</property>
-	</bean>
-	<bean id="taskAttachmentDAO" class="org.mds.project.bean.TaskAttachmentDAO">
-		<property name="baseDAO">
-			<ref bean="baseDAO" />
-		</property>
-	</bean>
 	<!-- ************************** SERVICE SETTING *****************************-->
 	<bean id="projectService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -77,15 +62,7 @@
 				<property name="projectAttachmentDAO">
 					<ref local="projectAttachmentDAO" />
 				</property>
-				<property name="jobTaskDAO">
-					<ref local="jobTaskDAO" />
-				</property>
-				<property name="jobTaskStatusDAO">
-					<ref local="jobTaskStatusDAO" />
-				</property>
-				<property name="taskAttachmentDAO">
-					<ref local="taskAttachmentDAO" />
-				</property>
+				
 			</bean>
 		</property>
 		<property name="transactionAttributes">

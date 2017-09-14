@@ -9,5 +9,4 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jstl/sql" prefix="sql" %>
 <%@ taglib uri="/tags/pager" prefix="pg" %>
-<%@ taglib uri="/tags/pow2webgui" prefix="gui" %>
 

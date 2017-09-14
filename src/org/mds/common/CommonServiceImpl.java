@@ -94,7 +94,7 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 		List<Project> pList = projectService.getProjectList();
 		for(Project p:pList)
 		{
-			if(!ua.getAccountName().equals("admin") && !projectService.isTeamMember(p, ua))
+			if(!ua.getAccountName().equals("admin") && !p.isTeamMember(ua))
 			{
 				continue;
 			}

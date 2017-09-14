@@ -98,7 +98,7 @@
 			<td width="50%" rowspan="2" align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<div class="putinscroll3">
+					<div class="putinscroll2">
 						<bean:write name="caseInfo" property="tcTestStep" filter="false"/>
 					</div>								
 				</fieldset>	
@@ -116,7 +116,7 @@
 			<td align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<div class="putinscroll0">
+					<div class="putinscroll1">
 						<bean:write name="caseInfo" property="tcIntendOutput" filter="false"/>
 					</div>						
 				</fieldset>

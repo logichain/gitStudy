@@ -6,30 +6,10 @@ body,td,th {
 	font-size: 20px;
 }
 
-.putinscroll0 {   
-    width: 480px;                                    
-    height:80px;                                   
-    color: ;                                        
-    font-family: ;                                  
-    padding-left: 0px;                              
-    padding-right: 0px;                             
-    padding-top: 0px;                               
-    padding-bottom: 0px;                          
-    overflow-x: hidden;                            
-    overflow-y: auto;                             
-               
-    scrollbar-face-color: #D4D4D4;                  
-    scrollbar-hightlight-color: #ffffff;                
-    scrollbar-shadow-color: #919192;               
-    scrollbar-3dlight-color: #ffffff;            
-    scrollbar-arrow-color: #919192;                
-    scrollbar-track-color: #ffffff;                
-    scrollbar-darkshadow-color: #ffffff;              
-	}
 
 .putinscroll1 {   
     width: 480px;                                    
-    height:380px;                                   
+    height:350px;                                   
     color: ;                                        
     font-family: ;                                  
     padding-left: 0px;                              
@@ -50,7 +30,7 @@ body,td,th {
     
 .putinscroll2 {   
     width: 480px;                                    
-    height:786px;                                   
+    height:720px;                                   
     color: ;                                        
     font-family: ;                                  
     padding-left: 0px;                              
@@ -69,26 +49,7 @@ body,td,th {
     scrollbar-darkshadow-color: #ffffff;              
 	}
     
- .putinscroll3 {   
-    width: 480px;                                    
-    height:490px;                                   
-    color: ;                                        
-    font-family: ;                                  
-    padding-left: 0px;                              
-    padding-right: 0px;                             
-    padding-top: 0px;                               
-    padding-bottom: 0px;                          
-    overflow-x: hidden;                            
-    overflow-y: auto;                             
-               
-    scrollbar-face-color: #D4D4D4;                  
-    scrollbar-hightlight-color: #ffffff;                
-    scrollbar-shadow-color: #919192;               
-    scrollbar-3dlight-color: #ffffff;            
-    scrollbar-arrow-color: #919192;                
-    scrollbar-track-color: #ffffff;                
-    scrollbar-darkshadow-color: #ffffff;              
-}
+
 
 .scroll {   
         width: 100%;                                    

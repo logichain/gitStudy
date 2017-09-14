@@ -2,11 +2,7 @@
 <%@ include file="../common/include.jsp"%>
 
 
-<html:form action="projectmanage.do" onsubmit="return validateProjectForm(this);">
-	<html:errors />
-	
-	<input type="hidden" name="method" value="saveProject">	
-	<input type="hidden" name="id">	
+
 	<table class="win"  width="100%">		
 		<tr><td width="70%" align="left">
 									
@@ -113,8 +109,6 @@
 	</table>
 </fieldset>		
 
-</html:form>
-
 <logic:iterate name="projectForm" property="projectInfo.projectVersionList" id="version" indexId="i">
 	<logic:notEqual name="version" property="pvInit" value="1">
 	<fieldset style="width:96%;float:left;border-color:blue;">
@@ -220,38 +214,6 @@
 </logic:iterate>		
 
 		
-<html:javascript formName="projectForm" dynamicJavascript="true" staticJavascript="false" />
-<script type="text/javascript" src="<html:rewrite forward='staticjavascript'/>"></script>
-
-<script language="JavaScript">
-
- function chgAction(obj,str){
-	obj.value=str;
- } 
- 
-  function chgFormOnsubmit(str){  	 	
-	projectForm.onsubmit="function onsubmit(){" + str + "}";	
- }
- 
-	
-function submitForm()
-{
-	chgFormOnsubmit('return true;');
-	chgAction(document.all.method,'refreshProjectInput');
-	projectForm.submit();
-}
 
 
-function openDialog(loadpos,WWidth,WHeight)//Lock   Size 
-{   
-	var WLeft = Math.ceil((window.screen.width - WWidth) / 2);   
-	var WTop = Math.ceil((window.screen.height - WHeight) / 2); 
-	var features = 'width=' + WWidth + 'px,' +	'height=' + WHeight + 'px,' + 'left=' + WLeft + 'px,' + 'top=' + WTop + 'px'; 
-		
-	WinOP = window.open(loadpos,"_blank",features); 
-	WinOP.focus();	   
-}
-
-
-</script>
 

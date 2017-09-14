@@ -34,12 +34,7 @@
         <property name="phone" type="java.lang.String">
             <column name="PHONE" length="45" />
         </property>
-        <property name="address" type="java.lang.String">
-            <column name="ADDRESS" length="100" />
-        </property>
-        <property name="birthday" type="java.util.Date">
-            <column name="BIRTHDAY" length="0" />
-        </property>
+ 
         <property name="dept" type="java.lang.Integer">
             <column name="DEPT" />
         </property>

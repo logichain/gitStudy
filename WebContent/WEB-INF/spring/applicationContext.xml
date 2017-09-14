@@ -50,11 +50,7 @@
 				<value>org/mds/project/bean/TeamMember.hbm.xml</value>
 				<value>org/mds/project/bean/ProjectVersion.hbm.xml</value>
 				<value>org/mds/project/bean/ProjectAttachment.hbm.xml</value>
-				
-				<value>org/mds/project/bean/JobTask.hbm.xml</value>
-				<value>org/mds/project/bean/TaskAttachment.hbm.xml</value>
-				<value>org/mds/project/bean/JobTaskStatus.hbm.xml</value>
-				
+								
 				<value>org/king/security/domain/UsrAccount.hbm.xml</value>
 				<value>org/king/security/domain/Department.hbm.xml</value>
 				<value>org/mds/common/IcoMenu.hbm.xml</value>
