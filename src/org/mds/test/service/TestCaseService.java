@@ -3,6 +3,7 @@ package org.mds.test.service;
 import java.util.List;
 
 import org.king.framework.service.Service;
+import org.mds.project.bean.ProjectVersion;
 import org.mds.test.bean.BugType;
 import org.mds.test.bean.CaseStatus;
 import org.mds.test.bean.CaseVersionReference;
@@ -38,4 +39,7 @@ public interface TestCaseService extends Service {
 	public CaseStatus getCaseStatusById(int id);
 	public TestResult getTestResultById(Integer id);
 	public CaseVersionReference getCaseVersionReferenceById(Integer id);
+	
+	public List<TestCase> searchTestCaseByVersion(ProjectVersion projectVersion);
+	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,Integer versionId);
 }

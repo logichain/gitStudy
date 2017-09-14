@@ -19,8 +19,11 @@
 			<td width="50%" align="left">
 				<bean:message bundle="project" key="version_code" />：			
 				<bean:write name="projectForm" property="projectInfo.initProjectVersion.pvVersion" />				
-			</td>			
-			<td align="right">								
+			</td>
+			<td align="center">
+				<a href="casemanage.do?method=exportTestCaseByVersion&pvId=<bean:write name="projectForm" property="projectInfo.initProjectVersion.pvId"/>">导出本版用例</a>				
+			</td>
+			<td align="right">									
 				<a href="javascript:openDialog('projectmanage.do?method=editProjectVersion&id=<bean:write name="projectForm" property="projectInfo.initProjectVersion.pvId"/>',760,360);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a>
 			</td>			
 		</tr>
@@ -51,7 +54,7 @@
 				</table>
 			</fieldset>
 			</td>
-			<td>
+			<td colspan="2">
 			<fieldset style="width:90%;float:left;">
 				<legend><bean:message bundle="project" key="test"/></legend>
 				<table width="100%">
@@ -77,7 +80,7 @@
 			</fieldset>
 			</td>			
 		</tr>	
-		<tr><td colspan="2">
+		<tr><td colspan="3">
 			<table width="100%">
 			<tr>
 				<td width="6%" align="right">
@@ -116,13 +119,16 @@
 		<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 			<tr>
 				<td width="50%"></td>
-				<td></td>
+				<td></td><td></td>
 			</tr>
 			<tr>
 				<td align="left">
 					<bean:message bundle="project" key="version_code" />：			
 					<bean:write name="version" property="pvVersion"/>					
-				</td>						
+				</td>	
+				<td align="center">
+					<a href="casemanage.do?method=exportTestCaseByVersion&pvId=<bean:write name="version" property="pvId"/>">导出本版用例</a>				
+				</td>					
 				<td align="right">								
 					<a href="javascript:openDialog('projectmanage.do?method=editProjectVersion&id=<bean:write name="version" property="pvId"/>',760,360);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a>
 					<a href='javascript:if(confirm("确认要删除这条信息吗?")){chgAction(document.all.id,"<bean:write name="version" property="pvId"/>");chgAction(document.all.method,"deleteProjectVersion");projectForm.submit();}'><img border="0" src="pages\images\icon\16x16\delete.gif"></a>
@@ -154,7 +160,7 @@
 					</table>
 				</fieldset>
 				</td>
-				<td>
+				<td colspan="2">
 				<fieldset style="width:90%;float:left;">
 					<legend><bean:message bundle="project" key="test"/></legend>
 					<table width="100%">
@@ -180,7 +186,7 @@
 				</fieldset>
 				</td>			
 			</tr>
-			<tr><td colspan="2">
+			<tr><td colspan="3">
 			<table width="100%">
 			<tr>
 				<td width="6%" align="right">

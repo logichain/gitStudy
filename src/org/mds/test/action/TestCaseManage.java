@@ -1,6 +1,9 @@
 package org.mds.test.action;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.validator.DynaValidatorForm;
 import org.king.framework.web.action.BaseAction;
 import org.king.security.domain.UsrAccount;
@@ -30,6 +35,54 @@ import org.mds.test.service.TestCaseService;
 public class TestCaseManage extends BaseAction {
 	private TestCaseService testCaseService;
 	private ProjectService projectService;
+	
+	
+	public ActionForward exportTestCaseByVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		
+		Integer pvId = Integer.parseInt(request.getParameter("pvId"));
+		
+		ProjectVersion projectVersion = projectService.getProjectVersionById(pvId);
+				
+		String uploadPath = request.getSession().getServletContext().getRealPath("");
+		if (!uploadPath.endsWith("\\")) {
+			uploadPath = uploadPath + "\\uploadImportFile\\";
+		}
+		
+		//≤‚ ‘¡Ÿ ±
+		uploadPath = "d:\\";
+		
+		List<TestCase> customerList = testCaseService.searchTestCaseByVersion(projectVersion);	
+		
+		String fileName = uploadPath + "exportCase.xls";
+		testCaseService.writeTestCaseToXslFile(fileName,customerList,pvId);
+				
+		try {
+			response.setContentType(org.king.util.FileUtil.getContentType(fileName));
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName.substring(fileName.lastIndexOf("\\")+1));
+			InputStream file = new FileInputStream(fileName);
+			byte[] bit = new byte[1024];
+			int len = file.read(bit);
+			OutputStream out = response.getOutputStream();
+
+			while (len != -1) {
+				out.write(bit, 0, len);
+				len = file.read(bit);
+			}
+			out.close();
+			file.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			ActionMessages errors = new ActionMessages();
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.download"));
+			saveErrors(request, errors);	
+			
+			return mapping.findForward("fail");
+		}    
+	
+		return null;
+	}
 	
 	public ActionForward createTestCase(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -981,7 +1034,8 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference)dform.get("cvrSearchInfo");
 		
-		Object[] args = {searchInfo,projectInfo,cvrSearchInfo};
+		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		Object[] args = {searchInfo,projectInfo,cvrSearchInfo,functionList};
 		
 		List<TestCase> caseList = testCaseService.getAllTestCase(args);
 		

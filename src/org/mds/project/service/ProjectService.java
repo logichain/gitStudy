@@ -3,7 +3,6 @@ package org.mds.project.service;
 import java.util.List;
 
 import org.king.framework.service.Service;
-import org.king.security.domain.UsrAccount;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectModule;
@@ -21,6 +20,7 @@ public interface ProjectService extends Service {
 	public void saveModuleFunction(ModuleFunction mu);
 	public void saveTeamMember(TeamMember tm);
 	public void deleteProjectVersion(ProjectVersion vtr);
+	public ProjectVersion getProjectVersionById(Integer pvId);
 	
 	public List<Project> getProjectList();
 	

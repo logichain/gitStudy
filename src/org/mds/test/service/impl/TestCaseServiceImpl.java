@@ -1,5 +1,8 @@
 package org.mds.test.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,7 @@ import org.king.framework.dao.MyQuery;
 import org.king.framework.service.impl.BaseService;
 import org.mds.common.CommonService;
 import org.mds.project.bean.Project;
+import org.mds.project.bean.ProjectVersion;
 import org.mds.test.bean.BugType;
 import org.mds.test.bean.BugTypeDAO;
 import org.mds.test.bean.CaseStatus;
@@ -23,6 +27,13 @@ import org.mds.test.bean.TestResult;
 import org.mds.test.bean.TestResultDAO;
 import org.mds.test.service.TestCaseService;
 
+import jxl.Workbook;
+import jxl.format.CellFormat;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+
 public class TestCaseServiceImpl extends BaseService implements TestCaseService {
 	private TestCaseDAO testCaseDAO;
 	
@@ -34,6 +45,205 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	private BugTypeDAO bugTypeDAO;
 	private CaseVersionReferenceDAO caseVersionReferenceDAO; 
 	
+
+	@Override
+	public List<TestCase> searchTestCaseByVersion(ProjectVersion projectVersion) {
+		// TODO Auto-generated method stub
+						
+		String hqlStr = "select distinct a from TestCase a,CaseVersionReference e " +
+				" where a.tcId = e.cvrTestCase and e.projectVersion.pvProject = " + projectVersion.getPvProject() + 
+				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG + 
+				" and e.projectVersion.pvVersion = '" + projectVersion.getPvVersion() + "'";
+				
+		hqlStr = hqlStr + " order by a.tcId";
+		
+        return testCaseDAO.find(hqlStr);
+	}
+	public void writeTestCaseToXslFile(String filePath,List<TestCase> testCaseList,Integer pvId) 
+	{		
+		File file = new File(filePath);
+		
+		FileOutputStream os = null;
+		try {
+			os = new FileOutputStream(file);		
+			WritableWorkbook wwb = null;		
+			wwb = Workbook.createWorkbook(os);
+				
+			WritableSheet wst = wwb.createSheet("测试用例", 0);			
+			int j =1;			
+			CellFormat cf = wst.getWritableCell(0,0).getCellFormat();
+			Label lbl = new Label(0,0, "序号");
+			if(cf != null)
+			{
+				lbl.setCellFormat(cf);
+			}				
+		
+			wst.addCell(lbl);		
+		
+			for(String colName:CommonService.IMPORT_COLUMN_NAME)
+			{
+				cf = wst.getWritableCell(0,0).getCellFormat();
+				lbl = new Label(j,0, colName);
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);			
+				j++;
+			}
+			
+			int i = 1;
+			for(TestCase tc:testCaseList)
+			{
+				CaseVersionReference cvr = null;
+				for(CaseVersionReference cvrTemp:tc.getCaseVersionReferenceList())
+				{
+					if(cvrTemp.getCvrProjectVersion().equals(pvId))
+					{
+						cvr = cvrTemp;
+						break;
+					}
+				}
+				
+				cf = wst.getWritableCell(0,i).getCellFormat();
+				lbl = new Label(0,i, String.valueOf(i));
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//功能模块
+				cf = wst.getWritableCell(1,i).getCellFormat();
+				lbl = new Label(1,i, tc.getModuleFunction().getProjectModule().getPmName());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//功能点				
+				cf = wst.getWritableCell(2,i).getCellFormat();
+				lbl = new Label(2,i, tc.getModuleFunction().getMuName());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+									
+				//用例编号
+				cf = wst.getWritableCell(3,i).getCellFormat();
+				lbl = new Label(3,i, tc.getTcCode());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//测试目的
+				cf = wst.getWritableCell(4,i).getCellFormat();
+				lbl = new Label(4,i, tc.getTcTestObjective());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//测试内容
+				cf = wst.getWritableCell(5,i).getCellFormat();
+				lbl = new Label(5,i, tc.getTcTestContent());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//测试步骤
+				cf = wst.getWritableCell(6,i).getCellFormat();
+				lbl = new Label(6,i, tc.getTcTestStep());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//测试说明
+				cf = wst.getWritableCell(6,i).getCellFormat();
+				lbl = new Label(6,i, tc.getTcRemark());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//预期输出
+				cf = wst.getWritableCell(7,i).getCellFormat();
+				lbl = new Label(7,i, tc.getTcIntendOutput());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);	
+				
+				//测试输出				
+				cf = wst.getWritableCell(8,i).getCellFormat();
+				lbl = new Label(8,i, cvr.getCvrCaseOutput());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+					
+				//测试结果					
+				if(cvr.getTestResult() != null)
+				{
+					cf = wst.getWritableCell(9,i).getCellFormat();
+					lbl = new Label(9,i, cvr.getTestResult().getTrName());
+					if(cf != null)
+					{
+						lbl.setCellFormat(cf);
+					}							
+					wst.addCell(lbl);
+				}
+				
+				
+				//创建人
+				cf = wst.getWritableCell(10,i).getCellFormat();
+				lbl = new Label(10,i,tc.getCreateUser().getPersonName());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
+				
+				//测试人
+				if(cvr.getTestUser() != null)
+				{
+					cf = wst.getWritableCell(11,i).getCellFormat();
+					lbl = new Label(11,i, cvr.getTestUser().getPersonName());
+					if(cf != null)
+					{
+						lbl.setCellFormat(cf);
+					}							
+					wst.addCell(lbl);
+				}
+											
+								
+				i++;
+			}		
+		
+			wwb.write();		
+			wwb.close();		
+			os.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public void saveCaseVersionReference(CaseVersionReference cvr)
 	{
@@ -503,19 +713,22 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		TestCase searchInfo = (TestCase) args[0];
 		Project projectInfo = (Project) args[1];		
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		String functionList = (String) args[3];
 				
 		String hqlStr = null;
 		
 		if(cvrSearchInfo.isSearchInfoEmpty())
 		{
 			hqlStr = "select a from TestCase a,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS ;
+					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS  + " and a.tcModuleFunction in " + functionList;
 		}
 		else
 		{
 			hqlStr = "select distinct a from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS + 
-					" and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG + 
+					" and a.tcModuleFunction in " + functionList;
 		}
 		
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);  
@@ -591,4 +804,5 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		// TODO Auto-generated method stub
 		return caseVersionReferenceDAO.get(id);
 	}
+
 }

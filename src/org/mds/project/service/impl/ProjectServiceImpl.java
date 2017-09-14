@@ -325,4 +325,11 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 			addAllFunctionIntoList(functionList, cmf);
 		}
 	}
+
+
+	@Override
+	public ProjectVersion getProjectVersionById(Integer pvId) {
+		// TODO Auto-generated method stub
+		return projectVersionDAO.get(pvId);
+	}
 }

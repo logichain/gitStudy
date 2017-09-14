@@ -60,7 +60,7 @@ public class TestStatisticsAction extends BaseAction {
 		Project projectInfo = (Project) dform.get("projectInfo");
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 				
-		if(projectInfo.isTeamMember(ua))
+		if(projectInfo.isTeamMember(ua) || ua.getId().equals(1))
 		{
 			this.versionStatistics(dform, request);
 			this.moduleStatistics(dform, request);
