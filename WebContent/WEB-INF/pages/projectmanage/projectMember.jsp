@@ -28,7 +28,9 @@
 			<td width="10%" align="center">
 				<bean:message bundle="security" key="person.name" />
 			</td>
-			
+			<td width="10%" align="center">
+				<bean:message bundle="security" key="person.dept" />
+			</td>
 			<td align="center">
 				<bean:message bundle="project" key="member_function" />
 			</td>
@@ -45,8 +47,8 @@
 	</thead>
 	
 	
-	<logic:iterate name="projectForm" property="projectInfo.memberList" id="m" indexId="i">		
-	<logic:notEmpty name="m" property="account">
+	<logic:iterate name="projectForm" property="projectInfo.memberList" id="m" indexId="i">	
+		<logic:equal name="m" property="tmFlag" value="0">	
 		  <tr>
 			<% int a = i%2;request.setAttribute("a",a);%>
 			<logic:equal name="a" value="0"><tr class="even"></logic:equal>
@@ -59,21 +61,27 @@
 				<td>
 					<bean:write name="m" property="account.personName" />
 				</td>
-				
 				<td>
-					<logic:notEmpty name="m" property="moduleFunction">
-					<bean:write name="m" property="moduleFunction.muName" />
-					</logic:notEmpty>
+					<bean:write name="m" property="account.department.DName" />
+				</td>
+				<td>
+					<logic:iterate id="mfr" name="m" property="memberFunctionReferenceList">					
+						<bean:write name="mfr" property="moduleFunction.projectModule.pmName" />-<bean:write name="mfr" property="moduleFunction.muName" />;				
+					</logic:iterate>
 				</td>
 			
 				<td>
 					<bean:write name="m" property="account.email" />
 				</td>					
-				<td align="center"><a href="javascript:openDialog('projectmanage.do?method=modifyTeamMember&id=<bean:write name="m" property="tmId"/>',800,420);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a></td>
+				<td align="center">
+				<logic:equal name="m" property="account.dept" value="2">
+					<a href="javascript:openDialog('projectmanage.do?method=editTeamMember&id=<bean:write name="m" property="tmId"/>',800,420);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a>
+				</logic:equal>	
+				</td>
 				<td align="center"><a href='javascript:if(confirm("确认要删除这条信息吗?")) {chgAction(document.all.id,"<bean:write  name="m" property="tmId" />");chgAction(document.all.method,"deleteTeamMember");projectForm.submit();}'><img border="0" src="pages\images\icon\16x16\delete.gif"></a></td>
 				
 			</tr>
-	</logic:notEmpty>
+		</logic:equal>
 	</logic:iterate>
 </table>
 

@@ -40,7 +40,7 @@
             <one-to-many class="org.mds.project.bean.ProjectModule" />
         </set>
         
-        <set name="memberSet" inverse="true" where=" tm_flag != -1" order-by="tm_id">
+        <set name="memberSet" inverse="true" order-by="tm_id">
             <key>
                 <column name="tm_project" not-null="true"/>
             </key>

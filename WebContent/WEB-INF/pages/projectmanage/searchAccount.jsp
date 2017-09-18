@@ -23,7 +23,7 @@
 	</table>
 
 	<input type="hidden" name="method" value="searchAccount">
-
+	<input type="hidden" name="opType" value="<%=request.getParameter("opType")%>">
 	<table class="sort-table" cellSpacing="1" cellPadding="1" width="100%" border="0">						
 		<logic:present name="accounts" scope="request">
 			<thead>

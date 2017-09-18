@@ -26,7 +26,12 @@
 		<tr>
 			<td align="right"><bean:message bundle="case" key="module"/>£º</td>
 			<td align="left">
+			<logic:notEmpty name="caseInfo" property="moduleFunction.projectModule">
 				<bean:write name="caseInfo" property="moduleFunction.projectModule.pmName"/>
+			</logic:notEmpty>
+			<logic:empty name="caseInfo" property="moduleFunction.projectModule">
+				<bean:write name="caseInfo" property="moduleFunction.parentFunction.projectModule.pmName"/>
+			</logic:empty>
 			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
 			<td align="left">			

@@ -37,6 +37,12 @@
 		</property>
 	</bean>
 	
+	<bean id="memberFunctionReferenceDAO" class="org.mds.project.bean.MemberFunctionReferenceDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
 	<!-- ************************** SERVICE SETTING *****************************-->
 	<bean id="projectService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -62,6 +68,9 @@
 				<property name="projectAttachmentDAO">
 					<ref local="projectAttachmentDAO" />
 				</property>
+				<property name="memberFunctionReferenceDAO">
+					<ref local="memberFunctionReferenceDAO" />
+				</property>
 				
 			</bean>
 		</property>
@@ -70,6 +79,7 @@
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 				<prop key="update*">PROPAGATION_REQUIRED</prop>
 				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
 				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>

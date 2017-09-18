@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +17,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 import org.king.framework.web.action.BaseAction;
 import org.king.security.domain.UsrAccount;
 import org.king.security.service.AccountService;
 import org.king.util.FileUtil;
 import org.mds.common.CommonService;
+import org.mds.project.bean.MemberFunctionReference;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectAttachment;
@@ -223,7 +227,21 @@ public class ProjectManage extends BaseAction {
 		}
 		else if("tm".equals(opType))
 		{
-			TeamMember tm = this.saveTeamMember(ua, project.getPId());
+			for(TeamMember tm:project.getMemberList())
+			{
+				if(tm.getTmAccount().equals(Integer.parseInt(id)))
+				{
+					if(tm.getTmFlag().equals(CommonService.DELETE_FLAG))
+					{
+						tm.setTmFlag(CommonService.NORMAL_FLAG);
+						projectService.saveTeamMember(tm);
+					}
+					
+					request.setAttribute("tabpageId","memberInfo");					
+					return mapping.findForward("refreshProjectInfo");
+				}				
+			}
+			TeamMember tm = projectService.addTeamMember(ua, project.getPId());
 			project.getMemberList().add(tm);
 			
 			request.setAttribute("tabpageId","memberInfo");
@@ -251,17 +269,7 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("refreshProjectInput");
 	}
 	
-	private TeamMember saveTeamMember(UsrAccount ua,Integer ProjectId)
-	{
-		TeamMember tm = new TeamMember();
-		tm.setTmAccount(ua.getId());
-		tm.setTmProject(ProjectId);
-		tm.setAccount(ua);
-		
-		projectService.saveTeamMember(tm);
-		
-		return tm;
-	}
+	
 	
 	public ActionForward refreshVersionInput(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{		
@@ -276,7 +284,7 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("projectInput");
 	}
 	
-	public ActionForward modifyTeamMember(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	public ActionForward editTeamMember(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{		
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project project = (Project) dform.get("projectInfo");
@@ -291,6 +299,33 @@ public class ProjectManage extends BaseAction {
 				break;
 			}
 		}
+		
+		List<LabelValueBean> selectedFunction = new ArrayList<LabelValueBean>();
+		List<LabelValueBean> availableFunction = new ArrayList<LabelValueBean>();
+		List<ModuleFunction> selectedFunctionList = new ArrayList<ModuleFunction>();
+		
+		for (MemberFunctionReference mfr:ctm.getMemberFunctionReferenceList()) 
+		{
+			LabelValueBean lv = new LabelValueBean();			
+			lv.setLabel(mfr.getModuleFunction().getProjectModule().getPmName() + "-" + mfr.getModuleFunction().getMuName());
+			lv.setValue(mfr.getMfrModuleFunction().toString());
+			selectedFunction.add(lv);
+			selectedFunctionList.add(mfr.getModuleFunction());
+		}
+		
+		ArrayList<ModuleFunction> functionList = project.getAllModuleFunctionList();
+
+		for (ModuleFunction mf:functionList) {			
+			if (!selectedFunctionList.contains(mf) && mf.getProjectModule() != null) {
+				LabelValueBean lv = new LabelValueBean();
+				lv.setLabel(mf.getProjectModule().getPmName() + "-" + mf.getMuName());
+				lv.setValue(mf.getMuId().toString());
+				availableFunction.add(lv);
+			}
+		}
+
+		request.setAttribute("selectedFunction", selectedFunction);
+		request.setAttribute("availableFunction", availableFunction);
 		
 		request.setAttribute("currentTeamMember",ctm);
 								
@@ -303,20 +338,17 @@ public class ProjectManage extends BaseAction {
 		Project project = (Project) dform.get("projectInfo");
 		
 		String id = request.getParameter("id");
-		TeamMember ctm = null;
+	
 		for(TeamMember tm:project.getMemberList())
 		{
 			if(tm.getTmId().equals(Integer.valueOf(id)))
 			{
 				tm.setTmFlag(CommonService.DELETE_FLAG);
-				projectService.saveTeamMember(tm);
-				ctm = tm;
+				projectService.saveTeamMember(tm);				
 				break;
 			}
 		}
-						
-		project.getMemberList().remove(ctm);
-		
+								
 		request.setAttribute("tabpageId","memberInfo");
 		
 		return mapping.findForward("editProjectInfo");
@@ -452,8 +484,8 @@ public class ProjectManage extends BaseAction {
 		project.setProjectVersionList(vtrList);
 		
 		//当开发、测试leader不是项目成员时，自动添加为项目成员
-		this.autoAddTeamMember(project, project.getInitProjectVersion().getDevelopLeader());	
-		this.autoAddTeamMember(project, project.getInitProjectVersion().getTestLeader());
+		projectService.addTeamMember(project, project.getInitProjectVersion().getDevelopLeader());	
+		projectService.addTeamMember(project, project.getInitProjectVersion().getTestLeader());
 		
 		return this.resetSearchProject(mapping, dform, request, response);
 	}
@@ -477,23 +509,60 @@ public class ProjectManage extends BaseAction {
 		projectService.saveProjectVersion(vtr,uploadPath);
 		
 		//当开发、测试leader不是项目成员时，自动添加为项目成员
-		this.autoAddTeamMember(project, vtr.getDevelopLeader());	
-		this.autoAddTeamMember(project, vtr.getTestLeader());
+		projectService.addTeamMember(project, vtr.getDevelopLeader());	
+		projectService.addTeamMember(project, vtr.getTestLeader());
 		
 		request.setAttribute("tabpageId","versionInfo");
 						
 		return mapping.findForward("refreshProjectInfo");
 	}
 	
-	private void autoAddTeamMember(Project project,UsrAccount ua)
+	public ActionForward saveTeamMember(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
-		boolean tmflag = project.isTeamMember(ua);
-		if(!tmflag)
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String tmId = request.getParameter("id");
+		
+		TeamMember tm = projectService.getTeamMemberById(Integer.parseInt(tmId));
+		
+		String[] selectedFunction = request.getParameterValues("selectedFunction");
+		List<String> selectedFunctionList = Arrays.asList(selectedFunction);
+				
+		ArrayList<MemberFunctionReference> mfrList = tm.getMemberFunctionReferenceList();
+		
+		for(MemberFunctionReference mfr:mfrList)
 		{
-			TeamMember tm = this.saveTeamMember( ua, project.getPId());
-			project.getMemberList().add(tm);
-		}	
+			if(selectedFunctionList.contains(mfr.getMfrModuleFunction()))
+			{
+				if(mfr.getMfrFlag().equals(CommonService.DELETE_FLAG))
+				{
+					mfr.setMfrFlag(CommonService.NORMAL_FLAG);
+				}
+				
+				selectedFunctionList.remove(mfr.getMfrModuleFunction());
+			}
+			else
+			{
+				mfr.setMfrFlag(CommonService.DELETE_FLAG);
+			}
+		}
+		
+		for(String sf:selectedFunctionList)
+		{
+			MemberFunctionReference mfr = new MemberFunctionReference();
+			mfr.setMfrModuleFunction(Integer.parseInt(sf));
+			mfr.setMfrTeamMember(tm.getTmId());
+			
+			mfrList.add(mfr);
+		}
+		
+		projectService.saveTeamMember(tm);
+				
+		request.setAttribute("tabpageId","memberInfo");						
+		
+		return mapping.findForward("refreshProjectInfo");
 	}
+	
+	
 	
 	public ActionForward searchProject(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	{

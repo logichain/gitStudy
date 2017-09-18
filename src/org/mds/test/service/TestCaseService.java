@@ -2,7 +2,10 @@ package org.mds.test.service;
 
 import java.util.List;
 
+import org.apache.struts.upload.FormFile;
 import org.king.framework.service.Service;
+import org.king.security.domain.UsrAccount;
+import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectVersion;
 import org.mds.test.bean.BugType;
 import org.mds.test.bean.CaseStatus;
@@ -42,4 +45,5 @@ public interface TestCaseService extends Service {
 	
 	public List<TestCase> searchTestCaseByVersion(ProjectVersion projectVersion);
 	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,Integer versionId);
+	public void saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project);
 }

@@ -1,5 +1,9 @@
 package org.mds.project.bean;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.king.security.domain.UsrAccount;
 
 /**
@@ -21,8 +25,8 @@ public class TeamMember extends org.king.framework.domain.BaseObject implements
 	private Integer tmAccount;
 	private Integer tmFlag = 0;
 	
-	private ModuleFunction moduleFunction;
 	private UsrAccount account = new UsrAccount();
+	private ArrayList<MemberFunctionReference> memberFunctionReferenceList = new ArrayList<MemberFunctionReference>();
 
 	// Constructors
 
@@ -110,13 +114,25 @@ public class TeamMember extends org.king.framework.domain.BaseObject implements
 	public void setTmModuleFunction(Integer tmModuleFunction) {
 		this.tmModuleFunction = tmModuleFunction;
 	}
-
-	public ModuleFunction getModuleFunction() {
-		return moduleFunction;
+		
+	public void setMemberFunctionReferenceSet(Set<MemberFunctionReference> mfrSet) {
+		memberFunctionReferenceList.clear();
+		memberFunctionReferenceList.addAll(mfrSet);		
 	}
 
-	public void setModuleFunction(ModuleFunction moduleFunction) {
-		this.moduleFunction = moduleFunction;
+	public Set<MemberFunctionReference> getMemberFunctionReferenceSet() {
+		Set<MemberFunctionReference> set = new HashSet<MemberFunctionReference>();
+		set.addAll(memberFunctionReferenceList);
+		
+		return set;
+	}
+
+	public ArrayList<MemberFunctionReference> getMemberFunctionReferenceList() {
+		return memberFunctionReferenceList;
+	}
+
+	public void setMemberFunctionReferenceList(ArrayList<MemberFunctionReference> memberFunctionReferenceList) {
+		this.memberFunctionReferenceList = memberFunctionReferenceList;
 	}
 
 }

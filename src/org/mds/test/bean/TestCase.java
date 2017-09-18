@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.struts.upload.FormFile;
 import org.king.security.domain.UsrAccount;
 import org.mds.common.CommonService;
 import org.mds.project.bean.ModuleFunction;
@@ -16,8 +17,7 @@ import org.mds.project.bean.ProjectVersion;
  * TestCase entity. @author MyEclipse Persistence Tools
  */
 
-public class TestCase extends org.king.framework.domain.BaseObject implements
-		java.io.Serializable {
+public class TestCase extends org.king.framework.domain.BaseObject implements java.io.Serializable {
 
 	// Fields
 
@@ -53,6 +53,8 @@ public class TestCase extends org.king.framework.domain.BaseObject implements
 	private ArrayList<TestCorrectRecord> testCorrectRecordList = new ArrayList<TestCorrectRecord>();
 	private ArrayList<CaseVersionReference> caseVersionReferenceList = new ArrayList<CaseVersionReference>();
 	
+	
+	private FormFile importFile;
 	// Constructors
 
 	/** default constructor */
@@ -349,6 +351,14 @@ public class TestCase extends org.king.framework.domain.BaseObject implements
 
 	public ModuleFunction getModuleFunction() {
 		return moduleFunction;
+	}
+
+	public FormFile getImportFile() {
+		return importFile;
+	}
+
+	public void setImportFile(FormFile importFile) {
+		this.importFile = importFile;
 	}
 
 }

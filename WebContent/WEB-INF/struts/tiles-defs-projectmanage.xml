@@ -48,6 +48,11 @@
 		<put name="body" value="/WEB-INF/pages/projectmanage/projectEdit.jsp" />
 	</definition>
 	
+	<definition name="teamMemberEditPageDef" extends="inputBaseDef">
+		<put name="title" value="组员信息编辑"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/teamMemberEdit.jsp" />
+	</definition>
+	
 	<definition name="attachmentInputPageDef" extends="inputBaseDef">		
 		<put name="title" value="附件信息编辑"/>
 		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />

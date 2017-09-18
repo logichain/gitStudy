@@ -36,6 +36,30 @@ public class TestCaseManage extends BaseAction {
 	private TestCaseService testCaseService;
 	private ProjectService projectService;
 	
+	public ActionForward importTestCase(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+	
+	
+		return mapping.findForward("caseImport");
+	}
+	
+	public ActionForward uploadTestCaseInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		UsrAccount user = (UsrAccount) request.getSession().getAttribute("accountPerson");
+					
+		String uploadPath = request.getSession().getServletContext().getRealPath("");
+		if (!uploadPath.endsWith("\\")) {
+			uploadPath = uploadPath + "\\uploadImportFile\\";
+		}
+		//≤‚ ‘¡Ÿ ±
+		uploadPath = "d:\\";
+		
+		Project projectInfo = (Project) dform.get("projectInfo");
+		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+			
+		testCaseService.saveImportTestCaseInfo(caseInfo.getImportFile(),uploadPath, user,projectInfo);	
+
+		return this.resetSearchTestCase(mapping, dform, request, response);
+	}
 	
 	public ActionForward exportTestCaseByVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		
@@ -51,10 +75,10 @@ public class TestCaseManage extends BaseAction {
 		//≤‚ ‘¡Ÿ ±
 		uploadPath = "d:\\";
 		
-		List<TestCase> customerList = testCaseService.searchTestCaseByVersion(projectVersion);	
+		List<TestCase> caseList = testCaseService.searchTestCaseByVersion(projectVersion);	
 		
 		String fileName = uploadPath + "exportCase.xls";
-		testCaseService.writeTestCaseToXslFile(fileName,customerList,pvId);
+		testCaseService.writeTestCaseToXslFile(fileName,caseList,pvId);
 				
 		try {
 			response.setContentType(org.king.util.FileUtil.getContentType(fileName));
@@ -136,15 +160,18 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward editTestCasePrevious(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 		TestCase caseInfo = (TestCase) dform.get("caseInfo");
 		
+		searchInfo.setTcCreateUser(ua.getId());
+		searchInfo.setTcCreateUserStr(ua.getPersonName());
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 				
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};		
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};		
 		
 		TestCase testCase = testCaseService.getTestCasePreviousEdit(args,caseInfo.getTcId());
 		if(testCase != null)
@@ -163,15 +190,18 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward editTestCaseNext(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 		TestCase caseInfo = (TestCase) dform.get("caseInfo");
 		
+		searchInfo.setTcCreateUser(ua.getId());
+		searchInfo.setTcCreateUserStr(ua.getPersonName());
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 						
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCaseNextEdit(args,caseInfo.getTcId());
 		if(testCase != null)
@@ -282,7 +312,7 @@ public class TestCaseManage extends BaseAction {
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCaseNextDisplay(args,Integer.valueOf(id));
 		if(testCase == null)
@@ -308,7 +338,7 @@ public class TestCaseManage extends BaseAction {
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCasePreviousDisplay(args,Integer.valueOf(id));
 		if(testCase == null)
@@ -359,7 +389,7 @@ public class TestCaseManage extends BaseAction {
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCaseNextTest(args,caseInfo.getTcId());
 		if(testCase != null)		
@@ -392,7 +422,7 @@ public class TestCaseManage extends BaseAction {
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCasePreviousTest(args,caseInfo.getTcId());
 		if(testCase != null)		
@@ -473,7 +503,7 @@ public class TestCaseManage extends BaseAction {
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCasePreviousCorrect(args,caseInfo.getTcId());
 		if(testCase != null)
@@ -506,7 +536,7 @@ public class TestCaseManage extends BaseAction {
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		
-		Object[] args = {projectInfo,searchInfo,cvrSearchInfo,functionList};
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = testCaseService.getTestCaseNextCorrect(args,caseInfo.getTcId());
 		if(testCase != null)
@@ -764,7 +794,9 @@ public class TestCaseManage extends BaseAction {
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		
-		Object[] args = {searchInfo,null,projectInfo};
+		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		
+		Object[] args = {searchInfo,null,functionList};
 		
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		testCaseService.saveTestCase(testCase);
@@ -855,7 +887,8 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 		
-		Object[] args = {searchInfo,null,projectInfo};
+		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};
 		
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		testCaseService.saveTestCase(testCase);
@@ -907,7 +940,9 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvr = this.getCurrentCaseVersionReference(testCase);
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
 		
-		Object[] args = {searchInfo,null,projectInfo};		
+		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		
+		Object[] args = {searchInfo,cvrSearchInfo,functionList};		
 		
 		testCaseService.saveTestCase(testCase);				
 		testCase = testCaseService.getTestCaseNextCorrect(args,testCase.getTcId());
@@ -962,7 +997,7 @@ public class TestCaseManage extends BaseAction {
 		
 		if((projectInfo.isTeamMember(ua) || ua.getId().equals(1)) && functionList.length() > 2)
 		{
-			Object[] args = {searchInfo,page,projectInfo,cvrSearchInfo,functionList};
+			Object[] args = {searchInfo,page,cvrSearchInfo,functionList};
 			
 			List<TestCase> caseList = testCaseService.searchTestCase(args);
 			Integer caseCount = testCaseService.searchTestCaseCount(args);
@@ -1007,7 +1042,7 @@ public class TestCaseManage extends BaseAction {
 		
 		if(functionList.length() > 2)
 		{
-			Object[] args = {searchInfo,page,projectInfo,cvrSearchInfo,functionList};			
+			Object[] args = {searchInfo,page,cvrSearchInfo,functionList};			
 			
 			List<TestCase> caseList = testCaseService.searchTestCase(args);
 			Integer caseCount = testCaseService.searchTestCaseCount(args);
@@ -1026,8 +1061,7 @@ public class TestCaseManage extends BaseAction {
 		return this.getForwardByUser(mapping, dform, request, response);
 	}
 	
-	public ActionForward exportTestCase(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	public ActionForward exportTestCase(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{			
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		Project projectInfo = (Project) dform.get("projectInfo");

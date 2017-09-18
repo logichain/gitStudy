@@ -40,6 +40,12 @@
 		</property>
 	</bean>
 	
+	<bean id="moduleFunctionDAO" class="org.mds.project.bean.ModuleFunctionDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
 	<!-- ************************** SERVICE SETTING *****************************-->
 	<bean id="testCaseService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -67,6 +73,10 @@
 				</property>
 				<property name="caseVersionReferenceDAO">
 					<ref local="caseVersionReferenceDAO" />
+				</property>		
+				
+				<property name="moduleFunctionDAO">
+					<ref local="moduleFunctionDAO" />
 				</property>				
 			</bean>
 		</property>

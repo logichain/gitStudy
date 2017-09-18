@@ -50,25 +50,27 @@
 			        <td><span class="parentNode"><font color="red"><%=j+1 +")" %></font></span></td>
 					<td><bean:write name="mf" property="muName"/></td>
 			        <td><bean:write name="mf" property="muRemark"/></td>
-			      	<td align="center"></td>
-<%-- 			      	<td align="center"><a href="javascript:openDialog('projectmanage.do?method=addChildModuleFunction&id=<bean:write name="mf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\new.gif"></a></td> --%>
+			      	
+			      	<td align="center"><a href="javascript:openDialog('projectmanage.do?method=addChildModuleFunction&id=<bean:write name="mf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\new.gif"></a></td>
 			      	<td align="center"><a href="javascript:openDialog('projectmanage.do?method=editModuleFunction&id=<bean:write name="mf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a></td>
 			      	<td align="center">
 			      		<a href='javascript:if(confirm("确认要删除这条信息吗?")) {chgAction(document.all.id,"<bean:write name="mf" property="muId"/>");chgAction(document.all.method,"deleteModuleFunction");projectForm.submit();}'><img border="0" src="pages\images\icon\16x16\delete.gif"></a>			      		
 			      	</td>
 			    </tr>
 
-<%-- 				<logic:iterate name="mf" property="childFunctionList" id="cmf" indexId="k"> --%>
-<%-- 	    			<tr id="<%="node-" + i + "-" + j + "-" + k%>" class="<%="child-of-node-" + i + "-" + j%>"> --%>
-<%-- 				        <td><span class="parentNode"><font color="MediumAquaMarine"><%=k+1 +")" %></font></span></td> --%>
-<%-- 						<td><bean:write name="cmf" property="muName"/></td> --%>
-<%-- 				        <td><bean:write name="cmf" property="muRemark"/></td> --%>
-<%-- 				      	<td align="center"><a href="javascript:openDialog('projectmanage.do?method=addChildModuleFunction&id=<bean:write name="cmf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\new.gif"></a></td> --%>
-<%-- 				      	<td align="center"><a href="javascript:openDialog('projectmanage.do?method=editChildModuleFunction&id=<bean:write name="cmf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a></td> --%>
-<!-- 				      	<td align="center"> -->
-<%-- 				      		<a href='javascript:if(confirm("确认要删除这条信息吗?")) {chgAction(document.all.id,"<bean:write name="cmf" property="muId"/>");chgAction(document.all.method,"deleteModuleFunction");projectForm.submit();}'><img border="0" src="pages\images\icon\16x16\delete.gif"></a>			      		 --%>
-<!-- 				      	</td> -->
-<!-- 				    </tr> -->
+				<logic:iterate name="mf" property="childFunctionList" id="cmf" indexId="k">
+	    			<tr id="<%="node-" + i + "-" + j + "-" + k%>" class="<%="child-of-node-" + i + "-" + j%>">
+				        <td><span class="parentNode"><font color="blue"><%=k+1 +")" %></font></span></td>
+						<td><bean:write name="cmf" property="muName"/></td>
+				        <td><bean:write name="cmf" property="muRemark"/></td>
+				      	<td align="center">
+<%-- 				      		<a href="javascript:openDialog('projectmanage.do?method=addChildModuleFunction&id=<bean:write name="cmf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\new.gif"></a> --%>
+				      	</td>
+				      	<td align="center"><a href="javascript:openDialog('projectmanage.do?method=editChildModuleFunction&id=<bean:write name="cmf" property="muId"/>',420,200);void(0);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a></td>
+				      	<td align="center">
+				      		<a href='javascript:if(confirm("确认要删除这条信息吗?")) {chgAction(document.all.id,"<bean:write name="cmf" property="muId"/>");chgAction(document.all.method,"deleteModuleFunction");projectForm.submit();}'><img border="0" src="pages\images\icon\16x16\delete.gif"></a>			      		
+				      	</td>
+				    </tr>
 <%-- 					<logic:iterate name="cmf" property="childFunctionList" id="ccmf" indexId="l"> --%>
 <%-- 		    			<tr id="<%="node-" + i + "-" + j + "-" + k + "-" + l%>" class="<%="child-of-node-" + i + "-" + j + "-" + k%>"> --%>
 <%-- 					        <td><span class="parentNode"><font color="blue"><%=l+1 +")" %></font></span></td> --%>
@@ -93,7 +95,7 @@
 <!-- 						    </tr> -->
 <%-- 						</logic:iterate> --%>
 <%-- 					</logic:iterate> --%>
-<%-- 				</logic:iterate> --%>
+				</logic:iterate>
 			</logic:iterate>    		
     	</logic:iterate>
 	</tbody>

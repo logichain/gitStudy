@@ -48,6 +48,7 @@
 				<value>org/mds/project/bean/Project.hbm.xml</value>
 				<value>org/mds/project/bean/ProjectModule.hbm.xml</value>
 				<value>org/mds/project/bean/TeamMember.hbm.xml</value>
+				<value>org/mds/project/bean/MemberFunctionReference.hbm.xml</value>
 				<value>org/mds/project/bean/ProjectVersion.hbm.xml</value>
 				<value>org/mds/project/bean/ProjectAttachment.hbm.xml</value>
 								

@@ -40,6 +40,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	private UsrAccount developLeader;
 	private UsrAccount testLeader;
 	private Integer pageItemCount = 30;
+	
 	// Constructors
 
 	
@@ -266,6 +267,5 @@ public class Project extends org.king.framework.domain.BaseObject implements
 		
 		return rtn;
 	}
-	
 
 }

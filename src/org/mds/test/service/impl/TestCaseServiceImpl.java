@@ -1,16 +1,25 @@
 package org.mds.test.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.struts.upload.FormFile;
 import org.king.framework.dao.MyQuery;
 import org.king.framework.service.impl.BaseService;
+import org.king.security.domain.UsrAccount;
+import org.king.util.FileUtil;
 import org.mds.common.CommonService;
+import org.mds.project.bean.ModuleFunction;
+import org.mds.project.bean.ModuleFunctionDAO;
 import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectVersion;
+import org.mds.project.bean.TeamMember;
 import org.mds.test.bean.BugType;
 import org.mds.test.bean.BugTypeDAO;
 import org.mds.test.bean.CaseStatus;
@@ -27,8 +36,10 @@ import org.mds.test.bean.TestResult;
 import org.mds.test.bean.TestResultDAO;
 import org.mds.test.service.TestCaseService;
 
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.format.CellFormat;
+import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -44,6 +55,154 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	private TestCorrectRecordDAO testCorrectRecordDAO;
 	private BugTypeDAO bugTypeDAO;
 	private CaseVersionReferenceDAO caseVersionReferenceDAO; 
+	
+	private ModuleFunctionDAO moduleFunctionDAO;
+	
+	
+	public void saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project) 
+	{		
+		String fileName = FileUtil.saveUploadFile(formFile,filePath);
+			
+		FileInputStream is = null;
+		try {
+			is = new FileInputStream(filePath + fileName);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Workbook wb = null;
+		try {
+			wb = Workbook.getWorkbook(is);
+		} catch (BiffException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Sheet st = wb.getSheet(0);
+		int rows = st.getRows();
+		int cols = st.getColumns();
+		int colNameRow = 0;
+		
+		for(int i = 0;i < rows;i++)
+		{
+			for(int j = 0;j < cols;j++)
+			{
+				String content = st.getCell(j, i).getContents().trim();
+				if(CommonService.IMPORT_COLUMN_NAME[0].equals(content))
+				{
+					colNameRow = i;
+					break;
+				}
+			}
+		}
+		
+		for (int i = colNameRow +1; i < rows; i++) {				
+			TestCase tc = new TestCase();
+			tc.setTcCreateUser(user.getId());
+			tc.setTcFlag(CommonService.NORMAL_FLAG);
+			tc.setTcCreateTime(new Date());						
+									
+			for (int j = 0; j < cols; j++) {
+				String colName = st.getCell(j,colNameRow).getContents().trim();
+				colName = colName.replaceAll("\n", "");
+				if (!colName.isEmpty()) {					
+					if(colName.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
+					{
+						String functionName = st.getCell(j, i).getContents().trim();
+						if(functionName != null && !functionName.isEmpty())
+						{
+							List<ModuleFunction> rtnList = moduleFunctionDAO.find("select a from ModuleFunction a where  a.muName like '%" + functionName + "%'");
+							if(rtnList.size() > 0)
+							{
+								Project cp = null;
+								for(ModuleFunction mf:rtnList)
+								{
+									if(mf.getParentFunction() != null)
+									{
+										cp = mf.getParentFunction().getProjectModule().getProject();
+									}
+									else
+									{
+										cp = mf.getProjectModule().getProject();
+									}
+									
+									if(cp.equals(project))
+									{
+										tc.setTcModuleFunction(rtnList.get(0).getMuId());
+										break;
+									}									
+								}
+								
+							}
+						}												
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[2]))//用例编号
+					{
+						tc.setTcCode(st.getCell(j, i).getContents().trim());
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[3]))//测试目的
+					{
+						tc.setTcTestObjective(st.getCell(j, i).getContents().trim());
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[4]))//测试内容
+					{
+						tc.setTcTestContent(st.getCell(j, i).getContents().trim());
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[5]))//测试步骤
+					{
+						tc.setTcTestStep(st.getCell(j, i).getContents().trim());
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[6]))//测试说明
+					{
+						tc.setTcRemark(st.getCell(j, i).getContents().trim());
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[7]))//预期输出
+					{
+						tc.setTcIntendOutput(st.getCell(j, i).getContents().trim());
+					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[10]))//创建人
+					{
+						String userName = st.getCell(j, i).getContents().trim();
+						for(TeamMember tm:project.getMemberList())
+						{
+							if(tm.getAccount().getPersonName().equals(userName))
+							{
+								tc.setTcCreateUser(tm.getTmAccount());
+								break;
+							}
+						}					
+					}
+				}
+			}	
+			
+			try
+			{
+				this.saveTestCase(tc);								
+								
+				System.err.println("转换完成行号：" + st.getCell(0,i).getContents().trim() + ",客户信息Key:" + tc.getTcId());
+			}
+			catch(Exception e)
+			{
+				System.err.println("转换行序列号：" + st.getCell(0,i).getContents().trim() + "时，报错！！！！！");	
+				e.printStackTrace();
+			}			
+		}
+												
+		wb.close();
+		try {
+			is.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
+				
+		
+	}
+	
 	
 
 	@Override
@@ -104,15 +263,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 						break;
 					}
 				}
-				
-				cf = wst.getWritableCell(0,i).getCellFormat();
-				lbl = new Label(0,i, String.valueOf(i));
-				if(cf != null)
-				{
-					lbl.setCellFormat(cf);
-				}							
-				wst.addCell(lbl);
-				
+								
 				//功能模块
 				cf = wst.getWritableCell(1,i).getCellFormat();
 				lbl = new Label(1,i, tc.getModuleFunction().getProjectModule().getPmName());
@@ -313,11 +464,10 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	
 	public List<TestCase> searchTestCase(Object[] args) {
 		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[2];
 		String page = (String) args[1];
 		TestCase searchInfo = (TestCase) args[0];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[3];
-		String functionList = (String) args[4];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		String functionList = (String) args[3];
 		
 		String hqlStr = null;
 		
@@ -327,9 +477,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		}
 		else
 		{
-			hqlStr = "select distinct a from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS + 
-					" and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+			hqlStr = "select distinct a from TestCase a,CaseVersionReference e " +
+					" where  a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and  e.cvrFlag != " + CommonService.DELETE_FLAG ;
 		}
 						        
         return this.retrieveTestCaseList(searchInfo,cvrSearchInfo, hqlStr,Integer.parseInt(page));		 
@@ -436,10 +586,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	
 	public Integer searchTestCaseCount(Object[] args) {
 		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[2];
 		TestCase searchInfo = (TestCase) args[0];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[3];
-		String functionList = (String) args[4];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		String functionList = (String) args[3];
 		
 		String hqlStr = null;
 		if(cvrSearchInfo.isSearchInfoEmpty())			
@@ -448,9 +597,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		}
 		else
 		{
-			hqlStr = "select  count(a) from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS + 
-					" and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+			hqlStr = "select  count(a) from TestCase a,CaseVersionReference e " +
+					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
 		}    	
 		    	
     	hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
@@ -521,30 +670,25 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	
 	public TestCase getTestCaseNextDisplay(Object[] args,Integer id) {
 		// TODO Auto-generated method stub
-		
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
 				
-		return this.getTestCaseDisplay(projectInfo, searchInfo, id, true,cvrSearchInfo,(String)args[3]);
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
+				
+		return this.getTestCaseDisplay(searchInfo, id, true,cvrSearchInfo,(String)args[2]);
 	}
 		
-	private TestCase getTestCaseDisplay(Project projectInfo,TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo,String functionList)
+	private TestCase getTestCaseDisplay(TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo,String functionList)
 	{		
 		String hqlStr = null;
 		if(cvrSearchInfo.isSearchInfoEmpty())
 		{
-			hqlStr = "select a from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS ;
-			if(searchInfo.getModuleId() != null)
-			{
-				hqlStr = hqlStr + " and a.tcModuleFunction in " + functionList;
-			}
+			hqlStr = "select a from TestCase a where a.tcModuleFunction in " + functionList + " and a.tcFlag != " + CaseStatus.DELETE_STATUS ;			
 		}
 		else
 		{
-			hqlStr = "select distinct a from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS + 
-					" and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+			hqlStr = "select distinct a from TestCase a,CaseVersionReference e " +
+					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
 		}
 			
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
@@ -554,12 +698,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	}
 	
 	public TestCase getTestCasePreviousDisplay(Object[] args,Integer id) {
-		// TODO Auto-generated method stub		
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		// TODO Auto-generated method stub			
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
+		String functionList =  (String) args[2];
 		
-		return this.getTestCaseDisplay(projectInfo, searchInfo, id, false,cvrSearchInfo,(String)args[3]);
+		return this.getTestCaseDisplay(searchInfo, id, false,cvrSearchInfo,functionList);
 	}
 	
 	private TestCase retrieveTestCase(TestCase searchInfo,String hqlStr,boolean isNext,Integer id)
@@ -605,15 +749,14 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	}
 
 	public TestCase getTestCaseNextEdit(Object[] args,Integer id) {
-		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		// TODO Auto-generated method stub	
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
 				 
-		return this.getTestCaseEdit(projectInfo, searchInfo, id, true,cvrSearchInfo,(String)args[3]);
+		return this.getTestCaseEdit(searchInfo, id, true,cvrSearchInfo,(String)args[2]);
 	}
 	
-	private TestCase getTestCaseEdit(Project projectInfo,TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo,String functionList)
+	private TestCase getTestCaseEdit(TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo,String functionList)
 	{
 		String hqlStr = null;
 		if(cvrSearchInfo.isSearchInfoEmpty())
@@ -626,9 +769,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		}
 		else
 		{
-			hqlStr = "select distinct a from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS + 
-					" and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+			hqlStr = "select distinct a from TestCase a,CaseVersionReference e " +
+					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
 		}
 		
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
@@ -638,28 +781,28 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	}
 	
 	public TestCase getTestCasePreviousEdit(Object[] args,Integer id) {
-		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		// TODO Auto-generated method stub		
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
 				 
-		 return this.getTestCaseEdit(projectInfo, searchInfo, id, false,cvrSearchInfo,(String)args[3]);
+		 return this.getTestCaseEdit(searchInfo, id, false,cvrSearchInfo,(String)args[2]);
 	}
 	
 	public TestCase getTestCaseNextTest(Object[] args,Integer id) {
-		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		// TODO Auto-generated method stub	
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
+		String functionList = (String) args[2];
 						 
-		 return this.getTestCaseTest(projectInfo, searchInfo, id, true,cvrSearchInfo);
+		 return this.getTestCaseTest(searchInfo, id, true,cvrSearchInfo,functionList);
 	}
 	
-	private TestCase getTestCaseTest(Project projectInfo,TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo)
+	private TestCase getTestCaseTest(TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo,String functionList)
 	{		
-		String hqlStr = "select a from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS + 
-					" and a.tcId = e.cvrTestCase and e.cvrProjectVersion = " + cvrSearchInfo.getCvrProjectVersion() + " and e.cvrFlag != " + CommonService.DELETE_FLAG +
+		String hqlStr = "select a from TestCase a,CaseVersionReference e " +
+					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG + 
+					" and e.cvrProjectVersion = " + cvrSearchInfo.getCvrProjectVersion()  +
 					" and ( e.cvrCaseStatus = " + CaseStatus.WAIT_TEST_STATUS + " or e.cvrCaseStatus = " + CaseStatus.CORRECT_STATUS + ")";
 				
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
@@ -669,28 +812,28 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	}
 	
 	public TestCase getTestCasePreviousTest(Object[] args,Integer id) {
-		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
-						 
-		 return this.getTestCaseTest(projectInfo, searchInfo, id, false,cvrSearchInfo);
+		// TODO Auto-generated method stub		
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
+		String functionList = (String) args[2];
+		
+		return this.getTestCaseTest(searchInfo, id, false,cvrSearchInfo,functionList);
 	}
 
 	public TestCase getTestCaseNextCorrect(Object[] args,Integer id) {
-		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		// TODO Auto-generated method stub		
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
+		String functionList = (String) args[2];
 		
-		 return this.getTestCaseCorrect(projectInfo, searchInfo, id, true,cvrSearchInfo); 
+		 return this.getTestCaseCorrect(searchInfo, id, true,cvrSearchInfo,functionList); 
 	}
 	
-	private TestCase getTestCaseCorrect(Project projectInfo,TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo)
+	private TestCase getTestCaseCorrect(TestCase searchInfo,Integer id,boolean isNext,CaseVersionReference cvrSearchInfo,String functionList)
 	{
-		String hqlStr = "select a from TestCase a ,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + " and a.tcFlag != " + CaseStatus.DELETE_STATUS +
-					" and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG +
+		String hqlStr = "select a from TestCase a ,CaseVersionReference e " +
+					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and  e.cvrFlag != " + CommonService.DELETE_FLAG +
 					" and e.cvrCaseStatus = " + CaseStatus.TESTED_STATUS + " and e.cvrCaseResult = " + TestResult.TestResult_FAILED;
 				
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
@@ -700,12 +843,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	}
 	
 	public TestCase getTestCasePreviousCorrect(Object[] args,Integer id) {
-		// TODO Auto-generated method stub
-		Project projectInfo = (Project) args[0];		
-		TestCase searchInfo = (TestCase) args[1];
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		// TODO Auto-generated method stub	
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[1];
+		String functionList = (String) args[2];
 		
-		 return this.getTestCaseCorrect(projectInfo, searchInfo, id, false,cvrSearchInfo); 
+		 return this.getTestCaseCorrect(searchInfo, id, false,cvrSearchInfo,functionList); 
 	}
 	
 	public List<TestCase> getAllTestCase(Object[] args) {
@@ -803,6 +946,14 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	public CaseVersionReference getCaseVersionReferenceById(Integer id) {
 		// TODO Auto-generated method stub
 		return caseVersionReferenceDAO.get(id);
+	}
+
+	public ModuleFunctionDAO getModuleFunctionDAO() {
+		return moduleFunctionDAO;
+	}
+
+	public void setModuleFunctionDAO(ModuleFunctionDAO moduleFunctionDAO) {
+		this.moduleFunctionDAO = moduleFunctionDAO;
 	}
 
 }

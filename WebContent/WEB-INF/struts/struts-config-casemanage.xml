@@ -24,7 +24,9 @@
 			<forward name="caseEdit" path="editPageDef" redirect="false" />
 			<forward name="caseTest" path="testPageDef" redirect="false" />
 			<forward name="caseCorrect" path="correctPageDef" redirect="false" />
-			<forward name="caseDisplay" path="displayPageDef" redirect="false" />	
+			<forward name="caseDisplay" path="displayPageDef" redirect="false" />
+			
+			<forward name="caseImport" path="importPageDef" redirect="false" />	
 		</action>		
 	</action-mappings>
 </struts-config>
