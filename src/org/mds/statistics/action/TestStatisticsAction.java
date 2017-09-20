@@ -71,6 +71,22 @@ public class TestStatisticsAction extends BaseAction {
 		return mapping.findForward("statistics");
 	}
 	
+	private String getApplicaleFunctionList(Project projectInfo,TestCase searchInfo)
+	{
+		String functionList = "";
+		if(searchInfo.getModuleId() != null)
+		{
+			ProjectModule pm = projectService.getProjectModuleById(searchInfo.getModuleId());
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
+		}
+		else
+		{
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
+		}
+				
+		return functionList;
+	}
+	
 	private void versionStatistics(ActionForm form,HttpServletRequest request)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -95,12 +111,7 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allUnpassCount = 0;
 		Integer allCorrectCount = 0;
 		
-		String functionList = "";
-		if(caseInfo.getModuleId() != null)
-		{
-			ProjectModule pm = projectService.getProjectModuleById(caseInfo.getModuleId());
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
-		}		
+		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);		
 		
 		for(ProjectVersion pv:projectInfo.getProjectVersionList())
 		{
@@ -253,12 +264,7 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allUnpassCount = 0;
 		Integer allCorrectCount = 0;
 		
-		String functionList = "";
-		if(caseInfo.getModuleId() != null)
-		{
-			ProjectModule pm = projectService.getProjectModuleById(caseInfo.getModuleId());
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
-		}
+		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);	
 				
 		ArrayList<TeamMember> tmList = projectInfo.getMemberList();		
 		for(TeamMember tm:tmList)

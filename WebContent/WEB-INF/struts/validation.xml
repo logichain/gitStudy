@@ -105,9 +105,7 @@
 		</form>
 		
 		<form name="caseForm">
-			<field property="caseInfo.moduleId" depends="required">
-				<arg position="0" bundle="case" key="module"  />
-			</field>
+			
 			<field property="caseInfo.tcModuleFunction" depends="required">
 				<arg position="0" bundle="case" key="module_function"  />
 			</field>

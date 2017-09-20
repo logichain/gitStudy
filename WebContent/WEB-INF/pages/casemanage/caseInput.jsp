@@ -1,8 +1,5 @@
 <%@page pageEncoding="GBK"%>
 <%@ include file="../common/include.jsp"%>
-<script type="text/javascript" charset="utf-8" src="<c:url value='/resources/ueditor/ueditor.config.js'/>"></script>
-<script type="text/javascript" charset="utf-8" src="<c:url value='/resources/ueditor/ueditor.all.js'/>"></script>
-
 
 <html:form action="casemanage.do" onsubmit="return validateCaseForm(this);">
 	<html:errors />
@@ -13,7 +10,7 @@
 		<tr><td width="70%"></td>
 			<td align="center"><html:submit styleClass="savebutton">&nbsp;</html:submit></td>
 			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseNew');">&nbsp;</html:submit></td>
-			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseCopy');">&nbsp;</html:submit></td>						
+			<td align="center"><html:submit styleClass="" onclick="chgAction(document.all.method,'saveTestCaseCopy');">copy new</html:submit></td>						
 			<td align="center"><html:reset styleClass="resetbutton">&nbsp;</html:reset></td>				
 		</tr>
 		<tr>
@@ -66,24 +63,25 @@
 	<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>
 		
 	<table width="100%">
-		<tr><td width="50%" rowspan="2" align="center">
-			<fieldset style="width:98%;float:left;">
-				<legend><bean:message bundle="case" key="test_step"/></legend>
-				<textarea class="putinscroll2" id="stepeditor" name="caseInfo.tcTestStep"><%=((org.mds.test.bean.TestCase)c).getTcTestStep()%></textarea>
-			</fieldset>
-		</td>
-		<td width="50%" align="center">					
-			<fieldset style="width:98%;float:left;">
-				<legend><bean:message bundle="case" key="test_remark"/></legend>
-				<textarea class="putinscroll1" id="remarkeditor" name="caseInfo.tcRemark"><%=((org.mds.test.bean.TestCase)c).getTcRemark()%></textarea>
-			</fieldset>
-		</td>
+		<tr>
+			<td width="50%" rowspan="2" align="center">
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="test_step"/></legend>					
+					<html:textarea cols="60" rows="30" property="caseInfo.tcTestStep"></html:textarea>									
+				</fieldset>
+			</td>
+			<td align="center">				
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="test_remark"/></legend>					
+					<html:textarea cols="60" rows="16" property="caseInfo.tcRemark"></html:textarea>										
+				</fieldset>
+			</td>
 		</tr>
-		<tr>			
+		<tr>		
 			<td align="center">
 				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<textarea class="putinscroll1" id="outputeditor" name="caseInfo.tcIntendOutput"><%=((org.mds.test.bean.TestCase)c).getTcIntendOutput()%></textarea>
+					<legend><bean:message bundle="case" key="intend_output"/></legend>					
+					<html:textarea cols="60" rows="10" property="caseInfo.tcIntendOutput"></html:textarea>										
 				</fieldset>
 			</td>
 		</tr>
@@ -97,10 +95,6 @@
 <script type="text/javascript" src="<html:rewrite forward='staticjavascript'/>"></script>
 
 <script language="JavaScript">	
-UE.getEditor('stepeditor',{initialFrameWidth:480,initialFrameHeight:600,maximumWords:1000});
-UE.getEditor('remarkeditor',{initialFrameWidth:480,initialFrameHeight:200,maximumWords:1000});
-UE.getEditor('outputeditor',{initialFrameWidth:480,initialFrameHeight:200,maximumWords:200});
-
 function chgAction(obj,str){
 	obj.value=str;
 }

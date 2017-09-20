@@ -24,14 +24,14 @@ public class TestStatisticsServiceImpl extends BaseService implements TestStatis
 		String functionList = "";
 		if(args.length == 4)
 		{
-			functionList = (String) args[3];
+			functionList = (String) args[3];//有可能是“（）”
 		}		
 		
 		String hqlStr = null;
 		
 		if(cvrSearchInfo.isSearchInfoEmpty())
 		{			
-			if(functionList.equals(""))
+			if(functionList.length() < 3)
 			{
 				hqlStr = "select count(distinct a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS;
 			}
@@ -42,15 +42,15 @@ public class TestStatisticsServiceImpl extends BaseService implements TestStatis
 		}
 		else
 		{
-			if(functionList.equals(""))
+			if(functionList.length() < 3)
 			{
 				hqlStr = "select count(distinct a) from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() +
 				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
 			}
 			else
 			{
-				hqlStr = "select count(distinct a) from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() +
-				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG + " and a.tcModuleFunction in " + functionList;
+				hqlStr = "select count(distinct a) from TestCase a,CaseVersionReference e where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList +
+				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
 			}
 			
 		}

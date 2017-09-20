@@ -93,7 +93,7 @@
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
+							<td><bean:message bundle="project" key="project_version" /></td>
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>
@@ -130,7 +130,7 @@
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
+							<td><bean:message bundle="case" key="module"/></td>
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>
@@ -167,7 +167,7 @@
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
+							<td><bean:message bundle="case" key="module_function"/></td>
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>
@@ -205,7 +205,7 @@
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
-							<td><bean:message bundle="case" key="class_name"/></td>
+							<td><bean:message bundle="case" key="test_user"/></td>
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>

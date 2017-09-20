@@ -67,23 +67,45 @@ public class ModuleFunction extends org.king.framework.domain.BaseObject impleme
 		
 		if(this.muId != null)
 		{
-			rtn = this.getParentFunctionEntireName(this, muName);				
+			rtn = this.getParentFunctionEntireName(this, muName,true);				
 		}		
 				
 		return rtn;		
 	}
 	
-	private String getParentFunctionEntireName(ModuleFunction mf,String name)
+	public String getEntireModuleFunctionName() {
+		String rtn = "";
+		
+		if(this.muId != null)
+		{
+			rtn = this.getParentFunctionEntireName(this, muName,false);				
+		}		
+				
+		return rtn;		
+	}
+	
+	public String getProjectModuleName() {
+				
+		ModuleFunction mf = this;
+		while(mf.parentFunction != null)
+		{
+			mf = mf.parentFunction;
+		}
+				
+		return mf.getProjectModule().getPmName();		
+	}
+	
+	private String getParentFunctionEntireName(ModuleFunction mf,String name,boolean hasPmName)
 	{
 		String rtn = name;
 		
 		if(mf.getParentFunction() != null)
 		{
-			rtn = this.getParentFunctionEntireName(mf.getParentFunction(), mf.getParentFunction().getMuName() + "-" + name);
+			rtn = this.getParentFunctionEntireName(mf.getParentFunction(), mf.getParentFunction().getMuName() + "¡ú" + name,hasPmName);
 		}
-		else if(mf.getProjectModule() != null)
+		else if(mf.getProjectModule() != null && hasPmName)
 		{
-			rtn = mf.getProjectModule().getPmName() + "-" + name;
+			rtn = mf.getProjectModule().getPmName() + "¡ú" + name;
 		}
 		
 		return rtn;

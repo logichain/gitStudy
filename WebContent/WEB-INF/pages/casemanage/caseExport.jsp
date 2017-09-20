@@ -26,11 +26,11 @@
 			<tr>
 				<td width="15%" align="center"><bean:message bundle="case" key="module"/></td>
 				<td width="15%" align="left">
-					<bean:write name="c" property="moduleFunction.projectModule.pmName"/>
+					<bean:write name="c" property="moduleFunction.projectModuleName"/>
 				</td>
 				<td width="15%" align="center"><bean:message bundle="case" key="module_function"/></td>
 				<td width="15%" align="left">			
-					<bean:write name="c" property="moduleFunction.muName"/>			
+					<bean:write name="c" property="moduleFunction.entireModuleFunctionName"/>			
 				</td>								
 				<td width="15%" align="center"><bean:message bundle="case" key="case_code"/></td><td align="left"><bean:write name="c" property="tcCode"/></td>
 			</tr>	

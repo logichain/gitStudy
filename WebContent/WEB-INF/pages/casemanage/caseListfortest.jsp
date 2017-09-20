@@ -142,7 +142,7 @@
 		<thead>
 			<tr id="node-0">
 				<td width="4%"><a href="javascript:expendhideall();"><font color="white">--</font></a></td>				
-				<td width="16%" colspan="2" align="center"><bean:message bundle="case" key="module_function"/></td>
+				<td width="20%" colspan="2" align="center"><bean:message bundle="case" key="module_function"/></td>
 				<td width="8%" align="center"><bean:message bundle="case" key="case_code"/></td>
 				<td align="center"><bean:message bundle="case" key="test_objective"/></td>				
 				<td width="7%" align="center"><bean:message bundle="case" key="create_user"/></td>

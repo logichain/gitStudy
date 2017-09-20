@@ -1,7 +1,5 @@
 <%@page pageEncoding="GBK"%>
 <%@ include file="../common/include.jsp"%>
-<script type="text/javascript" charset="utf-8" src="<c:url value='/resources/ueditor/ueditor.config.js'/>"></script>
-<script type="text/javascript" charset="utf-8" src="<c:url value='/resources/ueditor/ueditor.all.js'/>"></script>
 
 <html:form action="casemanage.do" onsubmit="return checkFormValidate();">
 	<html:errors />
@@ -24,23 +22,8 @@
 	</table>	
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">	
 		<tr>
-			<td width="10%">&nbsp;</td><td width="18%"></td>
-			<td width="10%"></td><td width="18%"></td>
-			<td width="10%"></td><td width="18%"></td>
-			<td></td>	
-		</tr>	
-		<tr>
-			<td align="right"><bean:message bundle="case" key="module"/>£º</td>
-			<td align="left">
-				<bean:write name="caseForm" property="caseInfo.moduleFunction.projectModule.pmName"/>
-			</td>
-			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left">			
-				<bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/>			
-			</td>			
-			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
-			<td align="left"><bean:write name="caseForm" property="caseInfo.tcCode"/></td>
-			
+			<td width="10%">&nbsp;</td><td width="40%"></td>
+			<td width="10%"></td><td width="10%"></td>
 			<td rowspan="3" align="center">
 				<fieldset style="width:96%;">
 					<legend><bean:message bundle="project" key="version"/></legend>
@@ -52,15 +35,23 @@
 				</fieldset>
 			</td>
 		</tr>	
+		<tr>			
+			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
+			<td align="left">			
+				<bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/>			
+			</td>			
+			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
+			<td align="left"><bean:write name="caseForm" property="caseInfo.tcCode"/></td>			
+		</tr>	
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>£º</td>
-			<td colspan="6" align="left"><bean:write name="caseForm" property="caseInfo.tcTestObjective"/></td>
+			<td colspan="4" align="left"><bean:write name="caseForm" property="caseInfo.tcTestObjective"/></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_content"/>£º</td>
-			<td colspan="6" align="left"><bean:write name="caseForm" property="caseInfo.tcTestContent"/></td>
+			<td colspan="4" align="left"><bean:write name="caseForm" property="caseInfo.tcTestContent"/></td>
 		</tr>
 		
 	</table>
@@ -96,36 +87,34 @@
 		</table>
 	</fieldset>
 			
-<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>
+
 						
 <table width="100%">
 	<tr>
-		<td width="50%" align="center">				
+		<td width="50%" rowspan="2" align="left">				
 			<fieldset style="width:98%;float:left;">
 				<legend><bean:message bundle="case" key="test_step"/></legend>
-				<div class="putinscroll1">				
-					<bean:write name="c" property="tcTestStep" filter="false"/>
-				</div>	
+				<html:textarea readonly="true" cols="60" rows="30" property="caseInfo.tcTestStep"></html:textarea>													
 			</fieldset>	
 		</td>
-		<td align="center" rowspan="2">
+		<td align="left">
 			<fieldset style="width:98%;float:left;">
 				<legend><bean:message bundle="case" key="test_remark"/></legend>
-				<textarea class="putinscroll2" id="remarkeditor" name="caseInfo.tcRemark"><%=((org.mds.test.bean.TestCase)c).getTcRemark()%></textarea>
+				<html:textarea cols="60" rows="16" property="caseInfo.tcRemark"></html:textarea>					
 			</fieldset>
 		</td>
 	</tr>
 	<tr>
-		<td align="center">				
+		<td align="left">				
 			<fieldset style="width:98%;float:left;">
 				<legend><bean:message bundle="case" key="intend_output"/></legend>
-				<div class="putinscroll1">
-				<bean:write name="c" property="tcIntendOutput" filter="false"/>
-				</div>
+				<html:textarea readonly="true" cols="60" rows="10" property="caseInfo.tcIntendOutput"></html:textarea>							
 			</fieldset>
 		</td>
+		
 	</tr>
 	
+	<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>
 	<c:set var="caseInfo" value="${c}" scope="request" />
 	<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
 </table>
@@ -134,8 +123,6 @@
 
 
 <script language="JavaScript">	
-UE.getEditor('remarkeditor',{initialFrameWidth:480,initialFrameHeight:310,maximumWords:1000});
-
  function chgAction(obj,str){
 	obj.value=str;
  }

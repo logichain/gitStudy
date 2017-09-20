@@ -18,26 +18,8 @@
 
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">	
 		<tr>
-			<td width="10%">&nbsp;</td><td width="18%"></td>
-			<td width="10%"></td><td width="18%"></td>
-			<td width="10%"></td><td width="18%"></td>
-			<td></td>		
-		</tr>	
-		<tr>
-			<td align="right"><bean:message bundle="case" key="module"/>£º</td>
-			<td align="left">
-			<logic:notEmpty name="caseInfo" property="moduleFunction.projectModule">
-				<bean:write name="caseInfo" property="moduleFunction.projectModule.pmName"/>
-			</logic:notEmpty>
-			<logic:empty name="caseInfo" property="moduleFunction.projectModule">
-				<bean:write name="caseInfo" property="moduleFunction.parentFunction.projectModule.pmName"/>
-			</logic:empty>
-			</td>
-			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left">			
-				<bean:write name="caseInfo" property="moduleFunction.entireName"/>			
-			</td>			
-			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td><td align="left"><bean:write name="caseInfo" property="tcCode"/></td>
+			<td width="10%">&nbsp;</td><td width="40%"></td>
+			<td width="10%"></td><td width="10%"></td>
 			<td rowspan="3" align="left">
 				<fieldset style="width:80%;float:right;">
 					<legend><bean:message bundle="project" key="version"/></legend>
@@ -47,17 +29,27 @@
 	      				<input type="hidden" name='<%="projectInfo.projectVersionList[" + i + "].selected" %>' value="false">
 					</logic:iterate>
 				</fieldset>
-			</td>
+			</td>		
+		</tr>	
+		<tr>
+			
+			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
+			<td align="left">			
+				<bean:write name="caseInfo" property="moduleFunction.entireName"/>			
+			</td>			
+			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
+			<td align="left"><bean:write name="caseInfo" property="tcCode"/></td>
+			
 		</tr>	
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>£º</td>
-			<td colspan="5" align="left"><bean:write name="caseInfo" property="tcTestObjective"/></td>
+			<td colspan="4" align="left"><bean:write name="caseInfo" property="tcTestObjective"/></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_content"/>£º</td>
-			<td colspan="5" align="left"><bean:write name="caseInfo" property="tcTestContent"/></td>
+			<td colspan="4" align="left"><bean:write name="caseInfo" property="tcTestContent"/></td>
 		</tr>
 		
 	</table>
@@ -97,23 +89,19 @@
 			</logic:iterate>		
 		</table>
 	</fieldset>
-								
+							
 	<table width="100%">
 		<tr>
 			<td width="50%" rowspan="2" align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<div class="putinscroll2">
-						<bean:write name="caseInfo" property="tcTestStep" filter="false"/>
-					</div>								
+					<html:textarea readonly="true" cols="56" rows="30" name="caseInfo" property="tcTestStep"></html:textarea>													
 				</fieldset>	
 			</td>
 			<td align="left">
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_remark"/></legend>
-					<div class="putinscroll1">
-						<bean:write name="caseInfo" property="tcRemark" filter="false"/>
-					</div>							
+					<html:textarea readonly="true" cols="56" rows="16" name="caseInfo" property="tcRemark"></html:textarea>					
 				</fieldset>
 			</td>
 		</tr>
@@ -121,9 +109,7 @@
 			<td align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<div class="putinscroll1">
-						<bean:write name="caseInfo" property="tcIntendOutput" filter="false"/>
-					</div>						
+					<html:textarea readonly="true" cols="56" rows="10" name="caseInfo" property="tcIntendOutput"></html:textarea>							
 				</fieldset>
 			</td>
 			

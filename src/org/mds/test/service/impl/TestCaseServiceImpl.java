@@ -229,15 +229,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			wwb = Workbook.createWorkbook(os);
 				
 			WritableSheet wst = wwb.createSheet("测试用例", 0);			
-			int j =1;			
-			CellFormat cf = wst.getWritableCell(0,0).getCellFormat();
-			Label lbl = new Label(0,0, "序号");
-			if(cf != null)
-			{
-				lbl.setCellFormat(cf);
-			}				
-		
-			wst.addCell(lbl);		
+			int j =0;			
+			CellFormat cf = null;
+			Label lbl = null;
 		
 			for(String colName:CommonService.IMPORT_COLUMN_NAME)
 			{
@@ -264,18 +258,10 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 					}
 				}
 								
-				//功能模块
-				cf = wst.getWritableCell(1,i).getCellFormat();
-				lbl = new Label(1,i, tc.getModuleFunction().getProjectModule().getPmName());
-				if(cf != null)
-				{
-					lbl.setCellFormat(cf);
-				}							
-				wst.addCell(lbl);
-				
+						
 				//功能点				
-				cf = wst.getWritableCell(2,i).getCellFormat();
-				lbl = new Label(2,i, tc.getModuleFunction().getMuName());
+				cf = wst.getWritableCell(1,i).getCellFormat();
+				lbl = new Label(1,i, tc.getModuleFunction().getEntireName());
 				if(cf != null)
 				{
 					lbl.setCellFormat(cf);
@@ -283,8 +269,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				wst.addCell(lbl);
 									
 				//用例编号
-				cf = wst.getWritableCell(3,i).getCellFormat();
-				lbl = new Label(3,i, tc.getTcCode());
+				cf = wst.getWritableCell(2,i).getCellFormat();
+				lbl = new Label(2,i, tc.getTcCode());
 				if(cf != null)
 				{
 					lbl.setCellFormat(cf);
@@ -292,8 +278,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				wst.addCell(lbl);
 				
 				//测试目的
-				cf = wst.getWritableCell(4,i).getCellFormat();
-				lbl = new Label(4,i, tc.getTcTestObjective());
+				cf = wst.getWritableCell(3,i).getCellFormat();
+				lbl = new Label(3,i, tc.getTcTestObjective());
 				if(cf != null)
 				{
 					lbl.setCellFormat(cf);
@@ -301,8 +287,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				wst.addCell(lbl);
 				
 				//测试内容
-				cf = wst.getWritableCell(5,i).getCellFormat();
-				lbl = new Label(5,i, tc.getTcTestContent());
+				cf = wst.getWritableCell(4,i).getCellFormat();
+				lbl = new Label(4,i, tc.getTcTestContent());
 				if(cf != null)
 				{
 					lbl.setCellFormat(cf);
@@ -310,8 +296,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				wst.addCell(lbl);
 				
 				//测试步骤
-				cf = wst.getWritableCell(6,i).getCellFormat();
-				lbl = new Label(6,i, tc.getTcTestStep());
+				cf = wst.getWritableCell(5,i).getCellFormat();
+				lbl = new Label(5,i, tc.getTcTestStep());
 				if(cf != null)
 				{
 					lbl.setCellFormat(cf);
@@ -862,16 +848,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 		if(cvrSearchInfo.isSearchInfoEmpty())
 		{
-			hqlStr = "select a from TestCase a,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + 
-					" and a.tcFlag != " + CaseStatus.DELETE_STATUS  + " and a.tcModuleFunction in " + functionList;
+			hqlStr = "select a from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS  + " and a.tcModuleFunction in " + functionList;
 		}
 		else
 		{
-			hqlStr = "select distinct a from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c" +
-					" where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() + 
-					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG + 
-					" and a.tcModuleFunction in " + functionList;
+			hqlStr = "select distinct a from TestCase a,CaseVersionReference e where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG;
 		}
 		
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);  
