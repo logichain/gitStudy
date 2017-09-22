@@ -56,6 +56,13 @@
             <key column="cvr_test_case" not-null="true"/>
             <one-to-many class="org.mds.test.bean.CaseVersionReference" />
         </set>      
+        
+         <set name="attachmentSet" inverse="true" where=" ca_flag != -1" order-by="ca_id">
+            <key>
+                <column name="ca_test_case" not-null="true"/>
+            </key>
+            <one-to-many class="org.mds.test.bean.CaseAttachment" />
+        </set>
        
     </class>
 </hibernate-mapping>

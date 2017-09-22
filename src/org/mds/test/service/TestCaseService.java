@@ -9,6 +9,7 @@ import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectVersion;
 import org.mds.test.bean.BugType;
 import org.mds.test.bean.CaseStatus;
+import org.mds.test.bean.CaseType;
 import org.mds.test.bean.CaseVersionReference;
 import org.mds.test.bean.ImportantLevel;
 import org.mds.test.bean.TestCase;
@@ -31,13 +32,15 @@ public interface TestCaseService extends Service {
 	public Integer searchTestCaseCount(Object[] args);
 	public List<TestCase> getAllTestCase(Object[] args);
 	
-	public void saveTestCase(TestCase testCase);
+	public void saveTestCase(TestCase testCase,String uploadPath);
+	
 	public void saveCaseVersionReference(CaseVersionReference cvr);
 		
 	public List<ImportantLevel> getImportantLevelList();
 	public List<TestResult> getTestResultList();
 	public List<CaseStatus> getCaseStatusList();
 	public List<BugType> getBugTypeList();
+	public List<CaseType> getCaseTypeList();
 	
 	public CaseStatus getCaseStatusById(int id);
 	public TestResult getTestResultById(Integer id);
@@ -45,5 +48,5 @@ public interface TestCaseService extends Service {
 	
 	public List<TestCase> searchTestCaseByVersion(ProjectVersion projectVersion);
 	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,Integer versionId);
-	public void saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project);
+	public Integer saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project);
 }

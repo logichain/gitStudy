@@ -4,6 +4,7 @@ import java.util.Date;
 
 
 import org.apache.struts.upload.FormFile;
+import org.mds.common.CommonService;
 
 /**
  * ProjectAttachment entity. @author MyEclipse Persistence Tools
@@ -23,7 +24,7 @@ public class ProjectAttachment extends org.king.framework.domain.BaseObject
 	private String paCode;
 	private String paName;
 	private String paUrl;
-	private Integer paFlag;
+	private Integer paFlag = CommonService.NORMAL_FLAG;
 	private Integer paCreateUser;
 	private Date paCreateTime;
 	private String paLocalUrl;
@@ -127,7 +128,7 @@ public class ProjectAttachment extends org.king.framework.domain.BaseObject
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub
-		return this.paId.hashCode();
+		return (paId + paName).hashCode();
 	}
 
 	@Override

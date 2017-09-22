@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,13 +89,24 @@ public class ProjectManage extends BaseAction {
 	public ActionForward deleteAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String opType = request.getParameter("opType");
 		
 		Project project = (Project) dform.get("projectInfo");
 		String index = request.getParameter("index");
 				
-		project.getInitProjectVersion().getAttachmentList().remove(Integer.parseInt(index));
+		ProjectAttachment pa = project.getInitProjectVersion().getAttachmentList().get(Integer.parseInt(index));
+		pa.setPaFlag(CommonService.DELETE_FLAG);
 						
-		return  mapping.findForward("projectInput");
+		if("projectInput".equals(opType))
+		{
+			return mapping.findForward("projectInput");
+		}
+		else if("versionInput".equals(opType))
+		{
+			return mapping.findForward("versionInput");
+		}
+		
+		return null;
 	}
 	
 	public ActionForward downloadAttachment(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
@@ -374,8 +384,6 @@ public class ProjectManage extends BaseAction {
 		Project project = new Project();
 		project.setPCreateUser(ua.getId());
 		project.setPCreateTime(createTime);
-		project.setDevelopLeader(new UsrAccount());
-		project.setTestLeader(new UsrAccount());
 		
 		ProjectVersion vtr = new ProjectVersion();
 		vtr.setPvCreateUser(ua.getId());

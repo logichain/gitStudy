@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import org.king.security.domain.UsrAccount;
+import org.mds.common.CommonService;
 import org.mds.project.bean.ProjectVersion;
 
 
@@ -23,7 +24,7 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 	private Integer cvrId;
 	private Integer cvrTestCase;
 	private Integer cvrProjectVersion;
-	private Integer cvrFlag = 0;
+	private Integer cvrFlag = CommonService.NORMAL_FLAG;
 	
 	private String cvrCaseOutput="";
 	private Integer cvrCaseResult;

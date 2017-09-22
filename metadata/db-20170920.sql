@@ -68,6 +68,28 @@ INSERT INTO `case_status` VALUES (-1,'删除',0),(1,'待测试',0),(2,'关闭',0
 /*!40000 ALTER TABLE `case_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+DROP TABLE IF EXISTS `case_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `case_type` (
+  `ct_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ct_name` varchar(45) DEFAULT NULL,
+  `ct_flag` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ct_id`),
+  UNIQUE KEY `ct_id_UNIQUE` (`ct_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=gbk;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bug_type`
+--
+
+LOCK TABLES `case_type` WRITE;
+/*!40000 ALTER TABLE `bug_type` DISABLE KEYS */;
+INSERT INTO `case_type` VALUES (1,'基本',0),(2,'重要',0),(3,'必要',0);
+/*!40000 ALTER TABLE `bug_type` ENABLE KEYS */;
+UNLOCK TABLES;
 --
 -- Table structure for table `case_version_reference`
 --
@@ -92,7 +114,7 @@ CREATE TABLE `case_version_reference` (
   `cvr_close_user` int(11) DEFAULT NULL,
   `cvr_close_time` datetime DEFAULT NULL,
   PRIMARY KEY (`cvr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=634 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,7 +224,7 @@ CREATE TABLE `member_function_reference` (
   `mfr_flag` int(11) DEFAULT NULL,
   PRIMARY KEY (`mfr_id`),
   UNIQUE KEY `mf_id_UNIQUE` (`mfr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -229,7 +251,7 @@ CREATE TABLE `module_function` (
   `mu_flag` int(11) DEFAULT NULL,
   `mu_parent` int(11) DEFAULT NULL,
   PRIMARY KEY (`mu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -251,19 +273,13 @@ DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
   `p_id` int(11) NOT NULL AUTO_INCREMENT,
   `p_name` varchar(45) NOT NULL,
-  `p_develop_leader` int(11) DEFAULT NULL,
-  `p_test_leader` int(11) DEFAULT NULL,
-  `p_develop_begin` date DEFAULT NULL,
-  `p_develop_end` date DEFAULT NULL,
-  `p_test_begin` date DEFAULT NULL,
-  `p_test_end` date DEFAULT NULL,
   `p_remark` varchar(200) DEFAULT NULL,
   `p_flag` int(11) DEFAULT NULL,
   `p_create_user` int(11) DEFAULT NULL,
   `p_create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_id_UNIQUE` (`p_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +312,7 @@ CREATE TABLE `project_attachment` (
   `pa_description` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`pa_id`),
   UNIQUE KEY `pa_id_UNIQUE` (`pa_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -322,7 +338,7 @@ CREATE TABLE `project_module` (
   `pm_remark` varchar(200) DEFAULT NULL,
   `pm_flag` int(11) DEFAULT NULL,
   PRIMARY KEY (`pm_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,7 +374,7 @@ CREATE TABLE `project_version` (
   `pv_init` int(11) DEFAULT NULL,
   PRIMARY KEY (`pv_id`),
   UNIQUE KEY `pv_id_UNIQUE` (`pv_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,7 +400,7 @@ CREATE TABLE `team_member` (
   `tm_flag` int(11) DEFAULT NULL,
   PRIMARY KEY (`tm_id`),
   UNIQUE KEY `tm_id_UNIQUE` (`tm_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -411,12 +427,13 @@ CREATE TABLE `test_case` (
   `tc_test_content` varchar(100) DEFAULT NULL,
   `tc_test_step` varchar(1000) DEFAULT NULL,
   `tc_intend_output` varchar(200) DEFAULT NULL,
+  `tc_type` int(11) DEFAULT NULL,
   `tc_flag` int(11) DEFAULT NULL,
   `tc_remark` varchar(1000) DEFAULT NULL,
   `tc_create_user` int(11) DEFAULT NULL,
   `tc_create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`tc_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15971 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -445,7 +462,7 @@ CREATE TABLE `test_correct_record` (
   `tcr_remark` varchar(100) DEFAULT NULL,
   `tcr_test_result` int(11) DEFAULT NULL,
   PRIMARY KEY (`tcr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=194 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -505,7 +522,7 @@ CREATE TABLE `usr_account` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `account_name_UNIQUE` (`account_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

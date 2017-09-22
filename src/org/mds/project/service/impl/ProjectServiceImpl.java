@@ -198,15 +198,19 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		vtr.setAttachmentList(attachmentList);
 
 		for (ProjectAttachment pa : attachmentList) {
-			if (pa.getPaId() == null) {
+			if (pa.getPaId() == null && pa.getPaFlag().equals(CommonService.NORMAL_FLAG)) {
 				String fileName = FileUtil.saveUploadFile(pa.getAttachmentFile(),
-						uploadPath + vtr.getPvProject() + "\\" + vtr.getPvId());
+						uploadPath + vtr.getPvProject() + "\\projectAttachment\\" + vtr.getPvId());
 
 				pa.setPaProjectVersion(vtr.getPvId());
 				pa.setPaCreateTime(createTime);
-				pa.setPaUrl(uploadPath + vtr.getPvProject() + "\\" + vtr.getPvId() + "\\" + fileName);
+				pa.setPaUrl(uploadPath + vtr.getPvProject() + "\\projectAttachment\\" + vtr.getPvId() + "\\" + fileName);
 
 				projectAttachmentDAO.save(pa);
+			}
+			else if (pa.getPaId() != null)
+			{
+				projectAttachmentDAO.update(pa);
 			}
 		}
 	}

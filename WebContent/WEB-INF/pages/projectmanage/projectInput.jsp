@@ -107,10 +107,12 @@
 					<td align="left">
 						<div style="width:98%;height:20px;background:white;">
 						<logic:iterate id="am" name="projectForm" property="projectInfo.initProjectVersion.attachmentList" indexId="i">
+						<logic:notEqual name="am" property="paFlag" value="-1">	
 							<span title="<bean:write name="am" property="paLocalUrl"/>">
 								<bean:write name="am" property="paName"/>
-								<a href="projectmanage.do?method=deleteAttachment&index=<%=i %>"><img border="0" src="pages\images\icon\16x16\delete.gif"></a>£»
-							</span>					
+								<a href="projectmanage.do?method=deleteAttachment&opType=projectInput&index=<%=i %>"><img border="0" src="pages\images\icon\16x16\delete.gif"></a>£»
+							</span>		
+						</logic:notEqual>				
 						</logic:iterate>
 						</div>
 					</td>			

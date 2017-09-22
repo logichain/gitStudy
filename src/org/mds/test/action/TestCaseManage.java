@@ -16,9 +16,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.DynaValidatorForm;
 import org.king.framework.web.action.BaseAction;
 import org.king.security.domain.UsrAccount;
+import org.king.util.FileUtil;
 import org.mds.common.CommonService;
 import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.Project;
@@ -26,6 +28,7 @@ import org.mds.project.bean.ProjectModule;
 import org.mds.project.bean.ProjectVersion;
 import org.mds.project.service.ProjectService;
 import org.mds.project.service.impl.ProjectServiceImpl;
+import org.mds.test.bean.CaseAttachment;
 import org.mds.test.bean.CaseStatus;
 import org.mds.test.bean.CaseVersionReference;
 import org.mds.test.bean.TestCase;
@@ -36,6 +39,128 @@ public class TestCaseManage extends BaseAction {
 	private TestCaseService testCaseService;
 	private ProjectService projectService;
 
+	public ActionForward addAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String opType = request.getParameter("opType");
+		
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");		
+		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+		
+		CaseAttachment pa = new CaseAttachment();
+		pa.setCaFlag(CommonService.NORMAL_FLAG);
+		pa.setCaCreateTime(new Date());
+		pa.setCaCreateUser(ua.getId());
+				
+		caseInfo.setCurrentAttachment(pa);
+						
+		return  mapping.findForward("attachmentInput");
+	}
+	
+	public ActionForward confirmAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String opType = request.getParameter("opType");
+		
+		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+		CaseAttachment pa = caseInfo.getCurrentAttachment();
+		caseInfo.getAttachmentList().add(pa);
+				
+		ActionForward rtn = null;
+		if("caseInput".equals(opType))
+		{
+			rtn = mapping.findForward("refreshCaseInput");
+		}
+		else
+		{
+			rtn = mapping.findForward("refreshCaseEdit");
+		}
+				
+		return rtn;		
+	}
+			
+	public ActionForward deleteAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String opType = request.getParameter("opType");
+		
+		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+		String index = request.getParameter("index");
+				
+		CaseAttachment ca = caseInfo.getAttachmentList().get(Integer.parseInt(index));
+		ca.setCaFlag(CommonService.DELETE_FLAG);
+						
+		ActionForward rtn = null;
+		if("caseInput".equals(opType))
+		{
+			rtn = mapping.findForward("caseInput");
+		}
+		else
+		{
+			rtn = mapping.findForward("caseEdit");
+		}
+				
+		return rtn;	
+	}
+	
+	public ActionForward downloadAttachment(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	{	
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		
+		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+		String id = request.getParameter("id");
+		CaseAttachment pa = null;
+				
+		for(CaseAttachment p:caseInfo.getAttachmentList())
+		{
+			if(p.getCaId().equals(Integer.valueOf(id)))
+			{
+				pa = p;
+				break;
+			}
+		}			
+	
+						
+		String fileName = pa.getCaUrl();				
+		try {
+			response.setContentType(FileUtil.getContentType(fileName));
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName.substring(fileName.lastIndexOf("\\")+1));
+			InputStream file = new FileInputStream(fileName);
+			byte[] bit = new byte[1024];
+			int len = file.read(bit);
+			OutputStream out = response.getOutputStream();
+
+			while (len != -1) {
+				out.write(bit, 0, len);
+				len = file.read(bit);
+			}
+			out.close();
+			file.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			ActionMessages errors = new ActionMessages();
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.download"));
+			saveErrors(request, errors);	
+			
+			return mapping.findForward("fail");
+		}    
+	
+		return null;
+	}
+	
+	public ActionForward refreshCaseInput(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	{		
+		
+		return mapping.findForward("caseInput");
+	}
+	public ActionForward refreshCaseEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	{		
+		
+		return mapping.findForward("caseEdit");
+	}
+	
 	public ActionForward importTestCase(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
 		return mapping.findForward("caseImport");
@@ -54,9 +179,15 @@ public class TestCaseManage extends BaseAction {
 
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+		FormFile formFIle = caseInfo.getImportFile();
+		
+		Integer caseCount = testCaseService.saveImportTestCaseInfo(formFIle, uploadPath, user, projectInfo);
+		
+		ActionMessages messenges = new ActionMessages();
 
-		testCaseService.saveImportTestCaseInfo(caseInfo.getImportFile(), uploadPath, user, projectInfo);
-
+		messenges.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("info.importCaseCount",caseCount));
+		saveErrors(request, messenges);
+		
 		return this.resetSearchTestCase(mapping, dform, request, response);
 	}
 
@@ -235,24 +366,6 @@ public class TestCaseManage extends BaseAction {
 		testCase.setModuleId(testCase.getModuleFunction().getMuModule());
 
 		this.initApplyProjectVersionInfo(testCase, projectInfo);
-
-		// CaseVersionReference cvr =
-		// this.getCurrentCaseVersionReference(testCase);
-		//
-		// if(cvr.getCvrCaseStatus() .equals(CaseStatus.CORRECT_STATUS) ||
-		// cvr.getCvrCaseStatus().equals(CaseStatus.TESTED_STATUS) )
-		// {
-		// UsrAccount ua = (UsrAccount)
-		// request.getSession().getAttribute("accountPerson");
-		// Date createTime = new Date();
-		//
-		// TestCorrectRecord tcr = testCaseService.createTestCorrectRecord(cvr);
-		// tcr.setTcrOperUser(ua.getId());
-		// tcr.setTcrOperTime(createTime);
-		// tcr.setOperUser(ua);
-		//
-		// testCase.getTestCorrectRecordList().add(tcr);
-		// }
 
 		this.prepareMetaData(request);
 	}
@@ -530,6 +643,12 @@ public class TestCaseManage extends BaseAction {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		String id = request.getParameter("id");
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
+		
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
 
 		Date closeTime = new Date();
 
@@ -548,7 +667,7 @@ public class TestCaseManage extends BaseAction {
 		tcr.setTcrOperTime(closeTime);
 		testCase.getTestCorrectRecordList().add(tcr);
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		return this.searchTestCase(mapping, dform, request, response);
 	}
@@ -558,6 +677,12 @@ public class TestCaseManage extends BaseAction {
 		String id = request.getParameter("id");
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		Date closeTime = new Date();
 
 		CaseVersionReference cvr = testCaseService.getCaseVersionReferenceById(Integer.valueOf(id));
@@ -575,7 +700,7 @@ public class TestCaseManage extends BaseAction {
 		tcr.setTcrOperTime(closeTime);
 		testCase.getTestCorrectRecordList().add(tcr);
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		return this.searchTestCase(mapping, dform, request, response);
 	}
@@ -585,6 +710,12 @@ public class TestCaseManage extends BaseAction {
 		String id = request.getParameter("id");
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		TestCase testCase = testCaseService.getTestCaseById(Integer.valueOf(id));
 		testCase.setTcFlag(CaseStatus.DELETE_STATUS);
 
@@ -598,7 +729,7 @@ public class TestCaseManage extends BaseAction {
 		tcr.setTcrOperTime(new Date());
 		testCase.getTestCorrectRecordList().add(tcr);
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		return this.searchTestCase(mapping, dform, request, response);
 	}
@@ -608,6 +739,7 @@ public class TestCaseManage extends BaseAction {
 		request.setAttribute("testResultList", testCaseService.getTestResultList());
 		request.setAttribute("caseStatusList", testCaseService.getCaseStatusList());
 		request.setAttribute("bugTypeList", testCaseService.getBugTypeList());
+		request.setAttribute("caseTypeList", testCaseService.getCaseTypeList());
 	}
 
 	public ActionForward setCaseModuleForInput(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -631,6 +763,12 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCase(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
@@ -654,7 +792,7 @@ public class TestCaseManage extends BaseAction {
 			}
 		}
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		for (ModuleFunction mu : projectInfo.getAllModuleFunctionList()) {
 			if (mu.getMuId().equals(testCase.getTcModuleFunction())) {
@@ -682,9 +820,15 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseNew(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		return this.createTestCase(mapping, dform, request, response);
 	}
@@ -692,9 +836,15 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseCopy(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		dform.set("caseInfo", testCase.copy());
 
@@ -706,6 +856,12 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseEditNext(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 
@@ -714,7 +870,7 @@ public class TestCaseManage extends BaseAction {
 		Object[] args = { searchInfo, null, functionList };
 
 		TestCase testCase = (TestCase) dform.get("caseInfo");
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		testCase = testCaseService.getTestCaseNextEdit(args, testCase.getTcId());
 		if (testCase == null) {
@@ -763,6 +919,12 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseTest(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 
@@ -774,7 +936,7 @@ public class TestCaseManage extends BaseAction {
 			}
 		}
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		return this.redirectToTestCaseListPage(request, response, searchInfo);
 	}
@@ -782,6 +944,12 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseTestNext(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
@@ -790,7 +958,7 @@ public class TestCaseManage extends BaseAction {
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
 		TestCase testCase = (TestCase) dform.get("caseInfo");
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		CaseVersionReference cvr = this.getCurrentCaseVersionReference(testCase);
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
@@ -812,10 +980,16 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseCorrect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 
 		return this.redirectToTestCaseListPage(request, response, searchInfo);
 	}
@@ -823,6 +997,12 @@ public class TestCaseManage extends BaseAction {
 	public ActionForward saveTestCaseCorrectNext(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		TestCase testCase = (TestCase) dform.get("caseInfo");
@@ -835,7 +1015,7 @@ public class TestCaseManage extends BaseAction {
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
-		testCaseService.saveTestCase(testCase);
+		testCaseService.saveTestCase(testCase,uploadPath);
 		testCase = testCaseService.getTestCaseNextCorrect(args, testCase.getTcId());
 
 		if (testCase != null) {

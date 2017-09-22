@@ -48,4 +48,10 @@
 		<put name="title" value="测试用例导入"/>
 		<put name="body" value="/WEB-INF/pages/casemanage/caseImport.jsp" />
 	</definition>  
+	
+	<definition name="caseAttachmentInputPageDef" extends="inputBaseDef">		
+		<put name="title" value="附件信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/casemanage/attachmentInput.jsp" />
+	</definition>
 </tiles-definitions>

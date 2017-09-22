@@ -24,8 +24,8 @@
 	</table>	
 	<table cellSpacing="0" cellPadding="0" WIDTH="100%" border="0">	
 		<tr>
-			<td width="10%">&nbsp;</td><td width="40%"></td>
-			<td width="10%"></td><td width="10%"></td>
+			<td width="10%">&nbsp;</td><td width="20%"></td>
+			<td width="10%"></td><td width="20%"></td>
 			<td rowspan="3" align="left">
 				<fieldset style="width:96%;float:right;">
 					<legend><bean:message bundle="project" key="version"/></legend>
@@ -39,18 +39,46 @@
 		</tr>	
 		<tr>			
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left"><bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/></td>
-						
-			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
-			<td align="left"><html:text property="caseInfo.tcCode" size="10" maxlength="45"/></td>			
+			<td align="left" colspan="3"><bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/></td>					
 		</tr>	
 		<tr>
+			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
+			<td align="left"><html:text property="caseInfo.tcCode" size="14" maxlength="45"/></td>
+			<td align="right"><bean:message bundle="case" key="case_type"/>£º</td>
+			<td align="left">
+				<html:select property="caseInfo.tcType" style="width:120px">													
+					<html:optionsCollection name="caseTypeList" value="ctId" label="ctName"/>									
+				</html:select>
+			</td>
+		</tr>
+		<tr>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>£º</td>
-			<td colspan="4" align="left"><html:text property="caseInfo.tcTestObjective" size="100" maxlength="100"/></td>
+			<td colspan="3" align="left"><html:text property="caseInfo.tcTestObjective" size="100" maxlength="100"/></td>
 		</tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_content"/>£º</td>
-			<td colspan="4" align="left"><html:text property="caseInfo.tcTestContent" size="100" maxlength="100"/></td>
+			<td colspan="3" align="left"><html:text property="caseInfo.tcTestContent" size="100" maxlength="100"/></td>
+		</tr>
+		
+		<tr>
+			<td align="right">
+				<bean:message bundle="project" key="project_attachment" />£º
+			</td>
+			<td  colspan="3" align="left">
+				<div style="width:100%;height:20px;background:white;">
+				<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList" indexId="i">
+				<logic:notEqual name="am" property="caFlag" value="-1">
+					<span title="<bean:write name="am" property="caLocalUrl"/>">
+						<bean:write name="am" property="caName"/>
+						<a href="casemanage.do?method=deleteAttachment&opType=caseEdit&index=<%=i %>"><img border="0" src="pages\images\icon\16x16\delete.gif"></a>£»
+					</span>		
+				</logic:notEqual>				
+				</logic:iterate>
+				</div>
+			</td>			
+			<td align="left">
+				<html:button property="" onclick="openDialog('casemanage.do?method=addAttachment&opType=caseEdit',600,240);"><bean:message bundle="project" key="button_addattachment"/></html:button>
+			</td>
 		</tr>
 	</table>
 	<fieldset style="width:99%;float:left;">
@@ -148,6 +176,24 @@
  function chgFormOnsubmit(str){  	
 	 caseForm.onsubmit="function onsubmit(){" + str + "}";	
 	}
-	     
+
+	function submitForm()
+	{
+		chgFormOnsubmit('return true;');
+		chgAction(document.all.method,'refreshCaseInput');
+		caseForm.submit();
+	}
+
+	function openDialog(loadpos,WWidth,WHeight)//Lock   Size 
+	{   
+		submitForm();
+		
+		var WLeft = Math.ceil((window.screen.width - WWidth) / 2);   
+		var WTop = Math.ceil((window.screen.height - WHeight) / 2); 
+		var features = 'width=' + WWidth + 'px,' +	'height=' + WHeight + 'px,' + 'left=' + WLeft + 'px,' + 'top=' + WTop + 'px'; 
+			
+		WinOP = window.open(loadpos,"_blank",features); 
+		WinOP.focus();	   
+	}	     
 
 </script>

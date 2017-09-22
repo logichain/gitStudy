@@ -46,6 +46,18 @@
 		</property>
 	</bean>
 	
+	<bean id="caseAttachmentDAO" class="org.mds.test.bean.CaseAttachmentDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
+	<bean id="caseTypeDAO" class="org.mds.test.bean.CaseTypeDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
+	
 	<!-- ************************** SERVICE SETTING *****************************-->
 	<bean id="testCaseService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -77,7 +89,14 @@
 				
 				<property name="moduleFunctionDAO">
 					<ref local="moduleFunctionDAO" />
-				</property>				
+				</property>		
+				<property name="caseAttachmentDAO">
+					<ref local="caseAttachmentDAO" />
+				</property>		
+				
+				<property name="caseTypeDAO">
+					<ref local="caseTypeDAO" />
+				</property>	
 			</bean>
 		</property>
 		<property name="transactionAttributes">

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.king.security.domain.UsrAccount;
+import org.mds.common.CommonService;
 import org.mds.test.bean.TestCase;
 
 
@@ -28,7 +29,7 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	private String pvDevelopEnd;
 	private String pvTestBegin;
 	private String pvTestEnd;
-	private Integer pvFlag = 0;
+	private Integer pvFlag = CommonService.NORMAL_FLAG;
 	private Integer pvInit = 0;
 	private String pvRemark;
 	private Integer pvCreateUser;

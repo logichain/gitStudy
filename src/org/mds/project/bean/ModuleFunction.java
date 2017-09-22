@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.mds.common.CommonService;
+
 /**
  * ModuleFunction entity. @author MyEclipse Persistence Tools
  */
@@ -19,7 +21,7 @@ public class ModuleFunction extends org.king.framework.domain.BaseObject impleme
 	private Integer muId;
 	private Integer muModule;
 	private String muName;
-	private Integer muFlag = 0;
+	private Integer muFlag = CommonService.NORMAL_FLAG;
 	private String muRemark;
 	private Integer muParent;
 	

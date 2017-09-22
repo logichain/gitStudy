@@ -254,7 +254,7 @@ public class SecurityAction extends BaseAction {
 		if (log.isDebugEnabled()) {
 			log.debug("Entering 'securityAction->loadAccount4Add' method");
 		}
-		ActionMessages messages = new ActionMessages();
+
 		UsrAccount account = new UsrAccount();
 
 		account.setSex("1");
@@ -342,7 +342,6 @@ public class SecurityAction extends BaseAction {
 			return mapping.findForward("search");
 		}
 		
-		ActionMessages errors = new ActionMessages();
 		UsrAccount account = (UsrAccount) ((DynaActionForm) form).get("account");
 		account.setEnabled("1");
 
@@ -378,7 +377,6 @@ public class SecurityAction extends BaseAction {
 			return mapping.findForward("search");
 		}
 						
-		ActionMessages errors = new ActionMessages();
 		UsrAccount account = (UsrAccount) ((DynaActionForm) form).get("account");
 
 		if (StringUtils.equals(request.getParameter("encryptPass"), "true")) {

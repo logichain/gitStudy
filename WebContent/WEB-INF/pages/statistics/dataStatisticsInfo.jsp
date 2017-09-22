@@ -80,7 +80,7 @@
      
 </div>
 
-<fieldset style="width:90%;float:left;">
+<fieldset style="width:98%;float:left;">
 	<div id="versionRefer">
 		<table width="100%">
 			<tr>
@@ -167,7 +167,7 @@
 					<table class="sort-table" width="100%">
 					<thead>	
 						<tr>
-							<td><bean:message bundle="case" key="module_function"/></td>
+							<td width="30%"><bean:message bundle="case" key="module_function"/></td>
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>

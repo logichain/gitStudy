@@ -7,8 +7,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.usermodel.Paragraph;
+import org.apache.poi.hwpf.usermodel.Range;
+import org.apache.poi.hwpf.usermodel.Table;
+import org.apache.poi.hwpf.usermodel.TableCell;
+import org.apache.poi.hwpf.usermodel.TableIterator;
+import org.apache.poi.hwpf.usermodel.TableRow;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.apache.struts.upload.FormFile;
 import org.king.framework.dao.MyQuery;
 import org.king.framework.service.impl.BaseService;
@@ -22,8 +35,12 @@ import org.mds.project.bean.ProjectVersion;
 import org.mds.project.bean.TeamMember;
 import org.mds.test.bean.BugType;
 import org.mds.test.bean.BugTypeDAO;
+import org.mds.test.bean.CaseAttachment;
+import org.mds.test.bean.CaseAttachmentDAO;
 import org.mds.test.bean.CaseStatus;
 import org.mds.test.bean.CaseStatusDAO;
+import org.mds.test.bean.CaseType;
+import org.mds.test.bean.CaseTypeDAO;
 import org.mds.test.bean.CaseVersionReference;
 import org.mds.test.bean.CaseVersionReferenceDAO;
 import org.mds.test.bean.ImportantLevel;
@@ -57,12 +74,13 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	private CaseVersionReferenceDAO caseVersionReferenceDAO; 
 	
 	private ModuleFunctionDAO moduleFunctionDAO;
+	private CaseAttachmentDAO caseAttachmentDAO;
+	private CaseTypeDAO caseTypeDAO;
 	
-	
-	public void saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project) 
+	public Integer saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project) 
 	{		
+		int rtn = 0;
 		String fileName = FileUtil.saveUploadFile(formFile,filePath);
-			
 		FileInputStream is = null;
 		try {
 			is = new FileInputStream(filePath + fileName);
@@ -70,7 +88,308 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+			
+		if(fileName.endsWith(".doc"))
+		{
+			rtn = this.importDOCFile(is, user, project);
+		}
+		else if(fileName.endsWith(".docx"))
+		{
+			rtn = this.importDOCXFile(is, user, project);
+		}
+		else if(fileName.endsWith(".xls"))
+		{
+			rtn = this.importXLSFile(is, user, project);
+		}	
+		else if(fileName.endsWith(".xlsx"))
+		{
+			
+		}
+				
+		return rtn;
+	}
+	
+	private Integer importDOCFile(FileInputStream is,UsrAccount user,Project project)
+	{
+		Integer rtn = 0;
+		try{
+			HWPFDocument hwpfDocument = new HWPFDocument(is);
+			Range range = hwpfDocument.getRange();// 得到文档的读取范围
+			TableIterator it = new TableIterator(range);
+			
+			// 迭代文档中的表格
+			while (it.hasNext()) {
+				Table tb = (Table) it.next();
+				
+				TestCase tc = new TestCase();
+				tc.setTcCreateUser(user.getId());
+				tc.setTcFlag(CommonService.NORMAL_FLAG);
+				tc.setTcCreateTime(new Date());	
+				if(project.getAllModuleFunctionList().size() > 0)
+				{
+					//设置一个默认的功能点，防止查询不到用例
+					tc.setTcModuleFunction(project.getAllModuleFunctionList().get(0).getMuId());
+				}
+	
+				// 迭代行，默认从0开始
+				for (int i = 0; i < tb.numRows(); i++) {
+					TableRow tr = tb.getRow(i);
+					// 迭代列，默认从0开始
+					for (int j = 0; j < tr.numCells(); j++) {
+						TableCell td = tr.getCell(j);// 取得单元格
+						// 取得单元格的内容
+						for (int k = 0; k < td.numParagraphs(); k++) {
+							Paragraph para = td.getParagraph(k);
+	
+							String keyStr = para.text();
+							if (tr.numCells() > j + 1) {
+																		
+								String content = "";
+
+								TableCell contentTd = tr.getCell(j + 1);
+								for (int l = 0; l < contentTd.numParagraphs(); l++) {
+									Paragraph pl = contentTd.getParagraph(l);
+									content = content + "\n" + pl.text().trim();
+								}
+
+								if (content.contains("\n") && content.length() > 2) {
+									content = content.substring(2);
+								}
+	
+								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
+								{
+									String functionName = content;
+									if(functionName != null && !functionName.isEmpty())
+									{
+										List<ModuleFunction> rtnList = moduleFunctionDAO.find("select a from ModuleFunction a where  a.muName like '%" + functionName + "%'");
+										if(rtnList.size() > 0)
+										{
+											Project cp = null;
+											for(ModuleFunction mf:rtnList)
+											{
+												if(mf.getParentFunction() != null)
+												{
+													cp = mf.getParentFunction().getProjectModule().getProject();
+												}
+												else
+												{
+													cp = mf.getProjectModule().getProject();
+												}
+												
+												if(cp.equals(project))
+												{
+													tc.setTcModuleFunction(rtnList.get(0).getMuId());
+													break;
+												}									
+											}
+											
+										}
+									}												
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[2]))//用例编号
+								{
+									tc.setTcCode(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[3]))//测试目的
+								{
+									tc.setTcTestObjective(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[4]))//测试内容
+								{
+									tc.setTcTestContent(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[5]))//测试步骤
+								{
+									tc.setTcTestStep(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[6]))//测试说明
+								{
+									tc.setTcRemark(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[7]))//预期输出
+								{
+									tc.setTcIntendOutput(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[10]))//创建人
+								{
+									String userName = content;
+									for(TeamMember tm:project.getMemberList())
+									{
+										if(tm.getAccount().getPersonName().equals(userName))
+										{
+											tc.setTcCreateUser(tm.getTmAccount());
+											break;
+										}
+									}					
+								}	
+								
+							}
+	
+						} // end for
+					} // end for
+				} // end for
+				
+				try
+				{
+					testCaseDAO.save(tc);
+					rtn++;
+									
+					System.err.println("转换完成行号：" + tc.getTcCode() + ",客户信息Key:" + tc.getTcId());
+				}
+				catch(Exception e)
+				{
+					System.err.println("转换行序列号：" + tc.getTcCode() + "时，报错！！！！！");	
+					e.printStackTrace();
+				}
+			} // end while
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
+		return rtn;
+	}
+	
+	private Integer importDOCXFile(FileInputStream is,UsrAccount user,Project project)
+	{
+		Integer rtn = 0;
+		try {			
+			XWPFDocument xwpfDocument = new XWPFDocument(is);
+			List<XWPFTable> tableList = xwpfDocument.getTables();
+						
+			// 迭代文档中的表格
+			for (XWPFTable table : tableList) {			
+				TestCase tc = new TestCase();
+				tc.setTcCreateUser(user.getId());
+				tc.setTcFlag(CommonService.NORMAL_FLAG);
+				tc.setTcCreateTime(new Date());	
+				if(project.getAllModuleFunctionList().size() > 0)
+				{
+					//设置一个默认的功能点，防止查询不到用例
+					tc.setTcModuleFunction(project.getAllModuleFunctionList().get(0).getMuId());
+				}
+				
+				
+				// 迭代行，默认从0开始
+				for (XWPFTableRow tr : table.getRows()) {
+					// 迭代列，默认从0开始
+					Iterator<XWPFTableCell> tdIt = tr.getTableCells().iterator();
+					while (tdIt.hasNext()) {
+						XWPFTableCell td = tdIt.next();
+						for (XWPFParagraph keyPara : td.getParagraphs()) {
+							String keyStr = keyPara.getText().trim();
+							if (tdIt.hasNext()) {
+								int column = 0;
+								
+								String content = "";
+
+								XWPFTableCell contentTd = tdIt.next();
+								for (XWPFParagraph pl : contentTd.getParagraphs()) {
+									content = content + "\n" + pl.getText().trim();
+								}
+
+								if (content.contains("\n") && content.length() > 2) {
+									content = content.substring(1);
+								}	
+								
+								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
+								{
+									String functionName = content;
+									if(functionName != null && !functionName.isEmpty())
+									{
+										List<ModuleFunction> rtnList = moduleFunctionDAO.find("select a from ModuleFunction a where  a.muName like '%" + functionName + "%'");
+										if(rtnList.size() > 0)
+										{
+											Project cp = null;
+											for(ModuleFunction mf:rtnList)
+											{
+												if(mf.getParentFunction() != null)
+												{
+													cp = mf.getParentFunction().getProjectModule().getProject();
+												}
+												else
+												{
+													cp = mf.getProjectModule().getProject();
+												}
+												
+												if(cp.equals(project))
+												{
+													tc.setTcModuleFunction(rtnList.get(0).getMuId());
+													break;
+												}									
+											}
+											
+										}
+									}												
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[2]))//用例编号
+								{
+									tc.setTcCode(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[3]))//测试目的
+								{
+									tc.setTcTestObjective(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[4]))//测试内容
+								{
+									tc.setTcTestContent(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[5]))//测试步骤
+								{
+									tc.setTcTestStep(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[6]))//测试说明
+								{
+									tc.setTcRemark(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[7]))//预期输出
+								{
+									tc.setTcIntendOutput(content);
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[10]))//创建人
+								{
+									String userName = content;
+									for(TeamMember tm:project.getMemberList())
+									{
+										if(tm.getAccount().getPersonName().equals(userName))
+										{
+											tc.setTcCreateUser(tm.getTmAccount());
+											break;
+										}
+									}					
+								}
+										
+									
+							}
+
+						} // end for
+					} // end for
+				} // end for
+				
+				try
+				{
+					testCaseDAO.save(tc);
+					rtn++;
+									
+					System.err.println("转换完成行号：" + tc.getTcCode() + ",客户信息Key:" + tc.getTcId());
+				}
+				catch(Exception e)
+				{
+					System.err.println("转换行序列号：" + tc.getTcCode() + "时，报错！！！！！");	
+					e.printStackTrace();
+				}
+			} // end while
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rtn;
+	}
+	
+	
+	private Integer importXLSFile(FileInputStream is,UsrAccount user,Project project)
+	{
+		Integer rtn = 0;
+				
 		Workbook wb = null;
 		try {
 			wb = Workbook.getWorkbook(is);
@@ -104,7 +423,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			TestCase tc = new TestCase();
 			tc.setTcCreateUser(user.getId());
 			tc.setTcFlag(CommonService.NORMAL_FLAG);
-			tc.setTcCreateTime(new Date());						
+			tc.setTcCreateTime(new Date());
+			if(project.getAllModuleFunctionList().size() > 0)
+			{
+				//设置一个默认的功能点，防止查询不到用例
+				tc.setTcModuleFunction(project.getAllModuleFunctionList().get(0).getMuId());
+			}
 									
 			for (int j = 0; j < cols; j++) {
 				String colName = st.getCell(j,colNameRow).getContents().trim();
@@ -181,7 +505,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			
 			try
 			{
-				this.saveTestCase(tc);								
+				testCaseDAO.save(tc);
+				rtn++;
 								
 				System.err.println("转换完成行号：" + st.getCell(0,i).getContents().trim() + ",客户信息Key:" + tc.getTcId());
 			}
@@ -200,7 +525,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			e.printStackTrace();
 		}			
 				
-		
+		return rtn;
 	}
 	
 	
@@ -257,11 +582,19 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 						break;
 					}
 				}
-								
+					
+				//功能模块			
+				cf = wst.getWritableCell(0,i).getCellFormat();
+				lbl = new Label(0,i, tc.getModuleFunction().getProjectModuleName());
+				if(cf != null)
+				{
+					lbl.setCellFormat(cf);
+				}							
+				wst.addCell(lbl);
 						
 				//功能点				
 				cf = wst.getWritableCell(1,i).getCellFormat();
-				lbl = new Label(1,i, tc.getModuleFunction().getEntireName());
+				lbl = new Label(1,i, tc.getModuleFunction().getEntireModuleFunctionName());
 				if(cf != null)
 				{
 					lbl.setCellFormat(cf);
@@ -395,11 +728,13 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	}
 	
 
-	public void saveTestCase(TestCase testCase) {		
+	public void saveTestCase(TestCase testCase,String uploadPath) {		
 		// TODO Auto-generated method stub
 		ArrayList<TestCorrectRecord> recordList = testCase.getTestCorrectRecordList();
 		ArrayList<CaseVersionReference> cvrList = testCase.getCaseVersionReferenceList();
+		ArrayList<CaseAttachment> attachmentList = testCase.getAttachmentList();
 		
+		testCase.setAttachmentList(new ArrayList<CaseAttachment>());
 		testCase.setTestCorrectRecordList(new ArrayList<TestCorrectRecord>());
 		testCase.setCaseVersionReferenceList(new ArrayList<CaseVersionReference>());
 		
@@ -412,6 +747,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			testCaseDAO.update(testCase);
 		}
 		
+		testCase.setAttachmentList(attachmentList);
 		testCase.setTestCorrectRecordList(recordList);
 		testCase.setCaseVersionReferenceList(cvrList);
 		
@@ -445,8 +781,25 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				caseVersionReferenceDAO.update(cvr);
 			}			
 		}
-	}
+		
+		for (CaseAttachment pa : attachmentList) {
+			if (pa.getCaId() == null && pa.getCaFlag().equals(CommonService.NORMAL_FLAG)) {
+				String fileName = FileUtil.saveUploadFile(pa.getAttachmentFile(),
+						uploadPath + "\\caseAttachment\\" + testCase.getTcId());
 
+				pa.setCaTestCase(testCase.getTcId());
+				pa.setCaCreateTime(new Date());
+				pa.setCaUrl(uploadPath + "\\caseAttachment\\" + testCase.getTcId() + "\\" + fileName);
+
+				caseAttachmentDAO.save(pa);
+			}
+			else if (pa.getCaId() != null)
+			{
+				caseAttachmentDAO.update(pa);
+			}
+		}
+	}
+	
 	
 	public List<TestCase> searchTestCase(Object[] args) {
 		// TODO Auto-generated method stub
@@ -909,6 +1262,13 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 		return bugTypeDAO.find(sql);
 	}
+	
+	public List<CaseType> getCaseTypeList() {
+		// TODO Auto-generated method stub
+		String sql = "from CaseType a where a.ctFlag != " + CommonService.DELETE_FLAG;
+		
+		return caseTypeDAO.find(sql);
+	}
 
 	@Override
 	public TestResult getTestResultById(Integer id) {
@@ -936,6 +1296,22 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 
 	public void setModuleFunctionDAO(ModuleFunctionDAO moduleFunctionDAO) {
 		this.moduleFunctionDAO = moduleFunctionDAO;
+	}
+
+	public CaseAttachmentDAO getCaseAttachmentDAO() {
+		return caseAttachmentDAO;
+	}
+
+	public void setCaseAttachmentDAO(CaseAttachmentDAO caseAttachmentDAO) {
+		this.caseAttachmentDAO = caseAttachmentDAO;
+	}
+	
+	public CaseTypeDAO getCaseTypeDAO() {
+		return caseTypeDAO;
+	}
+
+	public void setCaseTypeDAO(CaseTypeDAO caseTypeDAO) {
+		this.caseTypeDAO = caseTypeDAO;
 	}
 
 }

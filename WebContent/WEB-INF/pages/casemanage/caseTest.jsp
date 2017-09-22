@@ -25,8 +25,8 @@
 	</table>	
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">	
 		<tr>
-			<td width="10%">&nbsp;</td><td width="40%"></td>
-			<td width="10%"></td><td width="10%"></td>
+			<td width="10%">&nbsp;</td><td width="20%"></td>
+			<td width="10%"></td><td width="30%"></td>
 			<td rowspan="3" align="left">
 				<fieldset style="width:96%;float:right;">
 					<legend><bean:message bundle="project" key="version"/></legend>
@@ -38,15 +38,24 @@
 				</fieldset>
 			</td>
 		</tr>	
-		<tr>
-			
+		
+		<tr>			
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left">			
+			<td align="left" colspan="3">			
 				<bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/>			
 			</td>			
-			
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>	
 			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
-			<td align="left"><bean:write name="caseForm" property="caseInfo.tcCode"/></td>			
+			<td align="left"><bean:write name="caseForm" property="caseInfo.tcCode"/></td>		
+			
+			<td align="right"><bean:message bundle="case" key="case_type"/>£º</td>
+			<td align="left">
+				<logic:notEmpty name="caseForm" property="caseInfo.caseType">
+				<bean:write name="caseForm" property="caseInfo.caseType.ctName"/>	
+				</logic:notEmpty>
+			</td>
 		</tr>	
 		<tr><td>&nbsp;</td></tr>
 		<tr>
@@ -56,9 +65,24 @@
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_content"/>£º</td>
-			<td colspan="5" align="left"><bean:write name="caseForm" property="caseInfo.tcTestContent"/></td>
+			<td colspan="4" align="left"><bean:write name="caseForm" property="caseInfo.tcTestContent"/></td>
 		</tr>
-		
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td align="right">
+				<bean:message bundle="project" key="project_attachment" />£º
+			</td>
+			<td  colspan="3" align="left">
+				<div style="width:100%;height:20px;background:white;">
+				<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList" indexId="i">
+				<logic:notEqual name="am" property="caFlag" value="-1">											
+					<a href="casemanage.do?method=downloadAttachment&id=<bean:write name="am" property="caId"/>"><bean:write name="am" property="caName"/></a>£»
+				</logic:notEqual>
+				</logic:iterate>
+				</div>				
+			</td>				
+		</tr>
+		<tr><td>&nbsp;</td></tr>
 	</table>		
 	
 	<fieldset style="width:99%;float:left;">

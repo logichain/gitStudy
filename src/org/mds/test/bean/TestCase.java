@@ -34,6 +34,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	private String tcIntendOutput="";
 	private Integer tcFlag = CommonService.NORMAL_FLAG;
 	private String tcRemark = "";
+	private Integer tcType = CaseType.CASE_TYPE_NORMAL;
 	
 	private Integer tcCreateUser;
 	private Date tcCreateTime;
@@ -44,7 +45,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	private String tcCreateUserStr;
 	private String tcCreateTimeStr;
 	
-	
+	private CaseType caseType;
 	private UsrAccount createUser;
 	
 	private Integer pageItemCount = 30;
@@ -53,6 +54,8 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	private ArrayList<TestCorrectRecord> testCorrectRecordList = new ArrayList<TestCorrectRecord>();
 	private ArrayList<CaseVersionReference> caseVersionReferenceList = new ArrayList<CaseVersionReference>();
 	
+	private ArrayList<CaseAttachment> attachmentList = new ArrayList<CaseAttachment>();
+	private CaseAttachment currentAttachment;
 	
 	private FormFile importFile;
 	// Constructors
@@ -359,6 +362,50 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 
 	public void setImportFile(FormFile importFile) {
 		this.importFile = importFile;
+	}
+	
+	public void setAttachmentList(ArrayList<CaseAttachment> attachmentList) {
+		this.attachmentList = attachmentList;
+	}
+
+	public ArrayList<CaseAttachment> getAttachmentList() {
+		return attachmentList;
+	}
+	
+	public Set<CaseAttachment> getAttachmentSet() {
+		Set<CaseAttachment> detailSet = new HashSet<CaseAttachment>();
+		detailSet.addAll(attachmentList);
+		
+		return detailSet;
+	}
+	
+	public void setAttachmentSet(Set<CaseAttachment> attachmentSet) {
+		attachmentList.clear();
+		attachmentList.addAll(attachmentSet);
+	}
+
+	public CaseAttachment getCurrentAttachment() {
+		return currentAttachment;
+	}
+
+	public void setCurrentAttachment(CaseAttachment currentAttachment) {
+		this.currentAttachment = currentAttachment;
+	}
+
+	public Integer getTcType() {
+		return tcType;
+	}
+
+	public void setTcType(Integer tcType) {
+		this.tcType = tcType;
+	}
+
+	public CaseType getCaseType() {
+		return caseType;
+	}
+
+	public void setCaseType(CaseType caseType) {
+		this.caseType = caseType;
 	}
 
 }

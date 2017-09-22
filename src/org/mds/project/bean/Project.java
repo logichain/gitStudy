@@ -25,7 +25,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	private Integer PId;
 	private String PName;
 
-	private Integer PFlag = 0;
+	private Integer PFlag = CommonService.NORMAL_FLAG;
 	private String PRemark;
 	private Integer PCreateUser;
 	private Date PCreateTime;
@@ -36,9 +36,7 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	private ArrayList<TeamMember> memberList = new ArrayList<TeamMember>();
 		
 	private ProjectModule selectedProjectModule = new ProjectModule();
-		
-	private UsrAccount developLeader;
-	private UsrAccount testLeader;
+	
 	private Integer pageItemCount = 30;
 	
 	// Constructors
@@ -143,22 +141,6 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	public void setMemberList(ArrayList<TeamMember> memberList) {
 		this.memberList = memberList;
 	}	
-
-	public void setDevelopLeader(UsrAccount developLeader) {
-		this.developLeader = developLeader;
-	}
-
-	public UsrAccount getDevelopLeader() {
-		return developLeader;
-	}
-
-	public void setTestLeader(UsrAccount testLeader) {
-		this.testLeader = testLeader;
-	}
-
-	public UsrAccount getTestLeader() {
-		return testLeader;
-	}
 
 	public void setPageItemCount(Integer pageItemCount) {
 		this.pageItemCount = pageItemCount;

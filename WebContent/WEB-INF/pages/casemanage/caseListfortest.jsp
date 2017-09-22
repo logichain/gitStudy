@@ -103,16 +103,6 @@
 		</tr>
 		<tr>
 			<td colspan="6" align="right">
-				<html:submit styleClass="searchbutton" onclick="initPageNo();">
-					&nbsp;
-				</html:submit>
-			
-				<html:submit styleClass="resetbutton" onclick="initPageNo();chgAction(document.all.method,'resetSearchTestCase');">
-					&nbsp;
-				</html:submit>
-			</td>	
-				
-			<td colspan="2" align="right">
 				<logic:equal name="accountPersonId" value='1'>
 					<a href="casemanage.do?method=importTestCase">”√¿˝µº»Î</a>
 				</logic:equal>
@@ -121,6 +111,17 @@
 				</html:submit>
 			
 				<html:submit styleClass="addbutton" onclick="chgAction(document.all.method,'createTestCase');">
+					&nbsp;
+				</html:submit>
+				
+			</td>	
+				
+			<td colspan="2" align="right">
+				<html:submit styleClass="searchbutton" onclick="initPageNo();">
+					&nbsp;
+				</html:submit>
+			
+				<html:submit styleClass="resetbutton" onclick="initPageNo();chgAction(document.all.method,'resetSearchTestCase');">
 					&nbsp;
 				</html:submit>
 			</td>

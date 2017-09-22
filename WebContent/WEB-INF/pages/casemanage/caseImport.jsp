@@ -13,7 +13,7 @@
 						
 			<tr height="30">				
 				<td>					
-					<html:file styleId="importFile" property="caseInfo.importFile" size="80" accept="application/vnd.ms-excel"></html:file>															
+					<html:file styleId="importFile" property="caseInfo.importFile" size="80" accept="application/vnd.ms-excel;application/vnd.ms-word"></html:file>															
 				</td>						
 			</tr>
 			

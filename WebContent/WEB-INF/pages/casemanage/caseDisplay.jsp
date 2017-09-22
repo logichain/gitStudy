@@ -52,6 +52,21 @@
 			<td colspan="4" align="left"><bean:write name="caseInfo" property="tcTestContent"/></td>
 		</tr>
 		
+		<tr>
+			<td align="right">
+				<bean:message bundle="project" key="project_attachment" />£º
+			</td>
+			<td  colspan="4" align="left">
+				<div style="width:98%;height:20px;background:white;">
+				<logic:iterate id="am" name="caseInfo" property="attachmentList" indexId="i">
+				<logic:notEqual name="am" property="caFlag" value="-1">											
+					<a href="casemanage.do?method=downloadAttachment&id=<bean:write name="am" property="caId"/>"><bean:write name="am" property="caName"/></a>£»
+				</logic:notEqual>
+				</logic:iterate>
+				</div>				
+			</td>			
+			
+		</tr>
 	</table>
 		
 	<fieldset style="width:99%;float:left;">

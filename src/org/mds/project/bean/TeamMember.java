@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.king.security.domain.UsrAccount;
+import org.mds.common.CommonService;
 
 /**
  * TeamMember entity. @author MyEclipse Persistence Tools
@@ -23,7 +24,7 @@ public class TeamMember extends org.king.framework.domain.BaseObject implements
 	private Integer tmProject;
 	private Integer tmModuleFunction;
 	private Integer tmAccount;
-	private Integer tmFlag = 0;
+	private Integer tmFlag = CommonService.NORMAL_FLAG;
 	
 	private UsrAccount account = new UsrAccount();
 	private ArrayList<MemberFunctionReference> memberFunctionReferenceList = new ArrayList<MemberFunctionReference>();

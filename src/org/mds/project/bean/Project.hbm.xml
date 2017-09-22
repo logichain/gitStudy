@@ -27,12 +27,7 @@
         <property name="PCreateTime" type="java.util.Date">
             <column name="p_create_time"/>
         </property>
-        
-        <many-to-one name="developLeader" lazy="false" column="p_develop_leader" class="org.king.security.domain.UsrAccount" cascade="none" unique="true" insert="false" update="false">
-        </many-to-one>
-        <many-to-one name="testLeader" lazy="false" column="p_test_leader" class="org.king.security.domain.UsrAccount" cascade="none" unique="true" insert="false" update="false">
-        </many-to-one>
-        
+    
         <set name="moduleSet" inverse="true" where=" pm_flag != -1" order-by="pm_id">
             <key>
                 <column name="pm_project" not-null="true"/>

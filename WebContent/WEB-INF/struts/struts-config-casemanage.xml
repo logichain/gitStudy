@@ -27,6 +27,9 @@
 			<forward name="caseDisplay" path="displayPageDef" redirect="false" />
 			
 			<forward name="caseImport" path="importPageDef" redirect="false" />	
+			<forward name="refreshCaseInput" path="/WEB-INF/pages/casemanage/refreshCaseInput.jsp" redirect="false"/>
+			<forward name="refreshCaseEdit" path="/WEB-INF/pages/casemanage/refreshCaseEdit.jsp" redirect="false"/>
+			<forward name="attachmentInput" path="caseAttachmentInputPageDef" redirect="false" />
 		</action>		
 	</action-mappings>
 </struts-config>

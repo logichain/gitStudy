@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.mds.common.CommonService;
 import org.mds.project.service.impl.ProjectServiceImpl;
 
 /**
@@ -22,7 +23,7 @@ public class ProjectModule extends org.king.framework.domain.BaseObject
 	private Integer pmId;
 	private Integer pmProject;
 	private String pmName;
-	private Integer pmFlag = 0;
+	private Integer pmFlag = CommonService.NORMAL_FLAG;
 	private String pmRemark;
 	
 	private Project project;
