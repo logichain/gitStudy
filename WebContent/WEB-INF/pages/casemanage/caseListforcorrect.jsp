@@ -42,7 +42,13 @@
 			</td>
 		</tr>
 		<tr>
-			<td align="right"><bean:message bundle="case" key="test_remark"/>:</td><td align="left"><html:text property="searchInfo.tcRemark" size="14"/></td>
+			<td align="right"><bean:message bundle="case" key="case_type"/>:</td>
+			<td align="left">
+				<html:select property="searchInfo.tcType" style="width:120px">		
+					<html:option value=""></html:option>											
+					<html:optionsCollection name="caseTypeList" value="ctId" label="ctName"/>									
+				</html:select>
+			</td>
 			<td align="right"><bean:message bundle="case" key="case_status"/>:</td>
 			<td align="left">
 				<html:select property="cvrSearchInfo.cvrCaseStatus" style="width:120px">	

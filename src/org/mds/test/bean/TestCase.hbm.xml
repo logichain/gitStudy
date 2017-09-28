@@ -40,7 +40,12 @@
         <property name="tcCreateTime" type="java.util.Date">
             <column name="tc_create_time" />
         </property>
+        <property name="tcType" type="java.lang.Integer">
+            <column name="tc_type" />
+        </property>  
        
+       <many-to-one name="caseType" lazy="false" column="tc_type" class="org.mds.test.bean.CaseType" cascade="none" unique="true" insert="false" update="false">
+        </many-to-one>
         
         <many-to-one name="moduleFunction" lazy="false" column="tc_module_function" class="org.mds.project.bean.ModuleFunction" cascade="none" unique="true" insert="false" update="false">
         </many-to-one>

@@ -13,7 +13,8 @@
 			<form-property name="moduleInfo" type="org.mds.project.bean.ProjectModule" />
 			<form-property name="moduleFunctionInfo" type="org.mds.project.bean.ModuleFunction" />
 			<form-property name="versionInfo" type="org.mds.project.bean.ProjectVersion" />
-			
+			<form-property name="cvrSearchInfo" type="org.mds.test.bean.CaseVersionReference" />
+			<form-property name="searchInfo" type="org.mds.test.bean.TestCase" />
 		</form-bean>					
 	</form-beans>
 
@@ -33,7 +34,7 @@
 			<forward name="refreshProjectInfo" path="/WEB-INF/pages/projectmanage/refreshProjectInfo.jsp" redirect="false"/>
 			<forward name="refreshProjectInput" path="/WEB-INF/pages/projectmanage/refreshProjectInput.jsp" redirect="false"/>
 			<forward name="attachmentInput" path="attachmentInputPageDef" redirect="false" />
-			
+			<forward name="caseListForReference" path="caseListForReferenceDef" redirect="false" />
 		</action>		
 	</action-mappings>
 </struts-config>

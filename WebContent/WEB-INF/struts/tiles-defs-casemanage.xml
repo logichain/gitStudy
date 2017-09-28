@@ -54,4 +54,9 @@
 		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
 		<put name="body" value="/WEB-INF/pages/casemanage/attachmentInput.jsp" />
 	</definition>
+	
+	<definition name="caseListForReferenceDef" extends="inputBaseDef">
+		<put name="title" value="测试用例版本关联"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/caseListforReference.jsp" />
+	</definition>
 </tiles-definitions>

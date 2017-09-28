@@ -53,6 +53,8 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 	private ProjectVersion projectVersion;
 	private boolean currentReference = false;
 	
+	private Integer referVersion;
+	
 	// Constructors
 
 	/** default constructor */
@@ -398,8 +400,19 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 		{
 			rtn = false;
 		}
+	
 		
 		return rtn;
 	}
+
+	public Integer getReferVersion() {
+		return referVersion;
+	}
+
+	public void setReferVersion(Integer referVersion) {
+		this.referVersion = referVersion;
+	}
+
+	
 	
 }

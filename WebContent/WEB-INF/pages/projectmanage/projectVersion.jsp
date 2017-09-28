@@ -22,6 +22,8 @@
 			</td>
 			<td align="center">
 				<a href="casemanage.do?method=exportTestCaseByVersion&pvId=<bean:write name="projectForm" property="projectInfo.initProjectVersion.pvId"/>">导出本版用例</a>				
+				&nbsp;&nbsp;&nbsp;
+				<a href="javascript:openDialog('projectmanage.do?method=resetSearchTestCaseforRenference&pvId=<bean:write name="projectForm" property="projectInfo.initProjectVersion.pvId"/>',900,600);">本版用例关联</a>				
 			</td>
 			<td align="right">									
 				<a href="javascript:openDialog('projectmanage.do?method=editProjectVersion&id=<bean:write name="projectForm" property="projectInfo.initProjectVersion.pvId"/>',760,360);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a>

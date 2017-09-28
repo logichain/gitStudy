@@ -32,11 +32,119 @@ import org.mds.project.bean.ProjectVersion;
 import org.mds.project.bean.TeamMember;
 import org.mds.project.service.ProjectService;
 import org.mds.project.service.impl.ProjectServiceImpl;
+import org.mds.test.bean.CaseVersionReference;
+import org.mds.test.bean.TestCase;
+import org.mds.test.service.TestCaseService;
 
 public class ProjectManage extends BaseAction {
 	private AccountService accountService;
 	private ProjectService projectService;
+	private TestCaseService testCaseService;
+
+	
+	public ActionForward confirmTestCaseforReference(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String[] selectedCaseList = request.getParameterValues("selectedCaseList");
+		CaseVersionReference cvr = (CaseVersionReference) dform.get("cvrSearchInfo");
+		
+		if(selectedCaseList != null)
+		{
+			testCaseService.saveCaseVersionReference(selectedCaseList, cvr.getReferVersion());
+		}
 				
+		return mapping.findForward("refreshProjectInfo");
+	}
+
+	public ActionForward resetSearchTestCaseforRenference(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		Project projectInfo = (Project) dform.get("projectInfo");
+		String pvid = request.getParameter("pvId");
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
+		CaseVersionReference cvrSearchInfo = new CaseVersionReference();
+		
+		if (pvid != null && !"".equals(pvid)) {
+			ProjectVersion versionInfo = projectService.getProjectVersionById(Integer.valueOf(pvid));
+			projectInfo = projectService.getProjectById(versionInfo.getPvProject());
+			dform.set("projectInfo", projectInfo);
+			
+			cvrSearchInfo.setReferVersion(versionInfo.getPvId());			
+		}
+		else
+		{
+			CaseVersionReference cvr = (CaseVersionReference) dform.get("cvrSearchInfo");
+			cvrSearchInfo.setReferVersion(cvr.getReferVersion());
+		}
+
+		TestCase searchInfo = new TestCase();		
+		String page = request.getParameter("pager.offset");
+		if (page == null) {
+			page = "0";
+		}
+
+		dform.set("searchInfo", searchInfo);
+		dform.set("cvrSearchInfo", cvrSearchInfo);
+
+		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+
+		if ((projectInfo.isTeamMember(ua) || ua.getId().equals(1)) && functionList.length() > 2) {
+			Object[] args = { searchInfo, page, cvrSearchInfo, functionList };
+
+			List<TestCase> caseList = testCaseService.searchTestCaseForReference(args);
+			Integer caseCount = testCaseService.searchTestCaseCountForReference(args);
+
+			request.setAttribute("caseList", caseList);
+			request.setAttribute("caseCount", caseCount);
+		} else {
+			request.setAttribute("caseList", new ArrayList<TestCase>());
+			request.setAttribute("caseCount", 0);
+		}
+
+		this.prepareMetaData(request);
+
+		return mapping.findForward("caseListForReference");
+	}
+	
+	public ActionForward searchTestCaseforReference(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+
+		String page = request.getParameter("pager.offset");
+		Project projectInfo = (Project) dform.get("projectInfo");
+		TestCase searchInfo = (TestCase) dform.get("searchInfo");
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
+
+		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+
+		if (functionList.length() > 2) {
+			Object[] args = { searchInfo, page, cvrSearchInfo, functionList };
+
+			List<TestCase> caseList = testCaseService.searchTestCaseForReference(args);
+			Integer caseCount = testCaseService.searchTestCaseCountForReference(args);
+
+			request.setAttribute("caseList", caseList);
+			request.setAttribute("caseCount", caseCount);
+		} else {
+			request.setAttribute("caseList", new ArrayList<TestCase>());
+			request.setAttribute("caseCount", 0);
+		}
+
+		this.prepareMetaData(request);
+
+		return mapping.findForward("caseListForReference");
+	}
+				
+	private String getApplicaleFunctionList(Project projectInfo, TestCase searchInfo) {
+		String functionList = "";
+		if (searchInfo.getModuleId() != null) {
+			ProjectModule pm = projectService.getProjectModuleById(searchInfo.getModuleId());
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
+		} else {
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
+		}
+
+		return functionList;
+	}
+	
 	public ActionForward addAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -192,6 +300,12 @@ public class ProjectManage extends BaseAction {
 	private void prepareMetaData(HttpServletRequest request)
 	{
 		request.setAttribute("departmentList", accountService.getDepartmentList());
+		
+		request.setAttribute("importantLevelList", testCaseService.getImportantLevelList());
+		request.setAttribute("testResultList", testCaseService.getTestResultList());
+		request.setAttribute("caseStatusList", testCaseService.getCaseStatusList());
+		request.setAttribute("bugTypeList", testCaseService.getBugTypeList());
+		request.setAttribute("caseTypeList", testCaseService.getCaseTypeList());
 	}
 	
 	public ActionForward resetSearchAccount(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
@@ -883,5 +997,14 @@ public class ProjectManage extends BaseAction {
 	}
 	public void setProjectService(ProjectService projectService) {
 		this.projectService = projectService;
+	}
+	
+	
+	public TestCaseService getTestCaseService() {
+		return testCaseService;
+	}
+
+	public void setTestCaseService(TestCaseService testCaseService) {
+		this.testCaseService = testCaseService;
 	}
 }

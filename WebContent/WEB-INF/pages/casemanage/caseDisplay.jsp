@@ -34,24 +34,28 @@
 		<tr>
 			
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left">			
+			<td align="left" colspan="3">			
 				<bean:write name="caseInfo" property="moduleFunction.entireName"/>			
 			</td>			
+		</tr>	
+		<tr><td>&nbsp;</td></tr>
+		<tr>
 			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
 			<td align="left"><bean:write name="caseInfo" property="tcCode"/></td>
-			
+			<td align="right"><bean:message bundle="case" key="case_type"/>£º</td>
+			<td align="left"><bean:write name="caseInfo" property="caseType.ctName"/></td>
 		</tr>	
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>£º</td>
-			<td colspan="4" align="left"><bean:write name="caseInfo" property="tcTestObjective"/></td>
+			<td align="left" colspan="4"><bean:write name="caseInfo" property="tcTestObjective"/></td>			
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_content"/>£º</td>
 			<td colspan="4" align="left"><bean:write name="caseInfo" property="tcTestContent"/></td>
 		</tr>
-		
+		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right">
 				<bean:message bundle="project" key="project_attachment" />£º
@@ -67,6 +71,7 @@
 			</td>			
 			
 		</tr>
+		<tr><td>&nbsp;</td></tr>
 	</table>
 		
 	<fieldset style="width:99%;float:left;">

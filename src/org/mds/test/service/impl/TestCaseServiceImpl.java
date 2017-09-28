@@ -77,6 +77,23 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	private CaseAttachmentDAO caseAttachmentDAO;
 	private CaseTypeDAO caseTypeDAO;
 	
+
+	@Override
+	public void saveCaseVersionReference(String[] caseIdList, Integer versionId) {
+		// TODO Auto-generated method stub
+		
+		for(String caseId:caseIdList)
+		{
+			CaseVersionReference cvr = new CaseVersionReference();
+			cvr.setCvrFlag(CommonService.NORMAL_FLAG);
+			cvr.setCvrTestCase(Integer.parseInt(caseId));
+			cvr.setCvrProjectVersion(versionId);
+			cvr.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+			
+			caseVersionReferenceDAO.save(cvr);
+		}		
+	}
+	
 	public Integer saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project) 
 	{		
 		int rtn = 0;
@@ -221,7 +238,20 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 											break;
 										}
 									}					
-								}	
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[12]))//用例类型
+								{
+									String caseType = content;
+									List<CaseType> typeList = caseTypeDAO.find("select a from CaseType a where  a.ctFlag != -1");
+									for(CaseType ct:typeList)
+									{
+										if(ct.getCtName().equals(caseType))
+										{
+											tc.setTcType(ct.getCtId());
+											break;
+										}
+									}					
+								}
 								
 							}
 	
@@ -353,6 +383,19 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 										if(tm.getAccount().getPersonName().equals(userName))
 										{
 											tc.setTcCreateUser(tm.getTmAccount());
+											break;
+										}
+									}					
+								}
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[12]))//用例类型
+								{
+									String caseType = content;
+									List<CaseType> typeList = caseTypeDAO.find("select a from CaseType a where  a.ctFlag != -1");
+									for(CaseType ct:typeList)
+									{
+										if(ct.getCtName().equals(caseType))
+										{
+											tc.setTcType(ct.getCtId());
 											break;
 										}
 									}					
@@ -500,6 +543,19 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 							}
 						}					
 					}
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[12]))//用例类型
+					{
+						String caseType = st.getCell(j, i).getContents().trim();
+						List<CaseType> typeList = caseTypeDAO.find("select a from CaseType a where  a.ctFlag != -1");
+						for(CaseType ct:typeList)
+						{
+							if(ct.getCtName().equals(caseType))
+							{
+								tc.setTcType(ct.getCtId());
+								break;
+							}
+						}					
+					}
 				}
 			}	
 			
@@ -543,7 +599,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
         return testCaseDAO.find(hqlStr);
 	}
-	public void writeTestCaseToXslFile(String filePath,List<TestCase> testCaseList,Integer pvId) 
+	public void writeTestCaseToXslFile(String filePath,List<TestCase> testCaseList,ProjectVersion projectVersion) 
 	{		
 		File file = new File(filePath);
 		
@@ -553,7 +609,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			WritableWorkbook wwb = null;		
 			wwb = Workbook.createWorkbook(os);
 				
-			WritableSheet wst = wwb.createSheet("测试用例", 0);			
+			WritableSheet wst = wwb.createSheet(projectVersion.getPvVersion() + "版测试用例", 0);			
 			int j =0;			
 			CellFormat cf = null;
 			Label lbl = null;
@@ -576,7 +632,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				CaseVersionReference cvr = null;
 				for(CaseVersionReference cvrTemp:tc.getCaseVersionReferenceList())
 				{
-					if(cvrTemp.getCvrProjectVersion().equals(pvId))
+					if(cvrTemp.getCvrProjectVersion().equals(projectVersion.getPvId()))
 					{
 						cvr = cvrTemp;
 						break;
@@ -715,17 +771,6 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 	}
 	
-	public void saveCaseVersionReference(CaseVersionReference cvr)
-	{
-		if(cvr.getCvrId() == null)
-		{
-			caseVersionReferenceDAO.save(cvr);
-		}
-		else
-		{
-			caseVersionReferenceDAO.update(cvr);
-		}
-	}
 	
 
 	public void saveTestCase(TestCase testCase,String uploadPath) {		
@@ -785,11 +830,11 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		for (CaseAttachment pa : attachmentList) {
 			if (pa.getCaId() == null && pa.getCaFlag().equals(CommonService.NORMAL_FLAG)) {
 				String fileName = FileUtil.saveUploadFile(pa.getAttachmentFile(),
-						uploadPath + "\\caseAttachment\\" + testCase.getTcId());
+						uploadPath + "caseAttachment\\" + testCase.getTcId());
 
 				pa.setCaTestCase(testCase.getTcId());
 				pa.setCaCreateTime(new Date());
-				pa.setCaUrl(uploadPath + "\\caseAttachment\\" + testCase.getTcId() + "\\" + fileName);
+				pa.setCaUrl(uploadPath + "caseAttachment\\" + testCase.getTcId() + "\\" + fileName);
 
 				caseAttachmentDAO.save(pa);
 			}
@@ -820,6 +865,23 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 					" where  a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
 					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and  e.cvrFlag != " + CommonService.DELETE_FLAG ;
 		}
+						        
+        return this.retrieveTestCaseList(searchInfo,cvrSearchInfo, hqlStr,Integer.parseInt(page));		 
+	}
+	
+	public List<TestCase> searchTestCaseForReference(Object[] args) {
+		// TODO Auto-generated method stub
+		String page = (String) args[1];
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		String functionList = (String) args[3];
+		
+		String referedCaseList = this.getReferedCaseListStr(cvrSearchInfo.getReferVersion(), functionList);
+		
+		String hqlStr = "select a from TestCase a " +
+					" where a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS ;
+		
 						        
         return this.retrieveTestCaseList(searchInfo,cvrSearchInfo, hqlStr,Integer.parseInt(page));		 
 	}
@@ -870,7 +932,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		if(cvr.getCvrProjectVersion() != null && cvr.getCvrProjectVersion() != 0)
 		{
 			hqlStr = hqlStr + " and e.cvrProjectVersion = " + cvr.getCvrProjectVersion();
-		}		
+		}
+		
 		
 		return hqlStr;
 	}
@@ -880,6 +943,11 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		if(searchInfo.getTcModuleFunction()!= null)
 		{
 			hqlStr = hqlStr + " and a.tcModuleFunction = " + searchInfo.getTcModuleFunction();
+		}
+		
+		if(searchInfo.getTcType()!= null && !searchInfo.getTcType().equals(0))
+		{
+			hqlStr = hqlStr + " and a.tcType = " + searchInfo.getTcType();
 		}
 		
 		if(searchInfo.getTcCode() != null && !searchInfo.getTcCode().isEmpty())
@@ -932,11 +1000,11 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		String hqlStr = null;
 		if(cvrSearchInfo.isSearchInfoEmpty())			
 		{			
-			hqlStr = "select count(distinct a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcModuleFunction in " + functionList;			
+			hqlStr = "select count(a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcModuleFunction in " + functionList;			
 		}
 		else
 		{
-			hqlStr = "select  count(a) from TestCase a,CaseVersionReference e " +
+			hqlStr = "select  count(distinct a) from TestCase a,CaseVersionReference e " +
 					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
 					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
 		}    	
@@ -945,6 +1013,57 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
     	hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
     	
         return testCaseDAO.getFindCount(hqlStr);		
+	}
+	
+	public Integer searchTestCaseCountForReference(Object[] args) {
+		// TODO Auto-generated method stub
+		TestCase searchInfo = (TestCase) args[0];
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
+		String functionList = (String) args[3];
+		
+		String referedCaseList = this.getReferedCaseListStr(cvrSearchInfo.getReferVersion(), functionList);
+		
+		String hqlStr = "select  count(a) from TestCase a " +
+					" where a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS ;
+		    			    	
+    	hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
+    	hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
+    	
+        return testCaseDAO.getFindCount(hqlStr);		
+	}
+	
+	private String getReferedCaseListStr(Integer referVersion,String functionList)
+	{
+		String hqlStr = "select  distinct a from TestCase a,CaseVersionReference e " +
+				" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + 
+				" and e.cvrProjectVersion = " + referVersion + 
+				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+		
+		
+		MyQuery myQuery = new MyQuery();
+    	myQuery.setOffset(false);
+        myQuery.setOrderby(" order by a.tcId");
+        myQuery.setQueryString(hqlStr);
+       
+        List<TestCase> list = testCaseDAO.find(myQuery);
+        
+        String rtn = "";
+        for(TestCase tc:list)
+        {
+        	rtn = rtn + "," + tc.getTcId();
+        }
+        
+        if(!rtn.isEmpty())
+        {
+        	rtn = " (" + rtn.substring(1) + ") ";
+        }
+        else
+        {
+        	rtn = " (0) ";
+        }
+        
+        return rtn;
 	}
 
 	public void setTestCaseDAO(TestCaseDAO testCaseDAO) {
@@ -1312,6 +1431,30 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 
 	public void setCaseTypeDAO(CaseTypeDAO caseTypeDAO) {
 		this.caseTypeDAO = caseTypeDAO;
+	}
+
+	@Override
+	public ModuleFunction getModuleFunctionById(Integer id) {
+		// TODO Auto-generated method stub
+		return moduleFunctionDAO.get(id);
+	}
+
+	@Override
+	public CaseType getCaseTypeById(Integer id) {
+		// TODO Auto-generated method stub
+		return caseTypeDAO.get(id);
+	}
+
+	@Override
+	public ImportantLevel getImportantLevelById(Integer id) {
+		// TODO Auto-generated method stub
+		return importantLevelDAO.get(id);
+	}
+
+	@Override
+	public BugType getBugTypeById(Integer id) {
+		// TODO Auto-generated method stub
+		return bugTypeDAO.get(id);
 	}
 
 }

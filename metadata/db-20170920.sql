@@ -445,6 +445,29 @@ LOCK TABLES `test_case` WRITE;
 /*!40000 ALTER TABLE `test_case` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+CREATE TABLE `case_attachment` (
+  `ca_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ca_test_case` int(11) NOT NULL,
+  `ca_code` varchar(45) NOT NULL,
+  `ca_name` varchar(100) NOT NULL,
+  `ca_url` varchar(100) NOT NULL,
+  `ca_flag` int(11) NOT NULL,
+  `ca_create_user` int(11) NOT NULL,
+  `ca_create_time` datetime NOT NULL,
+  `ca_local_url` varchar(100) DEFAULT NULL,
+  `ca_submit_date` date DEFAULT NULL,
+  `ca_description` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`ca_id`),
+  UNIQUE KEY `ca_id_UNIQUE` (`ca_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+
+
+LOCK TABLES `case_attachment` WRITE;
+/*!40000 ALTER TABLE `test_case` DISABLE KEYS */;
+/*!40000 ALTER TABLE `test_case` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Table structure for table `test_correct_record`
 --

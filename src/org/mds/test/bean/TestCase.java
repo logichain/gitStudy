@@ -34,7 +34,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	private String tcIntendOutput="";
 	private Integer tcFlag = CommonService.NORMAL_FLAG;
 	private String tcRemark = "";
-	private Integer tcType = CaseType.CASE_TYPE_NORMAL;
+	private Integer tcType;
 	
 	private Integer tcCreateUser;
 	private Date tcCreateTime;

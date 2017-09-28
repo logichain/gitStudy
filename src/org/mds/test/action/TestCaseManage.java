@@ -38,7 +38,7 @@ import org.mds.test.service.TestCaseService;
 public class TestCaseManage extends BaseAction {
 	private TestCaseService testCaseService;
 	private ProjectService projectService;
-
+	
 	public ActionForward addAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -190,6 +190,7 @@ public class TestCaseManage extends BaseAction {
 		
 		return this.resetSearchTestCase(mapping, dform, request, response);
 	}
+	
 
 	public ActionForward exportTestCaseByVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
@@ -201,14 +202,14 @@ public class TestCaseManage extends BaseAction {
 		if (!uploadPath.endsWith("\\")) {
 			uploadPath = uploadPath + "\\uploadImportFile\\";
 		}
-
+		
 		// ≤‚ ‘¡Ÿ ±
 		uploadPath = "d:\\";
 
 		List<TestCase> caseList = testCaseService.searchTestCaseByVersion(projectVersion);
 
 		String fileName = uploadPath + "exportCase.xls";
-		testCaseService.writeTestCaseToXslFile(fileName, caseList, pvId);
+		testCaseService.writeTestCaseToXslFile(fileName, caseList,projectVersion);
 
 		try {
 			response.setContentType(org.king.util.FileUtil.getContentType(fileName));
@@ -1045,7 +1046,7 @@ public class TestCaseManage extends BaseAction {
 			dform.set("projectInfo", projectInfo);
 		}
 
-		TestCase searchInfo = new TestCase();
+		TestCase searchInfo = new TestCase();		
 		String page = request.getParameter("pager.offset");
 		if (page == null) {
 			page = "0";
@@ -1118,6 +1119,44 @@ public class TestCaseManage extends BaseAction {
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
+		
+		Integer id = searchInfo.getTcModuleFunction();
+		if( id != null && !id.equals(0))
+		{
+			searchInfo.setModuleFunction(testCaseService.getModuleFunctionById(id));
+		}
+		
+		id = searchInfo.getTcType();
+		if( id != null && !id.equals(0))
+		{
+			searchInfo.setCaseType(testCaseService.getCaseTypeById(id));
+		}
+		id = cvrSearchInfo.getCvrCaseResult();
+		if( id != null && !id.equals(0))
+		{
+			cvrSearchInfo.setTestResult(testCaseService.getTestResultById(id));
+		}
+		id = cvrSearchInfo.getCvrCaseStatus();
+		if( id != null && !id.equals(0))
+		{
+			cvrSearchInfo.setStatus(testCaseService.getCaseStatusById(id));
+		}
+		
+		id = cvrSearchInfo.getCvrImportantLevel();
+		if( id != null && !id.equals(0))
+		{
+			cvrSearchInfo.setImportantLevel(testCaseService.getImportantLevelById(id));
+		}
+		id = cvrSearchInfo.getCvrBugType();
+		if( id != null && !id.equals(0))
+		{
+			cvrSearchInfo.setBugType(testCaseService.getBugTypeById(id));
+		}
+		id = cvrSearchInfo.getCvrProjectVersion();
+		if( id != null && !id.equals(0))
+		{
+			cvrSearchInfo.setProjectVersion(projectService.getProjectVersionById(id));
+		}
 
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 		Object[] args = { searchInfo, projectInfo, cvrSearchInfo, functionList };

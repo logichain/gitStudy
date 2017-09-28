@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.struts.upload.FormFile;
 import org.king.framework.service.Service;
 import org.king.security.domain.UsrAccount;
+import org.mds.project.bean.ModuleFunction;
 import org.mds.project.bean.Project;
 import org.mds.project.bean.ProjectVersion;
 import org.mds.test.bean.BugType;
@@ -30,11 +31,12 @@ public interface TestCaseService extends Service {
 	
 	public List<TestCase> searchTestCase(Object[] args);
 	public Integer searchTestCaseCount(Object[] args);
+	public List<TestCase> searchTestCaseForReference(Object[] args);
+	public Integer searchTestCaseCountForReference(Object[] args);
 	public List<TestCase> getAllTestCase(Object[] args);
 	
-	public void saveTestCase(TestCase testCase,String uploadPath);
-	
-	public void saveCaseVersionReference(CaseVersionReference cvr);
+	public void saveTestCase(TestCase testCase,String uploadPath);	
+	public void saveCaseVersionReference(String[] caseIdList,Integer versionId);
 		
 	public List<ImportantLevel> getImportantLevelList();
 	public List<TestResult> getTestResultList();
@@ -47,6 +49,11 @@ public interface TestCaseService extends Service {
 	public CaseVersionReference getCaseVersionReferenceById(Integer id);
 	
 	public List<TestCase> searchTestCaseByVersion(ProjectVersion projectVersion);
-	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,Integer versionId);
+	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,ProjectVersion projectVersion);
 	public Integer saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project);
+	
+	public ModuleFunction getModuleFunctionById(Integer id);
+	public CaseType getCaseTypeById(Integer id);
+	public ImportantLevel getImportantLevelById(Integer id);
+	public BugType getBugTypeById(Integer id);
 }
