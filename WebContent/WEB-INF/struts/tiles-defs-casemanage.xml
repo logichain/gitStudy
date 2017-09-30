@@ -44,7 +44,7 @@
 		<put name="body" value="/WEB-INF/pages/casemanage/caseExport.jsp" />
 	</definition>   
 	
-	<definition name="importPageDef" extends="mainBaseDef">
+	<definition name="importPageDef" extends="inputBaseDef">
 		<put name="title" value="测试用例导入"/>
 		<put name="body" value="/WEB-INF/pages/casemanage/caseImport.jsp" />
 	</definition>  

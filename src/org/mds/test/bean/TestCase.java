@@ -225,7 +225,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	public String getTcCreateTimeStr() {
 		if(tcCreateTime != null)
 		{
-			return DateFormat.getDateInstance().format(tcCreateTime);
+			return DateFormat.getDateTimeInstance().format(tcCreateTime);
 		}
 		return tcCreateTimeStr;
 	}

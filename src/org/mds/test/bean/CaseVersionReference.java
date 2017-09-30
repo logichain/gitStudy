@@ -179,7 +179,7 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 	public String getCvrTestTimeStr() {
 		if(cvrTestTime != null)
 		{
-			return DateFormat.getDateInstance().format(cvrTestTime);
+			return DateFormat.getDateTimeInstance().format(cvrTestTime);
 		}
 		return cvrTestTimeStr;
 	}
@@ -191,7 +191,7 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 	public String getCvrCorrectTimeStr() {
 		if(cvrCorrectTime != null)
 		{
-			return DateFormat.getDateInstance().format(cvrCorrectTime);
+			return DateFormat.getDateTimeInstance().format(cvrCorrectTime);
 		}
 		return cvrCorrectTimeStr;
 	}

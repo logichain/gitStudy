@@ -7,21 +7,27 @@
 <input type="hidden" name="method" value="saveProjectVersion">	
 <table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 	<tr>
+		<td width="10%">&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td align="right">
+			<bean:message bundle="project" key="version_code" />£º		
+		</td>
+		<td align="left">	
+			<html:text property="versionInfo.pvVersion" size="45" maxlength="45"/>
+		</td>						
+		
+	</tr>
+</table>
+<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
+	<tr>
 		<td width="50%">&nbsp;</td>
 		<td></td>
 	</tr>
 	<tr>
-		<td align="left">
-			<bean:message bundle="project" key="version_code" />£º			
-			<html:text property="versionInfo.pvVersion" size="45" maxlength="45"/>
-		</td>						
-		<td align="right">
-			<html:submit styleClass="savebutton">&nbsp;</html:submit>
-		</td>
-	</tr>
-	<tr>
-		<td>
-		<fieldset style="width:90%;float:left;">
+		<td align="center">
+		<fieldset style="width:90%;float:center;">
 			<legend><bean:message bundle="project" key="develop"/></legend>
 			<table width="100%">
 				<tr>
@@ -42,8 +48,8 @@
 			</table>
 		</fieldset>
 		</td>
-		<td>
-		<fieldset style="width:90%;float:left;">
+		<td align="center">
+		<fieldset style="width:90%;float:center;">
 			<legend><bean:message bundle="project" key="test"/></legend>
 			<table width="100%">
 				<tr>
@@ -65,44 +71,50 @@
 		</fieldset>
 		</td>			
 	</tr>
-	<tr><td>&nbsp;</td></tr>
+</table>
+<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 	<tr>
-		<td colspan="2">
-		<table width="100%">
-			<tr>
-				<td width="8%" align="right">
-					<bean:message bundle="project" key="remark" />£º
-				</td>
-				<td align="left">			
-					<html:text property="versionInfo.pvRemark" size="80" maxlength="200"/>
-				</td>			
-			</tr>
-			<tr><td>&nbsp;</td></tr>
-	
-			<tr>
-				<td align="right">
-					<bean:message bundle="project" key="project_attachment" />£º
-				</td>
-				<td align="left">
-					<div style="width:96%;height:20px;background:white;">
-					<logic:iterate id="am" name="projectForm" property="versionInfo.attachmentList" indexId="i">
-					<logic:notEqual name="am" property="paFlag" value="-1">	
-						<span title="<bean:write name="am" property="paLocalUrl"/>">
-							<bean:write name="am" property="paName"/>
-							<a href="projectmanage.do?method=deleteAttachment&opType=versionInput&index=<%=i %>"><img border="0" src="pages\images\icon\16x16\delete.gif"></a>£»
-						</span>					
-					</logic:notEqual>
-					</logic:iterate>
-					</div>
-				</td>			
-				<td width="10%" align="left">
-					<html:button property="" onclick="openDialog('projectmanage.do?method=addAttachment&opType=versionInput',600,200);"><bean:message bundle="project" key="button_addattachment"/></html:button>
-				</td>
-			</tr>	
-		</table>
+		<td width="10%">&nbsp;</td><td width="80%"></td><td></td>		
+	</tr>
+	<tr>
+		<td align="right">
+			<bean:message bundle="project" key="remark" />£º
+		</td>
+		<td align="left">			
+			<html:text property="versionInfo.pvRemark" size="80" maxlength="200"/>
+		</td>	
+	</tr>
+	<tr><td>&nbsp;</td></tr>
+
+	<tr>
+		<td align="right">
+			<bean:message bundle="project" key="project_attachment" />£º
+		</td>
+		<td align="left">
+			<div style="width:100%;height:20px;background:white;">
+			<logic:iterate id="am" name="projectForm" property="versionInfo.attachmentList" indexId="i">
+			<logic:notEqual name="am" property="paFlag" value="-1">	
+				<span title="<bean:write name="am" property="paLocalUrl"/>">
+					<bean:write name="am" property="paName"/>
+					<a href="projectmanage.do?method=deleteAttachment&opType=versionInput&index=<%=i %>"><img border="0" src="pages\images\icon\16x16\delete.gif"></a>£»
+				</span>					
+			</logic:notEqual>
+			</logic:iterate>
+			</div>
+		</td>
+		<td align="left">
+			<html:button property="" onclick="openDialog('projectmanage.do?method=addAttachment&opType=versionInput',600,200);"><bean:message bundle="project" key="button_addattachment"/></html:button>
 		</td>
 	</tr>	
-	
+	<tr><td>&nbsp;</td></tr>
+	<tr>
+		<td colspan="2" align="right">
+			<html:submit styleClass="savebutton">&nbsp;</html:submit>			
+			<html:button property="" onclick="window.close();" styleClass="button">
+				<bean:message key="button.cancel" />
+			</html:button>
+		</td>
+	</tr>
 </table>
 
 </html:form>

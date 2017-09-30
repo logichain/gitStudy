@@ -36,7 +36,7 @@ public interface TestCaseService extends Service {
 	public List<TestCase> getAllTestCase(Object[] args);
 	
 	public void saveTestCase(TestCase testCase,String uploadPath);	
-	public void saveCaseVersionReference(String[] caseIdList,Integer versionId);
+	public void saveCaseVersionReference(String[] caseIdList,Integer versionId,Integer userId);
 		
 	public List<ImportantLevel> getImportantLevelList();
 	public List<TestResult> getTestResultList();

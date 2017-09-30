@@ -14,7 +14,6 @@ public class CaseStatus extends org.king.framework.domain.BaseObject implements
 	public static Integer CLOSE_STATUS = 2;//¹Ø±Õ
 	public static Integer TESTED_STATUS = 3;//²âÊÔ
 	public static Integer CORRECT_STATUS = 4;//ÐÞÕý
-
 	/**
 	 * 
 	 */

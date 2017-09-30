@@ -174,8 +174,7 @@ public class TestCaseManage extends BaseAction {
 		if (!uploadPath.endsWith("\\")) {
 			uploadPath = uploadPath + "\\uploadImportFile\\";
 		}
-		// 测试临时
-		uploadPath = "d:\\";
+		
 
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase caseInfo = (TestCase) dform.get("caseInfo");
@@ -186,9 +185,9 @@ public class TestCaseManage extends BaseAction {
 		ActionMessages messenges = new ActionMessages();
 
 		messenges.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("info.importCaseCount",caseCount));
-		saveErrors(request, messenges);
+		saveErrors(request.getSession(), messenges);
 		
-		return this.resetSearchTestCase(mapping, dform, request, response);
+		return mapping.findForward("refreshCaseList");
 	}
 	
 
@@ -203,8 +202,6 @@ public class TestCaseManage extends BaseAction {
 			uploadPath = uploadPath + "\\uploadImportFile\\";
 		}
 		
-		// 测试临时
-		uploadPath = "d:\\";
 
 		List<TestCase> caseList = testCaseService.searchTestCaseByVersion(projectVersion);
 
@@ -763,7 +760,7 @@ public class TestCaseManage extends BaseAction {
 
 	public ActionForward saveTestCase(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
-
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
 		if(!uploadPath.endsWith("\\"))
 		{
@@ -773,6 +770,7 @@ public class TestCaseManage extends BaseAction {
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
+		Date operTime = new Date();
 
 		for (ProjectVersion version : projectInfo.getProjectVersionList()) {
 			CaseVersionReference cvr = testCase.isApplyProjectVersion(version);
@@ -785,10 +783,25 @@ public class TestCaseManage extends BaseAction {
 					ccvr.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
 
 					testCase.getCaseVersionReferenceList().add(ccvr);
+					
+					//关联用例记录
+					TestCorrectRecord tcr = testCaseService.createTestCorrectRecord(ccvr);
+					
+					tcr.setTcrOperUser(ua.getId());
+					tcr.setTcrOperTime(operTime);
+					testCase.getTestCorrectRecordList().add(tcr);
 				}
 			} else {
 				if (cvr != null) {
 					cvr.setCvrFlag(CommonService.DELETE_FLAG);
+					cvr.setCvrCaseStatus(CaseStatus.DELETE_STATUS);
+					
+					//解除关联用例记录
+					TestCorrectRecord tcr = testCaseService.createTestCorrectRecord(cvr);
+					
+					tcr.setTcrOperUser(ua.getId());
+					tcr.setTcrOperTime(operTime);
+					testCase.getTestCorrectRecordList().add(tcr);
 				}
 			}
 		}

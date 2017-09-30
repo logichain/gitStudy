@@ -79,7 +79,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	
 
 	@Override
-	public void saveCaseVersionReference(String[] caseIdList, Integer versionId) {
+	public void saveCaseVersionReference(String[] caseIdList, Integer versionId,Integer userId) {
 		// TODO Auto-generated method stub
 		
 		for(String caseId:caseIdList)
@@ -91,6 +91,17 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			cvr.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
 			
 			caseVersionReferenceDAO.save(cvr);
+			
+			//关联用例记录
+			TestCorrectRecord tcr = new TestCorrectRecord();
+			tcr.setTcrTestCase(Integer.parseInt(caseId));
+			tcr.setTcrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+			tcr.setTcrTestVersion(versionId);
+			tcr.setCurrentOperRecord(true);
+			tcr.setTcrOperUser(userId);
+			tcr.setTcrOperTime(new Date());
+			
+			testCorrectRecordDAO.save(tcr);
 		}		
 	}
 	
@@ -130,6 +141,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	{
 		Integer rtn = 0;
 		try{
+			Date operDate = new Date();
 			HWPFDocument hwpfDocument = new HWPFDocument(is);
 			Range range = hwpfDocument.getRange();// 得到文档的读取范围
 			TableIterator it = new TableIterator(range);
@@ -141,7 +153,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				TestCase tc = new TestCase();
 				tc.setTcCreateUser(user.getId());
 				tc.setTcFlag(CommonService.NORMAL_FLAG);
-				tc.setTcCreateTime(new Date());	
+				tc.setTcType(CaseType.CASE_TYPE_NORMAL);
+				tc.setTcCreateTime(operDate);	
 				if(project.getAllModuleFunctionList().size() > 0)
 				{
 					//设置一个默认的功能点，防止查询不到用例
@@ -263,6 +276,16 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				{
 					testCaseDAO.save(tc);
 					rtn++;
+					
+					// 新建用例记录
+					TestCorrectRecord tcr = new TestCorrectRecord();
+					tcr.setTcrTestCase(tc.getTcId());
+					tcr.setTcrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+					tcr.setCurrentOperRecord(true);
+					tcr.setTcrOperUser(user.getId());
+					tcr.setTcrOperTime(operDate);
+					
+					testCorrectRecordDAO.save(tcr);
 									
 					System.err.println("转换完成行号：" + tc.getTcCode() + ",客户信息Key:" + tc.getTcId());
 				}
@@ -283,6 +306,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	{
 		Integer rtn = 0;
 		try {			
+			Date operDate = new Date();
 			XWPFDocument xwpfDocument = new XWPFDocument(is);
 			List<XWPFTable> tableList = xwpfDocument.getTables();
 						
@@ -290,8 +314,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			for (XWPFTable table : tableList) {			
 				TestCase tc = new TestCase();
 				tc.setTcCreateUser(user.getId());
+				tc.setTcType(CaseType.CASE_TYPE_NORMAL);
 				tc.setTcFlag(CommonService.NORMAL_FLAG);
-				tc.setTcCreateTime(new Date());	
+				tc.setTcCreateTime(operDate);	
 				if(project.getAllModuleFunctionList().size() > 0)
 				{
 					//设置一个默认的功能点，防止查询不到用例
@@ -412,6 +437,16 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				{
 					testCaseDAO.save(tc);
 					rtn++;
+					
+					// 新建用例记录
+					TestCorrectRecord tcr = new TestCorrectRecord();
+					tcr.setTcrTestCase(tc.getTcId());
+					tcr.setTcrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+					tcr.setCurrentOperRecord(true);
+					tcr.setTcrOperUser(user.getId());
+					tcr.setTcrOperTime(operDate);
+					
+					testCorrectRecordDAO.save(tcr);
 									
 					System.err.println("转换完成行号：" + tc.getTcCode() + ",客户信息Key:" + tc.getTcId());
 				}
@@ -444,6 +479,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			e.printStackTrace();
 		}
 		
+		Date operDate = new Date();
 		Sheet st = wb.getSheet(0);
 		int rows = st.getRows();
 		int cols = st.getColumns();
@@ -465,8 +501,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		for (int i = colNameRow +1; i < rows; i++) {				
 			TestCase tc = new TestCase();
 			tc.setTcCreateUser(user.getId());
+			tc.setTcType(CaseType.CASE_TYPE_NORMAL);
 			tc.setTcFlag(CommonService.NORMAL_FLAG);
-			tc.setTcCreateTime(new Date());
+			tc.setTcCreateTime(operDate);
 			if(project.getAllModuleFunctionList().size() > 0)
 			{
 				//设置一个默认的功能点，防止查询不到用例
@@ -563,6 +600,16 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			{
 				testCaseDAO.save(tc);
 				rtn++;
+				
+				// 新建用例记录
+				TestCorrectRecord tcr = new TestCorrectRecord();
+				tcr.setTcrTestCase(tc.getTcId());
+				tcr.setTcrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+				tcr.setCurrentOperRecord(true);
+				tcr.setTcrOperUser(user.getId());
+				tcr.setTcrOperTime(operDate);
+				
+				testCorrectRecordDAO.save(tcr);
 								
 				System.err.println("转换完成行号：" + st.getCell(0,i).getContents().trim() + ",客户信息Key:" + tc.getTcId());
 			}

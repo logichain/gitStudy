@@ -81,7 +81,10 @@
 			<td COLSPAN="5" ALIGN="RIGHT">
 				<html:submit styleClass="confirmbutton" onclick="chgAction(document.all.method,'confirmAccount');return validSelectedIdForEdit();">
 					&nbsp;
-				</html:submit>		
+				</html:submit>	
+				<html:button property="" onclick="window.close();" styleClass="button">
+					<bean:message key="button.cancel" />
+				</html:button>	
 			</td>
 		</tr>		
 	</table>

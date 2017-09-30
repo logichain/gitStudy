@@ -110,7 +110,7 @@
 		<tr>
 			<td colspan="6" align="right">
 				<logic:equal name="accountPersonId" value='1'>
-					<a href="casemanage.do?method=importTestCase">用例导入</a>
+					<a href="javascript:openDialog('casemanage.do?method=importTestCase',600,200);">用例导入</a>
 				</logic:equal>
 				<html:submit styleClass="exportbutton" property="" onclick="chgAction(document.all.method,'exportTestCase');">
 					&nbsp;
@@ -153,10 +153,10 @@
 				<td width="8%" align="center"><bean:message bundle="case" key="case_code"/></td>
 				<td align="center"><bean:message bundle="case" key="test_objective"/></td>				
 				<td width="7%" align="center"><bean:message bundle="case" key="create_user"/></td>
-				<td width="7%" align="center"><bean:message bundle="case" key="create_time"/></td>				
-				<td width="7%" align="center"><bean:message bundle="case" key="edit"/></td>				
-				<td width="7%" align="center"><bean:message bundle="case" key="delete"/></td>
-				<td width="7%" align="center"><bean:message bundle="case" key="display"/></td>
+				<td width="12%" align="center"><bean:message bundle="case" key="create_time"/></td>				
+				<td width="4%" align="center"><bean:message bundle="case" key="edit"/></td>				
+				<td width="4%" align="center"><bean:message bundle="case" key="delete"/></td>
+				<td width="4%" align="center"><bean:message bundle="case" key="display"/></td>
 			</tr>
 			<tr id="node-0-0">
 				<td ></td>

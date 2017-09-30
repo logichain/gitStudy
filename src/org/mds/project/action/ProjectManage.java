@@ -45,12 +45,13 @@ public class ProjectManage extends BaseAction {
 	public ActionForward confirmTestCaseforReference(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
+		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		String[] selectedCaseList = request.getParameterValues("selectedCaseList");
 		CaseVersionReference cvr = (CaseVersionReference) dform.get("cvrSearchInfo");
 		
 		if(selectedCaseList != null)
 		{
-			testCaseService.saveCaseVersionReference(selectedCaseList, cvr.getReferVersion());
+			testCaseService.saveCaseVersionReference(selectedCaseList, cvr.getReferVersion(),ua.getId());
 		}
 				
 		return mapping.findForward("refreshProjectInfo");
@@ -335,6 +336,7 @@ public class ProjectManage extends BaseAction {
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		String opType = request.getParameter("opType");
+						
 		String id = request.getParameter("id");
 		
 		Project project = (Project)dform.get("projectInfo");
@@ -643,44 +645,40 @@ public class ProjectManage extends BaseAction {
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		String tmId = request.getParameter("id");
-		
+
 		TeamMember tm = projectService.getTeamMemberById(Integer.parseInt(tmId));
-		
+
 		String[] selectedFunction = request.getParameterValues("selectedFunction");
-		List<String> selectedFunctionList = Arrays.asList(selectedFunction);
-				
-		ArrayList<MemberFunctionReference> mfrList = tm.getMemberFunctionReferenceList();
-		
-		for(MemberFunctionReference mfr:mfrList)
-		{
-			if(selectedFunctionList.contains(mfr.getMfrModuleFunction()))
-			{
-				if(mfr.getMfrFlag().equals(CommonService.DELETE_FLAG))
-				{
-					mfr.setMfrFlag(CommonService.NORMAL_FLAG);
+		if (selectedFunction != null) {
+			List<String> selectedFunctionList = Arrays.asList(selectedFunction);
+
+			ArrayList<MemberFunctionReference> mfrList = tm.getMemberFunctionReferenceList();
+
+			for (MemberFunctionReference mfr : mfrList) {
+				if (selectedFunctionList.contains(mfr.getMfrModuleFunction())) {
+					if (mfr.getMfrFlag().equals(CommonService.DELETE_FLAG)) {
+						mfr.setMfrFlag(CommonService.NORMAL_FLAG);
+					}
+
+					selectedFunctionList.remove(mfr.getMfrModuleFunction());
+				} else {
+					mfr.setMfrFlag(CommonService.DELETE_FLAG);
 				}
-				
-				selectedFunctionList.remove(mfr.getMfrModuleFunction());
 			}
-			else
-			{
-				mfr.setMfrFlag(CommonService.DELETE_FLAG);
+
+			for (String sf : selectedFunctionList) {
+				MemberFunctionReference mfr = new MemberFunctionReference();
+				mfr.setMfrModuleFunction(Integer.parseInt(sf));
+				mfr.setMfrTeamMember(tm.getTmId());
+
+				mfrList.add(mfr);
 			}
+
+			projectService.saveTeamMember(tm);
 		}
-		
-		for(String sf:selectedFunctionList)
-		{
-			MemberFunctionReference mfr = new MemberFunctionReference();
-			mfr.setMfrModuleFunction(Integer.parseInt(sf));
-			mfr.setMfrTeamMember(tm.getTmId());
-			
-			mfrList.add(mfr);
-		}
-		
-		projectService.saveTeamMember(tm);
-				
-		request.setAttribute("tabpageId","memberInfo");						
-		
+
+		request.setAttribute("tabpageId", "memberInfo");
+
 		return mapping.findForward("refreshProjectInfo");
 	}
 	

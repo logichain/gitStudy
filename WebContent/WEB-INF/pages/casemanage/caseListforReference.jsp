@@ -108,12 +108,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="6" align="right">
-				<html:submit styleClass="confirmbutton" onclick="chgAction(document.all.method,'confirmTestCaseforReference');">
-					&nbsp;
-				</html:submit>
-			</td>			
-			<td colspan="2" align="right">
+					
+			<td colspan="8" align="right">
 				<html:submit styleClass="searchbutton" onclick="initPageNo();">
 					&nbsp;
 				</html:submit>
@@ -147,7 +143,7 @@
 				<td width="7%" align="center"><bean:message bundle="case" key="create_time"/></td>				
 				
 				<td width="4%" align="center"><bean:message bundle="case" key="display"/></td>
-				<td width="4%" rowspan="2"><input type="checkbox"  name="all" onclick="allCheck(this)"/></td>
+				<td width="4%"><input type="checkbox"  name="all" onclick="allCheck(this)"/></td>
 			</tr>
 			<tr id="node-0-0">
 				<td ></td>
@@ -156,9 +152,8 @@
 				<td align="center"><bean:message bundle="case" key="test_result"/></td>
 				<td align="center"><bean:message bundle="case" key="test_output"/></td>
 				<td align="center"><bean:message bundle="case" key="test_user"/></td>
-				<td align="center"><bean:message bundle="case" key="test_time"/></td>
+				<td align="center" colspan="3"><bean:message bundle="case" key="test_time"/></td>
 				
-				<td align="center"></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -201,11 +196,8 @@
 							<bean:write name="cvr" property="testUser.personName"/></td>
 						</logic:notEmpty>
 					</td>								
-					<td align="center"><bean:write name="cvr" property="cvrTestTimeStr"/></td>
+					<td align="center" colspan="3"><bean:write name="cvr" property="cvrTestTimeStr"/></td>
 					
-					<td align="center">
-						
-					</td>
 				</tr>
 				</logic:iterate>
 			</pg:item>
@@ -223,6 +215,19 @@
 	<jsp:include page="../common/page.jsp" flush="true" />
 
 	</pg:pager>
+	
+<table CELLPADDING="2" CELLSPACING="0" width="100%" border="0">	
+<tr>
+	<td align="right">
+		<html:submit styleClass="confirmbutton" onclick="chgAction(document.all.method,'confirmTestCaseforReference');">
+			&nbsp;
+		</html:submit>
+		<html:button property="" onclick="window.close();" styleClass="button">
+			<bean:message key="button.cancel" />
+		</html:button>	
+	</td>	
+</tr>		
+</table>
 	
 </html:form>
 

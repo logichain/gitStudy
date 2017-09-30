@@ -80,9 +80,10 @@
 				<html:submit styleClass="button">
 					<bean:message key="button.confirm" />
 				</html:submit>
-				<html:cancel styleClass="button">
+				
+				<html:button property="" onclick="window.close();" styleClass="button">
 					<bean:message key="button.cancel" />
-				</html:cancel>
+				</html:button>
 			</td>
 		</tr>
 	</table>

@@ -31,7 +31,7 @@
 			<forward name="refreshCaseEdit" path="/WEB-INF/pages/casemanage/refreshCaseEdit.jsp" redirect="false"/>
 			<forward name="attachmentInput" path="caseAttachmentInputPageDef" redirect="false" />
 			
-			
+			<forward name="refreshCaseList" path="/WEB-INF/pages/casemanage/refreshCaseList.jsp" redirect="false"/>
 		</action>		
 	</action-mappings>
 </struts-config>
