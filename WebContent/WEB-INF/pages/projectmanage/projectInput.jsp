@@ -89,7 +89,7 @@
 			<td colspan="2">
 			<table width="100%">
 				<tr>
-					<td width="5%" align="right">
+					<td width="8%" align="right">
 						<bean:message bundle="project" key="remark" />£º	
 					</td>
 					<td align="left">		

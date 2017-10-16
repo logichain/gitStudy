@@ -5,9 +5,7 @@
 	<html:errors />
 	
 	<input type="hidden" name="method" value="saveTestCase">
-	<html:hidden property="caseInfo.moduleId"/>
-	<html:hidden property="caseInfo.tcModuleFunction"/>
-	
+		
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">		
 		<tr><td width="50%"></td>
 			<td align="center"><html:submit styleClass="previousbutton" onclick="chgAction(document.all.method,'editTestCasePrevious');chgFormOnsubmit('return true;');">&nbsp;</html:submit></td>
@@ -39,11 +37,15 @@
 		</tr>	
 		<tr>			
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left" colspan="3"><bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/></td>					
+			<td align="left" colspan="3">
+				<html:select styleId="editable-select2" styleClass="form-control" property="caseInfo.tcModuleFunction" style="width:180px">															
+					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
+				</html:select>	
+			</td>				
 		</tr>	
 		<tr>
 			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
-			<td align="left"><html:text property="caseInfo.tcCode" size="14" maxlength="45"/></td>
+			<td align="left"><html:text property="caseInfo.tcCode" size="14" maxlength="45" readonly="true" disabled="true"/></td>
 			<td align="right"><bean:message bundle="case" key="case_type"/>£º</td>
 			<td align="left">
 				<html:select property="caseInfo.tcType" style="width:120px">													
@@ -168,6 +170,11 @@
 <script type="text/javascript" src="<html:rewrite forward='staticjavascript'/>"></script>
 
 <script language="JavaScript">	
+
+
+$('#editable-select2').editableSelect({
+	effects: 'slide'
+});
 
  function chgAction(obj,str){
 	obj.value=str;

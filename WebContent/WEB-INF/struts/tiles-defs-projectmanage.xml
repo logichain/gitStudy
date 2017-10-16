@@ -59,5 +59,16 @@
 		<put name="body" value="/WEB-INF/pages/projectmanage/attachmentInput.jsp" />
 	</definition>
 	
-		
+	<definition name="testDesignOutputPageDef" extends="mainBaseDef">
+		<put name="title" value="测试式样书导出"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/testDesignOutput.jsp" />
+	</definition>
+	<definition name="testResultOutputPageDef" extends="mainBaseDef">
+		<put name="title" value="测试成绩书导出"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/testResultOutput.jsp" />
+	</definition>	
+	<definition name="caseVersionReferPageDef" extends="mainBaseDef">
+		<put name="title" value="用例版本关联"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/caseVersionRefer.jsp" />
+	</definition>
 </tiles-definitions>

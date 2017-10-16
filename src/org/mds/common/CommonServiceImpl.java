@@ -94,6 +94,10 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 		List<Project> pList = projectService.getProjectList();
 		for(Project p:pList)
 		{
+			if(p.getPStatus().equals(Project.PROJECT_STATUS_CLOSE))
+			{
+				continue;
+			}
 			if(!ua.getAccountName().equals("admin") && !p.isTeamMember(ua))
 			{
 				continue;
@@ -111,6 +115,30 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 			m.setPid("3");
 			m.setMenuName(p.getPName());
 			m.setUrl("teststatistics.do?method=resetDataStatistics&pid=" + p.getPId());
+						
+			menuList.add(m);
+			
+			m = new IcoMenu();
+			m.setId(String.valueOf(100+p.getPId()));
+			m.setPid("6");
+			m.setMenuName(p.getPName());
+			m.setUrl("projectmanage.do?method=testDesignOutput&pid=" + p.getPId());
+						
+			menuList.add(m);
+			
+			m = new IcoMenu();
+			m.setId(String.valueOf(100+p.getPId()));
+			m.setPid("7");
+			m.setMenuName(p.getPName());
+			m.setUrl("projectmanage.do?method=testResultOutput&pid=" + p.getPId());
+						
+			menuList.add(m);
+			
+			m = new IcoMenu();
+			m.setId(String.valueOf(100+p.getPId()));
+			m.setPid("8");
+			m.setMenuName(p.getPName());
+			m.setUrl("projectmanage.do?method=caseVersionRefer&pid=" + p.getPId());
 						
 			menuList.add(m);
 		}

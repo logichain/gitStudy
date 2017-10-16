@@ -13,6 +13,9 @@
 <link rel="shortcut icon" href="./pages/images/favicon.ico" type="image/x-icon" />
 <link href="<c:url value="/pages/style/default/style.css"/>" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="<c:url value='/pages/scripts/calendar.js'/>" charset="gbk"></script>
+
+<script type="text/javascript" src="<c:url value='/pages/editableselect/jquery.editable-select.min.js'/>" ></script>
+<link rel="stylesheet" type="text/css" href="/page/editableselect/jquery.editable-select.min.css" />
 </head>
 
 <body style="overflow-x:hidden;overflow-y:hidden;">

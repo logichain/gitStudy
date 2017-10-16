@@ -13,11 +13,12 @@ import org.mds.project.service.impl.ProjectServiceImpl;
  * Project entity. @author MyEclipse Persistence Tools
  */
 
-public class Project extends org.king.framework.domain.BaseObject implements
-		java.io.Serializable {
+public class Project extends org.king.framework.domain.BaseObject implements java.io.Serializable {
 
 	// Fields
 
+	public static final Integer PROJECT_STATUS_CLOSE = 0;
+	public static final Integer PROJECT_STATUS_NORMAL = 1;
 	/**
 	 * 
 	 */
@@ -29,14 +30,13 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	private String PRemark;
 	private Integer PCreateUser;
 	private Date PCreateTime;
+	private Integer PStatus = PROJECT_STATUS_NORMAL;
 	
 	private ProjectVersion initProjectVersion = new ProjectVersion(); 
 	private ArrayList<ProjectModule> moduleList = new ArrayList<ProjectModule>();
 	private ArrayList<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
 	private ArrayList<TeamMember> memberList = new ArrayList<TeamMember>();
-		
-	private ProjectModule selectedProjectModule = new ProjectModule();
-	
+			
 	private Integer pageItemCount = 30;
 	
 	// Constructors
@@ -209,14 +209,6 @@ public class Project extends org.king.framework.domain.BaseObject implements
 	public void setInitProjectVersion(ProjectVersion initProjectVersion) {
 		this.initProjectVersion = initProjectVersion;
 	}
-
-	public ProjectModule getSelectedProjectModule() {
-		return selectedProjectModule;
-	}
-
-	public void setSelectedProjectModule(ProjectModule selectedProjectModule) {
-		this.selectedProjectModule = selectedProjectModule;
-	}
 	
 	public ArrayList<ModuleFunction> getAllModuleFunctionList()
 	{
@@ -248,6 +240,14 @@ public class Project extends org.king.framework.domain.BaseObject implements
 		}
 		
 		return rtn;
+	}
+
+	public Integer getPStatus() {
+		return PStatus;
+	}
+
+	public void setPStatus(Integer pStatus) {
+		PStatus = pStatus;
 	}
 
 }

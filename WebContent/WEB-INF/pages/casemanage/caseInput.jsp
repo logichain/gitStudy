@@ -33,26 +33,19 @@
 			</td>			
 		</tr>	
 		<tr>
-			<td align="right"><bean:message bundle="case" key="module"/>£º</td>
-			<td align="left">
-				<html:select property="caseInfo.moduleId" style="width:120px" onchange="chgAction(document.all.method,'setCaseModuleForInput');caseForm.submit();">	
-					<html:option value=""></html:option>
-					<html:optionsCollection name="caseForm" property="projectInfo.moduleList" value="pmId" label="pmName"/>
-				</html:select>
-			</td>
+
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
 			<td align="left">			
-				<html:select property="caseInfo.tcModuleFunction" style="width:180px">	
-					<html:option value=""></html:option>									
-					<html:optionsCollection name="caseForm" property="projectInfo.selectedProjectModule.allModuleFunctionList" value="muId" label="entireName"/>									
+				<html:select styleId="editable-select2" styleClass="form-control" property="caseInfo.tcModuleFunction" style="width:180px">	
+														
+					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
 				</html:select>			
-			</td>			
-			
+			</td>						
 			
 		</tr>	
 		<tr>
 			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
-			<td align="left"><html:text property="caseInfo.tcCode" size="14" maxlength="45"/></td>
+			<td align="left"><html:text property="caseInfo.tcCode" size="14" maxlength="45" readonly="true" disabled="true"/></td>
 			<td align="right"><bean:message bundle="case" key="case_type"/>£º</td>
 			<td align="left">
 				<html:select property="caseInfo.tcType" style="width:120px">													
@@ -124,6 +117,10 @@
 <script type="text/javascript" src="<html:rewrite forward='staticjavascript'/>"></script>
 
 <script language="JavaScript">	
+
+$('#editable-select2').editableSelect({
+	effects: 'slide'
+});
 function chgAction(obj,str){
 	obj.value=str;
 }

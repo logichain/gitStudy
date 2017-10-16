@@ -58,6 +58,7 @@
 		</property>
 	</bean>
 	
+	
 	<!-- ************************** SERVICE SETTING *****************************-->
 	<bean id="testCaseService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">

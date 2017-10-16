@@ -49,11 +49,13 @@ public interface TestCaseService extends Service {
 	public CaseVersionReference getCaseVersionReferenceById(Integer id);
 	
 	public List<TestCase> searchTestCaseByVersion(ProjectVersion projectVersion);
-	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,ProjectVersion projectVersion);
+	public void writeTestCaseToXslFile(String filePath,List<TestCase> customerList,ProjectVersion projectVersion,boolean design);
 	public Integer saveImportTestCaseInfo(FormFile formFile,String filePath,UsrAccount user,Project project);
 	
 	public ModuleFunction getModuleFunctionById(Integer id);
 	public CaseType getCaseTypeById(Integer id);
 	public ImportantLevel getImportantLevelById(Integer id);
 	public BugType getBugTypeById(Integer id);
+	
+	public String getTestCaseCode(Integer mfId);
 }

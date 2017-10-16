@@ -191,10 +191,9 @@ public class TestCaseManage extends BaseAction {
 	}
 	
 
-	public ActionForward exportTestCaseByVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-
+	public ActionForward exportTestCaseXLSByVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		String type = request.getParameter("type");
 		Integer pvId = Integer.parseInt(request.getParameter("pvId"));
-
 		ProjectVersion projectVersion = projectService.getProjectVersionById(pvId);
 
 		String uploadPath = request.getSession().getServletContext().getRealPath("");
@@ -202,11 +201,10 @@ public class TestCaseManage extends BaseAction {
 			uploadPath = uploadPath + "\\uploadImportFile\\";
 		}
 		
-
 		List<TestCase> caseList = testCaseService.searchTestCaseByVersion(projectVersion);
-
+		
 		String fileName = uploadPath + "exportCase.xls";
-		testCaseService.writeTestCaseToXslFile(fileName, caseList,projectVersion);
+		testCaseService.writeTestCaseToXslFile(fileName, caseList,projectVersion,"design".equals(type));
 
 		try {
 			response.setContentType(org.king.util.FileUtil.getContentType(fileName));
@@ -235,10 +233,29 @@ public class TestCaseManage extends BaseAction {
 
 		return null;
 	}
+	
+	public ActionForward exportTestCaseDOCByVersion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		String type = request.getParameter("type");
+		Integer pvId = Integer.parseInt(request.getParameter("pvId"));
+		ProjectVersion projectVersion = projectService.getProjectVersionById(pvId);
+		Project projectInfo = projectService.getProjectById(projectVersion.getPvProject());
+
+		List<TestCase> caseList = testCaseService.searchTestCaseByVersion(projectVersion);
+
+		request.setAttribute("caseList", caseList);
+		request.setAttribute("caseCount", caseList.size());
+		
+		request.setAttribute("type",type);
+		request.setAttribute("version",projectVersion.getPvId());
+		request.setAttribute("projectInfo", projectInfo);
+		request.setAttribute("versionInfo", projectVersion);
+		
+		return mapping.findForward("caseExportByVersion");
+	}
 
 	public ActionForward createTestCase(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
-		TestCase searchInfo = (TestCase) dform.get("searchInfo");
+
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 
 		TestCase testCase = new TestCase();
@@ -259,7 +276,7 @@ public class TestCaseManage extends BaseAction {
 		testCase.getTestCorrectRecordList().add(tcr);
 
 		dform.set("caseInfo", testCase);
-
+		
 		this.prepareMetaData(request);
 
 		return mapping.findForward("caseInput");
@@ -740,24 +757,6 @@ public class TestCaseManage extends BaseAction {
 		request.setAttribute("caseTypeList", testCaseService.getCaseTypeList());
 	}
 
-	public ActionForward setCaseModuleForInput(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-		DynaValidatorForm dform = (DynaValidatorForm) form;
-
-		TestCase caseInfo = (TestCase) dform.get("caseInfo");
-		Project projectInfo = (Project) dform.get("projectInfo");
-
-		for (ProjectModule pm : projectInfo.getModuleList()) {
-			if (pm.getPmId().equals(caseInfo.getModuleId())) {
-				projectInfo.setSelectedProjectModule(pm);
-				break;
-			}
-		}
-
-		this.prepareMetaData(request);
-
-		return mapping.findForward("caseInput");
-	}
-
 	public ActionForward saveTestCase(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
@@ -805,8 +804,22 @@ public class TestCaseManage extends BaseAction {
 				}
 			}
 		}
-
+		Integer selectedModuleFunction = testCase.getTcModuleFunction();
+		boolean mfChanged = true;
+		if(testCase.getModuleFunction() != null)
+		{
+			mfChanged = !selectedModuleFunction.equals(testCase.getModuleFunction().getMuId());
+		}
+		
 		testCaseService.saveTestCase(testCase,uploadPath);
+				
+		if(mfChanged)
+		{
+			String code = testCaseService.getTestCaseCode(selectedModuleFunction);
+			testCase.setTcCode(code);
+			
+			testCaseService.saveTestCase(testCase, uploadPath);
+		}
 
 		for (ModuleFunction mu : projectInfo.getAllModuleFunctionList()) {
 			if (mu.getMuId().equals(testCase.getTcModuleFunction())) {
@@ -878,10 +891,11 @@ public class TestCaseManage extends BaseAction {
 		
 		Project projectInfo = (Project) dform.get("projectInfo");
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
+		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
 		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
 
-		Object[] args = { searchInfo, null, functionList };
+		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
 		TestCase testCase = (TestCase) dform.get("caseInfo");
 		testCaseService.saveTestCase(testCase,uploadPath);
@@ -891,8 +905,7 @@ public class TestCaseManage extends BaseAction {
 			return this.redirectToTestCaseListPage(request, response, searchInfo);
 		}
 
-		testCase.setModuleId(testCase.getModuleFunction().getMuModule());
-
+		
 		dform.set("caseInfo", testCase);
 
 		this.prepareMetaData(request);

@@ -7,6 +7,6 @@
 <title>flash</title>
 </head>
 <body>
-<iframe src="http://nihonkohden.com.cn/" frameborder="0" width="100%" height="99%"></iframe>
+<!-- <iframe src="http://nihonkohden.com.cn/" frameborder="0" width="100%" height="99%"></iframe> -->
 </body>
 </html>

@@ -17,22 +17,22 @@
             <column name="pv_version" length="45" not-null="true" />
         </property>
         <property name="pvDevelopLeader" type="java.lang.Integer">
-            <column name="pv_develop_leader" not-null="true" />
+            <column name="pv_develop_leader"  />
         </property>
         <property name="pvTestLeader" type="java.lang.Integer">
-            <column name="pv_test_leader" not-null="true" />
+            <column name="pv_test_leader"  />
         </property>
         <property name="pvDevelopBegin" type="java.lang.String">
-            <column name="pv_develop_begin" length="0" not-null="true" />
+            <column name="pv_develop_begin" length="0" />
         </property>
         <property name="pvDevelopEnd" type="java.lang.String">
-            <column name="pv_develop_end" length="0" not-null="true" />
+            <column name="pv_develop_end" length="0" />
         </property>
         <property name="pvTestBegin" type="java.lang.String">
-            <column name="pv_test_begin" length="0" not-null="true" />
+            <column name="pv_test_begin" length="0" />
         </property>
         <property name="pvTestEnd" type="java.lang.String">
-            <column name="pv_test_end" length="0" not-null="true" />
+            <column name="pv_test_end" length="0" />
         </property>
         <property name="pvFlag" type="java.lang.Integer">
             <column name="pv_flag" not-null="true" />

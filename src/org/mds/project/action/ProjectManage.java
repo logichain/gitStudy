@@ -42,19 +42,60 @@ public class ProjectManage extends BaseAction {
 	private TestCaseService testCaseService;
 
 	
-	public ActionForward confirmTestCaseforReference(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	public ActionForward caseVersionRefer(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+
+		String id = request.getParameter("pid");
+		Project project = projectService.getProjectById(Integer.parseInt(id));
+				
+		dform.set("projectInfo", project);
+		
+		return mapping.findForward("caseVersionRefer");
+	}
+	
+	public ActionForward testDesignOutput(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+
+		String id = request.getParameter("pid");
+		Project project = projectService.getProjectById(Integer.parseInt(id));
+				
+		dform.set("projectInfo", project);
+		
+		return mapping.findForward("testDesignOutput");
+	}
+	
+	public ActionForward testResultOutput(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+
+		String id = request.getParameter("pid");
+		Project project = projectService.getProjectById(Integer.parseInt(id));
+				
+		dform.set("projectInfo", project);
+		
+		return mapping.findForward("testResultOutput");
+	}
+	
+	
+	public ActionForward confirmTestCaseforReference(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		String[] selectedCaseList = request.getParameterValues("selectedCaseList");
 		CaseVersionReference cvr = (CaseVersionReference) dform.get("cvrSearchInfo");
 		
+		Project project = (Project) dform.get("projectInfo");
+		
 		if(selectedCaseList != null)
 		{
 			testCaseService.saveCaseVersionReference(selectedCaseList, cvr.getReferVersion(),ua.getId());
 		}
+		
+		request.setAttribute("pid", project.getPId());
 				
-		return mapping.findForward("refreshProjectInfo");
+		return mapping.findForward("refreshCaseVersionRefer");
 	}
 
 	public ActionForward resetSearchTestCaseforRenference(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -537,6 +578,27 @@ public class ProjectManage extends BaseAction {
 		return this.searchProject(mapping, dform, request, response);
 	}
 	
+	public ActionForward enableProject(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		
+		String id = request.getParameter("id");
+		Project project = projectService.getProjectById(Integer.parseInt(id));
+		
+		if(project.getPStatus().equals(Project.PROJECT_STATUS_CLOSE))
+		{
+			project.setPStatus(Project.PROJECT_STATUS_NORMAL);
+		}
+		else
+		{
+			project.setPStatus(Project.PROJECT_STATUS_CLOSE);
+		}
+		
+		projectService.saveProject(project);
+		
+		return this.searchProject(mapping, dform, request, response);
+	}
+	
 	public ActionForward editProjectVersion(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -608,11 +670,15 @@ public class ProjectManage extends BaseAction {
 		project.setProjectVersionList(vtrList);
 		
 		//当开发、测试leader不是项目成员时，自动添加为项目成员
-		projectService.addTeamMember(project, project.getInitProjectVersion().getDevelopLeader());	
+		if(project.getInitProjectVersion().getPvDevelopLeader() != null)
+		{
+			projectService.addTeamMember(project, project.getInitProjectVersion().getDevelopLeader());
+		}			
 		projectService.addTeamMember(project, project.getInitProjectVersion().getTestLeader());
 		
 		return this.resetSearchProject(mapping, dform, request, response);
 	}
+	
 	public ActionForward saveProjectVersion(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;

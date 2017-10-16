@@ -52,6 +52,7 @@
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="develop"/></td>
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="test"/></td>
 				<td rowspan="2" align="center"><bean:message bundle="project" key="remark"/></td>
+				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="task_status"/></td>
 				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="edit"/></td>
 				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="delete"/></td>				
 			</tr>
@@ -84,13 +85,25 @@
 							</td>							
 							<td align="center"><bean:write name="p" property="PName"/></td>					
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvVersion"/></td>		
-							<td align="center"><bean:write name="p" property="initProjectVersion.developLeader.personName"/></td>
+							<td align="center">
+								<logic:notEmpty name="p" property="initProjectVersion.developLeader">
+									<bean:write name="p" property="initProjectVersion.developLeader.personName"/>
+								</logic:notEmpty>
+							</td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvDevelopBegin"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvDevelopEnd"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.testLeader.personName"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestBegin"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestEnd"/></td>
 							<td align="center"><bean:write name="p" property="PRemark"/></td>
+							<td align="center">
+								<logic:equal name="p" property="PStatus" value="1">
+									<input type="checkbox" checked onclick='chgAction(document.all.id,"<bean:write  name="p" property="PId" />");chgAction(document.all.method,"enableProject");projectForm.submit();'>
+								</logic:equal>	
+								<logic:equal name="p" property="PStatus" value="0">
+									<input type="checkbox" onclick='chgAction(document.all.id,"<bean:write  name="p" property="PId" />");chgAction(document.all.method,"enableProject");projectForm.submit();'>
+								</logic:equal>
+							</td>
 							<td align="center">								
 								<a href='projectmanage.do?method=editProject&id=<bean:write name="p" property="PId"/>'><img border="0" src="pages\images\icon\16x16\modify.gif"></a>
 							</td>							

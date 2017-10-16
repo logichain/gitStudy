@@ -21,6 +21,9 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 
 	// Fields
 
+	public static final String CODE_MODULEFUNCTION_DIVIDE = ".";
+	public static final String CODE_SERIALNUM_DIVIDE = "-";
+	public static final String MODULEFUNCTION_NAME_DIVIDE = "¡ú";
 	/**
 	 * 
 	 */
@@ -329,6 +332,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	{
 		TestCase rtn = new TestCase();
 				
+		rtn.setTcModuleFunction(this.tcModuleFunction);
 		rtn.setTcTestObjective(tcTestObjective);
 		rtn.setTcTestContent(tcTestContent);
 		rtn.setTcTestStep(tcTestStep);

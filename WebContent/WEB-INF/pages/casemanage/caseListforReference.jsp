@@ -7,7 +7,7 @@
 	<input type="hidden" name="id" value="">
 	<table CELLPADDING="2" CELLSPACING="0" width="100%" border="0">		
 		<tr><td width="10%" align="right" class="strong"><bean:message bundle="case" key="project"/>:</td>
-			<td width="15%" align="left" class="strong"><bean:write name="caseForm" property="projectInfo.PName"/></td>
+			<td width="15%" align="left" class="strong"><bean:write name="projectForm" property="projectInfo.PName"/></td>
 			<td width="10%"></td><td width="15%"></td><td width="10%"></td><td width="15%"></td>
 			<td width="10%"></td><td></td>
 		</tr>			
@@ -16,14 +16,14 @@
 			<td align="left">
 				<html:select property="searchInfo.moduleId" style="width:120px">	
 					<html:option value=""></html:option>
-					<html:optionsCollection name="caseForm" property="projectInfo.moduleList" value="pmId" label="pmName"/>
+					<html:optionsCollection name="projectForm" property="projectInfo.moduleList" value="pmId" label="pmName"/>
 				</html:select>
 			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>:</td>
 			<td align="left">			
 				<html:select property="searchInfo.tcModuleFunction" style="width:120px">	
 					<html:option value=""></html:option>									
-					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
+					<html:optionsCollection name="projectForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
 				</html:select>			
 			</td>
 			<td align="right"><bean:message bundle="case" key="case_code"/>:</td><td align="left"><html:text property="searchInfo.tcCode" size="14"/></td>
@@ -93,12 +93,12 @@
 			<td align="left">
 				<html:select property="cvrSearchInfo.cvrProjectVersion" style="width:120px">	
 					<html:option value=""></html:option>									
-					<html:optionsCollection name="caseForm" property="projectInfo.projectVersionList" value="pvId" label="pvVersion"/>									
+					<html:optionsCollection name="projectForm" property="projectInfo.projectVersionList" value="pvId" label="pvVersion"/>									
 				</html:select>
 			</td>
 			<td align="right"><bean:message bundle="case" key="page_itemcount"/>:</td>
 			<td align="left">
-				<html:select property="searchInfo.pageItemCount" style="width:120px" onchange="caseForm.submit();">	
+				<html:select property="searchInfo.pageItemCount" style="width:120px" onchange="projectForm.submit();">	
 					<html:option value="20">20</html:option>
 					<html:option value="30">30</html:option>
 					<html:option value="40">40</html:option>
@@ -123,7 +123,7 @@
 				
 			
 
-<bean:define id="pageCount" name="caseForm" property="searchInfo.pageItemCount"></bean:define>
+<bean:define id="pageCount" name="projectForm" property="searchInfo.pageItemCount"></bean:define>
 <bean:define id="itemNo" name="caseCount"></bean:define>
 <pg:pager url="./projectmanage.do" items="<%=Integer.valueOf(itemNo.toString())%>" index="center" maxPageItems="<%=Integer.valueOf(pageCount.toString())%>" maxIndexPages="10" isOffset="<%= true %>" export="offset,currentPageNumber=pageNumber" scope="request">
 	<%-- keep track of preference --%>						

@@ -76,7 +76,6 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	private ModuleFunctionDAO moduleFunctionDAO;
 	private CaseAttachmentDAO caseAttachmentDAO;
 	private CaseTypeDAO caseTypeDAO;
-	
 
 	@Override
 	public void saveCaseVersionReference(String[] caseIdList, Integer versionId,Integer userId) {
@@ -646,7 +645,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
         return testCaseDAO.find(hqlStr);
 	}
-	public void writeTestCaseToXslFile(String filePath,List<TestCase> testCaseList,ProjectVersion projectVersion) 
+	public void writeTestCaseToXslFile(String filePath,List<TestCase> testCaseList,ProjectVersion projectVersion,boolean design) 
 	{		
 		File file = new File(filePath);
 		
@@ -758,17 +757,21 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				}							
 				wst.addCell(lbl);	
 				
-				//≤‚ ‘ ‰≥ˆ				
-				cf = wst.getWritableCell(8,i).getCellFormat();
-				lbl = new Label(8,i, cvr.getCvrCaseOutput());
-				if(cf != null)
+				//≤‚ ‘ ‰≥ˆ		
+				if(!design)
 				{
-					lbl.setCellFormat(cf);
-				}							
-				wst.addCell(lbl);
+					cf = wst.getWritableCell(8,i).getCellFormat();
+					lbl = new Label(8,i, cvr.getCvrCaseOutput());
+					if(cf != null)
+					{
+						lbl.setCellFormat(cf);
+					}							
+					wst.addCell(lbl);
+				}
+				
 					
 				//≤‚ ‘Ω·π˚					
-				if(cvr.getTestResult() != null)
+				if(cvr.getTestResult() != null && !design)
 				{
 					cf = wst.getWritableCell(9,i).getCellFormat();
 					lbl = new Label(9,i, cvr.getTestResult().getTrName());
@@ -790,7 +793,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				wst.addCell(lbl);
 				
 				//≤‚ ‘»À
-				if(cvr.getTestUser() != null)
+				if(cvr.getTestUser() != null && !design)
 				{
 					cf = wst.getWritableCell(11,i).getCellFormat();
 					lbl = new Label(11,i, cvr.getTestUser().getPersonName());
@@ -800,8 +803,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 					}							
 					wst.addCell(lbl);
 				}
-											
-								
+												
 				i++;
 			}		
 		
@@ -818,8 +820,32 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 	}
 	
+	public String getTestCaseCode(Integer mfId)
+	{
+		String rtn = "";
+		
+		String mfCode = moduleFunctionDAO.get(mfId).getEntireCode();
+		
+		String hqlStr = "select a from TestCase a where a.tcModuleFunction = " + mfId + " and a.tcCode like '%" + mfCode + "%'";
+		
+		TestCase tc = this.retrieveTestCase(hqlStr);
+		
+		if(tc != null)
+		{
+			Integer index = tc.getTcCode().indexOf(TestCase.CODE_SERIALNUM_DIVIDE);
+			String code = tc.getTcCode().substring(index +1);
+			code = "0000" + (Integer.parseInt(code) + 1);
+			
+			rtn = mfCode + TestCase.CODE_SERIALNUM_DIVIDE + code.substring(code.length() -4);
+		}
+		else
+		{
+			rtn = mfCode + TestCase.CODE_SERIALNUM_DIVIDE + "0001";
+		}
+		
+		return rtn;
+	}
 	
-
 	public void saveTestCase(TestCase testCase,String uploadPath) {		
 		// TODO Auto-generated method stub
 		ArrayList<TestCorrectRecord> recordList = testCase.getTestCorrectRecordList();
@@ -829,7 +855,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		testCase.setAttachmentList(new ArrayList<CaseAttachment>());
 		testCase.setTestCorrectRecordList(new ArrayList<TestCorrectRecord>());
 		testCase.setCaseVersionReferenceList(new ArrayList<CaseVersionReference>());
-		
+				
 		if(testCase.getTcId() == null)
 		{
 			testCaseDAO.save(testCase);
@@ -925,10 +951,19 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 		String referedCaseList = this.getReferedCaseListStr(cvrSearchInfo.getReferVersion(), functionList);
 		
-		String hqlStr = "select a from TestCase a " +
+		String hqlStr = null ;
+		if(cvrSearchInfo.isSearchInfoEmpty())
+		{			
+			hqlStr = "select a from TestCase a " +
 					" where a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList + 
-					" and a.tcFlag != " + CaseStatus.DELETE_STATUS ;
-		
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS ;			
+		}
+		else
+		{
+			hqlStr = "select distinct a from TestCase a,CaseVersionReference e " +
+					" where  a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList +
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and  e.cvrFlag != " + CommonService.DELETE_FLAG ;
+		}
 						        
         return this.retrieveTestCaseList(searchInfo,cvrSearchInfo, hqlStr,Integer.parseInt(page));		 
 	}
@@ -1070,9 +1105,18 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 		String referedCaseList = this.getReferedCaseListStr(cvrSearchInfo.getReferVersion(), functionList);
 		
-		String hqlStr = "select  count(a) from TestCase a " +
-					" where a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList + 
-					" and a.tcFlag != " + CaseStatus.DELETE_STATUS ;
+		String hqlStr = null;
+		if(cvrSearchInfo.isSearchInfoEmpty())			
+		{			
+			hqlStr = "select count(a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS + 
+					" and a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList;			
+		}
+		else
+		{
+			hqlStr = "select  count(distinct a) from TestCase a,CaseVersionReference e " +
+					" where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList + " and a.tcId not in " + referedCaseList + 
+					" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
+		}  
 		    			    	
     	hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
     	hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
@@ -1199,7 +1243,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
 		hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
 		
-		return this.retrieveTestCase(searchInfo, hqlStr,isNext,id);
+		return this.retrieveTestCase(hqlStr,isNext,id);
 	}
 	
 	public TestCase getTestCasePreviousDisplay(Object[] args,Integer id) {
@@ -1211,13 +1255,13 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		return this.getTestCaseDisplay(searchInfo, id, false,cvrSearchInfo,functionList);
 	}
 	
-	private TestCase retrieveTestCase(TestCase searchInfo,String hqlStr,boolean isNext,Integer id)
+	private TestCase retrieveTestCase(String hqlStr,boolean isNext,Integer id)
 	{	    	
     	MyQuery myQuery = new MyQuery();
     	myQuery.setPageSize(1);    	
         myQuery.setPageStartNo(0);
-                
-        if(isNext)
+                       
+    	if(isNext)
         {
         	hqlStr =  hqlStr + " and a.tcId > " + id;
         	myQuery.setOrderby(" order by a.tcId");
@@ -1227,6 +1271,23 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
         	hqlStr =  hqlStr + " and a.tcId < " + id;
         	myQuery.setOrderby(" order by a.tcId desc");
         }
+                
+        myQuery.setQueryString(hqlStr);
+
+        myQuery.setOffset(true);
+       
+        List<TestCase>  list = testCaseDAO.find(myQuery);
+        
+        return list.size()==0?null:list.get(0);
+	}
+	
+	private TestCase retrieveTestCase(String hqlStr)
+	{	    	
+    	MyQuery myQuery = new MyQuery();
+    	myQuery.setPageSize(1);    	
+        myQuery.setPageStartNo(0);
+                                  	
+        myQuery.setOrderby(" order by a.tcCode desc");       
         
         myQuery.setQueryString(hqlStr);
 
@@ -1237,6 +1298,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
         return list.size()==0?null:list.get(0);
 	}
 	
+		
 	private List<TestCase> retrieveTestCaseList(TestCase searchInfo,CaseVersionReference cvrSearchInfo,String hqlStr,int pageNum)
 	{		
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
@@ -1282,7 +1344,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
 		hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
 		
-		 return this.retrieveTestCase(searchInfo, hqlStr,isNext,id);
+		 return this.retrieveTestCase(hqlStr,isNext,id);
 	}
 	
 	public TestCase getTestCasePreviousEdit(Object[] args,Integer id) {
@@ -1313,7 +1375,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
 		hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
 		
-		 return this.retrieveTestCase(searchInfo, hqlStr,isNext,id);
+		 return this.retrieveTestCase(hqlStr,isNext,id);
 	}
 	
 	public TestCase getTestCasePreviousTest(Object[] args,Integer id) {
@@ -1344,7 +1406,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		hqlStr = TestCaseServiceImpl.processQuerySql(searchInfo, hqlStr);
 		hqlStr = TestCaseServiceImpl.processQuerySql(cvrSearchInfo, hqlStr);
 			
-		 return this.retrieveTestCase(searchInfo, hqlStr,isNext,id);
+		 return this.retrieveTestCase(hqlStr,isNext,id);
 	}
 	
 	public TestCase getTestCasePreviousCorrect(Object[] args,Integer id) {

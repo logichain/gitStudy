@@ -127,34 +127,54 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	}
 
 	public String getPvDevelopBegin() {
+		if("".equals(pvDevelopBegin))
+		{
+			return null;
+		}
 		return this.pvDevelopBegin;
 	}
 
 	public void setPvDevelopBegin(String pvDevelopBegin) {
+		
 		this.pvDevelopBegin = pvDevelopBegin;
 	}
 
 	public String getPvDevelopEnd() {
+		if("".equals(pvDevelopEnd))
+		{
+			return null;
+		}
 		return this.pvDevelopEnd;
 	}
 
 	public void setPvDevelopEnd(String pvDevelopEnd) {
+	
 		this.pvDevelopEnd = pvDevelopEnd;
 	}
 
 	public String getPvTestBegin() {
+		if("".equals(pvTestBegin))
+		{
+			return null;
+		}
 		return this.pvTestBegin;
 	}
 
 	public void setPvTestBegin(String pvTestBegin) {
+		
 		this.pvTestBegin = pvTestBegin;
 	}
 
 	public String getPvTestEnd() {
+		if("".equals(pvTestEnd))
+		{
+			return null;
+		}
 		return this.pvTestEnd;
 	}
 
 	public void setPvTestEnd(String pvTestEnd) {
+		
 		this.pvTestEnd = pvTestEnd;
 	}
 

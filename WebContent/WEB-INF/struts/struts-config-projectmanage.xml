@@ -35,6 +35,11 @@
 			<forward name="refreshProjectInput" path="/WEB-INF/pages/projectmanage/refreshProjectInput.jsp" redirect="false"/>
 			<forward name="attachmentInput" path="attachmentInputPageDef" redirect="false" />
 			<forward name="caseListForReference" path="caseListForReferenceDef" redirect="false" />
+			
+			<forward name="testDesignOutput" path="testDesignOutputPageDef" redirect="false" />
+			<forward name="testResultOutput" path="testResultOutputPageDef" redirect="false" />
+			<forward name="caseVersionRefer" path="caseVersionReferPageDef" redirect="false" />
+			<forward name="refreshCaseVersionRefer" path="/WEB-INF/pages/projectmanage/refreshCaseVersionRefer.jsp" redirect="false"/>
 		</action>		
 	</action-mappings>
 </struts-config>

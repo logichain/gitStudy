@@ -109,9 +109,7 @@
 			<field property="caseInfo.tcModuleFunction" depends="required">
 				<arg position="0" bundle="case" key="module_function"  />
 			</field>
-			<field property="caseInfo.tcCode" depends="required">
-				<arg position="0" bundle="case" key="case_code"  />
-			</field>
+		
 			<field property="caseInfo.tcTestObjective" depends="required">
 				<arg position="0" bundle="case" key="test_objective"  />
 			</field>
@@ -126,15 +124,15 @@
 			<field property="projectInfo.initProjectVersion.pvVersion" depends="required">
 				<arg position="0" bundle="project" key="version_code"  />
 			</field>
-			<field property="projectInfo.initProjectVersion.developLeader.personName" depends="required">
-				<arg position="0" bundle="project" key="develop_leader"  />
-			</field>
-			<field property="projectInfo.initProjectVersion.pvDevelopBegin" depends="required">
-				<arg position="0" bundle="project" key="develop_begin"  />
-			</field>
-			<field property="projectInfo.initProjectVersion.pvDevelopEnd" depends="required">
-				<arg position="0" bundle="project" key="develop_end"  />
-			</field>
+<!-- 			<field property="projectInfo.initProjectVersion.developLeader.personName" depends="required"> -->
+<!-- 				<arg position="0" bundle="project" key="develop_leader"  /> -->
+<!-- 			</field> -->
+<!-- 			<field property="projectInfo.initProjectVersion.pvDevelopBegin" depends="required"> -->
+<!-- 				<arg position="0" bundle="project" key="develop_begin"  /> -->
+<!-- 			</field> -->
+<!-- 			<field property="projectInfo.initProjectVersion.pvDevelopEnd" depends="required"> -->
+<!-- 				<arg position="0" bundle="project" key="develop_end"  /> -->
+<!-- 			</field> -->
 			<field property="projectInfo.initProjectVersion.testLeader.personName" depends="required">
 				<arg position="0" bundle="project" key="test_leader"  />
 			</field>

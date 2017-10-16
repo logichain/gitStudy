@@ -18,6 +18,10 @@
         <property name="PFlag" type="java.lang.Integer">
             <column name="p_flag" />
         </property>
+        <property name="PStatus" type="java.lang.Integer">
+            <column name="p_status" />
+        </property>
+        
         <property name="PRemark" type="string">
             <column name="p_remark" length="200" />
         </property>

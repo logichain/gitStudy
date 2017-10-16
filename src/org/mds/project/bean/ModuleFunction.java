@@ -1,10 +1,12 @@
 package org.mds.project.bean;
 
 import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import org.mds.common.CommonService;
+import org.mds.test.bean.TestCase;
 
 /**
  * ModuleFunction entity. @author MyEclipse Persistence Tools
@@ -75,6 +77,19 @@ public class ModuleFunction extends org.king.framework.domain.BaseObject impleme
 		return rtn;		
 	}
 	
+	public String getEntireCode() {
+		String rtn = "";
+		
+		if(this.muId != null)
+		{
+			String code = "00" + muId.toString();
+			code = code.substring(code.length() -2);
+			rtn = this.getParentFunctionEntireCode(this,code);				
+		}		
+				
+		return rtn;		
+	}
+	
 	public String getEntireModuleFunctionName() {
 		String rtn = "";
 		
@@ -103,11 +118,31 @@ public class ModuleFunction extends org.king.framework.domain.BaseObject impleme
 		
 		if(mf.getParentFunction() != null)
 		{
-			rtn = this.getParentFunctionEntireName(mf.getParentFunction(), mf.getParentFunction().getMuName() + "¡ú" + name,hasPmName);
+			rtn = this.getParentFunctionEntireName(mf.getParentFunction(), mf.getParentFunction().getMuName() + TestCase.MODULEFUNCTION_NAME_DIVIDE + name,hasPmName);
 		}
 		else if(mf.getProjectModule() != null && hasPmName)
 		{
-			rtn = mf.getProjectModule().getPmName() + "¡ú" + name;
+			rtn = mf.getProjectModule().getPmName() + TestCase.MODULEFUNCTION_NAME_DIVIDE + name;
+		}
+		
+		return rtn;
+	}
+	
+	private String getParentFunctionEntireCode(ModuleFunction mf,String name)
+	{
+		String rtn = name;
+		
+		if(mf.getParentFunction() != null)
+		{
+			String code = "00" + mf.getParentFunction().getMuId();
+			code = code.substring(code.length() -2);
+			rtn = this.getParentFunctionEntireCode(mf.getParentFunction(), code + TestCase.CODE_MODULEFUNCTION_DIVIDE + name);
+		}
+		else if(mf.getProjectModule() != null)
+		{
+			String code = "00" + mf.getProjectModule().getPmId();
+			code = code.substring(code.length() -2);
+			rtn = code + TestCase.CODE_MODULEFUNCTION_DIVIDE + name;
 		}
 		
 		return rtn;
