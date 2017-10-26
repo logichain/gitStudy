@@ -43,6 +43,8 @@ import org.mds.test.bean.CaseType;
 import org.mds.test.bean.CaseTypeDAO;
 import org.mds.test.bean.CaseVersionReference;
 import org.mds.test.bean.CaseVersionReferenceDAO;
+import org.mds.test.bean.CvrAttachment;
+import org.mds.test.bean.CvrAttachmentDAO;
 import org.mds.test.bean.ImportantLevel;
 import org.mds.test.bean.ImportantLevelDAO;
 import org.mds.test.bean.TestCase;
@@ -76,7 +78,8 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	private ModuleFunctionDAO moduleFunctionDAO;
 	private CaseAttachmentDAO caseAttachmentDAO;
 	private CaseTypeDAO caseTypeDAO;
-
+	private CvrAttachmentDAO cvrAttachmentDAO;
+	
 	@Override
 	public void saveCaseVersionReference(String[] caseIdList, Integer versionId,Integer userId) {
 		// TODO Auto-generated method stub
@@ -148,7 +151,10 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			// 迭代文档中的表格
 			while (it.hasNext()) {
 				Table tb = (Table) it.next();
-				
+				if(tb.numRows() < 8)
+				{
+					continue;
+				}
 				TestCase tc = new TestCase();
 				tc.setTcCreateUser(user.getId());
 				tc.setTcFlag(CommonService.NORMAL_FLAG);
@@ -188,36 +194,24 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
 								{
 									String functionName = content;
+									
 									if(functionName != null && !functionName.isEmpty())
-									{
-										List<ModuleFunction> rtnList = moduleFunctionDAO.find("select a from ModuleFunction a where  a.muName like '%" + functionName + "%'");
-										if(rtnList.size() > 0)
+									{			
+										for(ModuleFunction mf:project.getAllModuleFunctionList())
 										{
-											Project cp = null;
-											for(ModuleFunction mf:rtnList)
-											{
-												if(mf.getParentFunction() != null)
-												{
-													cp = mf.getParentFunction().getProjectModule().getProject();
-												}
-												else
-												{
-													cp = mf.getProjectModule().getProject();
-												}
-												
-												if(cp.equals(project))
-												{
-													tc.setTcModuleFunction(rtnList.get(0).getMuId());
-													break;
-												}									
+											if(mf.getEntireName().endsWith(functionName.trim()))
+											{												
+												tc.setTcModuleFunction(mf.getMuId());
+												String code = this.getTestCaseCode(mf);
+												tc.setTcCode(code);
+												break;	
 											}
-											
 										}
 									}												
 								}
 								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[2]))//用例编号
 								{
-									tc.setTcCode(content);
+//									tc.setTcCode(content);
 								}
 								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[3]))//测试目的
 								{
@@ -311,6 +305,10 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 						
 			// 迭代文档中的表格
 			for (XWPFTable table : tableList) {			
+				if(table.getNumberOfRows() < 8)
+				{
+					continue;
+				}
 				TestCase tc = new TestCase();
 				tc.setTcCreateUser(user.getId());
 				tc.setTcType(CaseType.CASE_TYPE_NORMAL);
@@ -345,39 +343,27 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 									content = content.substring(1);
 								}	
 								
+								
 								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
 								{
 									String functionName = content;
 									if(functionName != null && !functionName.isEmpty())
-									{
-										List<ModuleFunction> rtnList = moduleFunctionDAO.find("select a from ModuleFunction a where  a.muName like '%" + functionName + "%'");
-										if(rtnList.size() > 0)
+									{													
+										for(ModuleFunction mf:project.getAllModuleFunctionList())
 										{
-											Project cp = null;
-											for(ModuleFunction mf:rtnList)
-											{
-												if(mf.getParentFunction() != null)
-												{
-													cp = mf.getParentFunction().getProjectModule().getProject();
-												}
-												else
-												{
-													cp = mf.getProjectModule().getProject();
-												}
-												
-												if(cp.equals(project))
-												{
-													tc.setTcModuleFunction(rtnList.get(0).getMuId());
-													break;
-												}									
+											if(mf.getEntireName().endsWith(functionName.trim()))
+											{												
+												tc.setTcModuleFunction(mf.getMuId());
+												String code = this.getTestCaseCode(mf);
+												tc.setTcCode(code);
+												break;	
 											}
-											
-										}
+										}											
 									}												
 								}
 								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[2]))//用例编号
 								{
-									tc.setTcCode(content);
+//									tc.setTcCode(content);
 								}
 								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[3]))//测试目的
 								{
@@ -517,35 +503,22 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 					{
 						String functionName = st.getCell(j, i).getContents().trim();
 						if(functionName != null && !functionName.isEmpty())
-						{
-							List<ModuleFunction> rtnList = moduleFunctionDAO.find("select a from ModuleFunction a where  a.muName like '%" + functionName + "%'");
-							if(rtnList.size() > 0)
+						{			
+							for(ModuleFunction mf:project.getAllModuleFunctionList())
 							{
-								Project cp = null;
-								for(ModuleFunction mf:rtnList)
-								{
-									if(mf.getParentFunction() != null)
-									{
-										cp = mf.getParentFunction().getProjectModule().getProject();
-									}
-									else
-									{
-										cp = mf.getProjectModule().getProject();
-									}
-									
-									if(cp.equals(project))
-									{
-										tc.setTcModuleFunction(rtnList.get(0).getMuId());
-										break;
-									}									
+								if(mf.getEntireName().endsWith(functionName.trim()))
+								{												
+									tc.setTcModuleFunction(mf.getMuId());
+									String code = this.getTestCaseCode(mf);
+									tc.setTcCode(code);
+									break;	
 								}
-								
 							}
-						}												
+						}																		
 					}
 					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[2]))//用例编号
-					{
-						tc.setTcCode(st.getCell(j, i).getContents().trim());
+					{						
+//						tc.setTcCode(st.getCell(j, i).getContents().trim());
 					}
 					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[3]))//测试目的
 					{
@@ -820,20 +793,20 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		
 	}
 	
-	public String getTestCaseCode(Integer mfId)
+	private String getTestCaseCode(ModuleFunction mf)
 	{
 		String rtn = "";
 		
-		String mfCode = moduleFunctionDAO.get(mfId).getEntireCode();
+		String mfCode = mf.getEntireCode();
 		
-		String hqlStr = "select a from TestCase a where a.tcModuleFunction = " + mfId + " and a.tcCode like '%" + mfCode + "%'";
+		String hqlStr = "select a.tcCode from TestCase a where a.tcModuleFunction = " + mf.getMuId() + " and a.tcCode like '%" + mfCode + "%'";
 		
-		TestCase tc = this.retrieveTestCase(hqlStr);
+		String caseCode = this.retrieveTestCase(hqlStr);
 		
-		if(tc != null)
+		if(caseCode != null)
 		{
-			Integer index = tc.getTcCode().indexOf(TestCase.CODE_SERIALNUM_DIVIDE);
-			String code = tc.getTcCode().substring(index +1);
+			Integer index = caseCode.indexOf(TestCase.CODE_SERIALNUM_DIVIDE);
+			String code = caseCode.substring(index +1);
 			code = "0000" + (Integer.parseInt(code) + 1);
 			
 			rtn = mfCode + TestCase.CODE_SERIALNUM_DIVIDE + code.substring(code.length() -4);
@@ -856,6 +829,16 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		testCase.setTestCorrectRecordList(new ArrayList<TestCorrectRecord>());
 		testCase.setCaseVersionReferenceList(new ArrayList<CaseVersionReference>());
 				
+		ModuleFunction mf = testCase.getModuleFunction();
+		String mfCode = mf.getEntireCode();		
+		String oldCode = testCase.getTcCode();
+		
+		if(oldCode == null || !mfCode.equals(oldCode.substring(0,oldCode.length()-5)))
+		{			
+			String code = this.getTestCaseCode(mf);
+			testCase.setTcCode(code);
+		}			
+		
 		if(testCase.getTcId() == null)
 		{
 			testCaseDAO.save(testCase);
@@ -888,7 +871,9 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		}
 		
 		for(CaseVersionReference cvr:cvrList)
-		{					
+		{			
+			ArrayList<CvrAttachment> cvrAttachmentList = cvr.getAttachmentList();
+			cvr.setAttachmentList(new ArrayList<CvrAttachment>());
 			if(cvr.getCvrId() == null)
 			{
 				cvr.setCvrTestCase(testCase.getTcId());
@@ -898,16 +883,35 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			{
 				caseVersionReferenceDAO.update(cvr);
 			}			
+			
+			cvr.setAttachmentList(cvrAttachmentList);
+			
+			for (CvrAttachment pa : cvrAttachmentList) {
+				if (pa.getCaId() == null && pa.getCaFlag().equals(CommonService.NORMAL_FLAG)) {
+					String fileName = FileUtil.saveUploadFile(pa.getAttachmentFile(),
+							uploadPath + "uploadImportFile\\cvrAttachment\\" + cvr.getCvrId());
+
+					pa.setCaCaseVersionReference(cvr.getCvrId());
+					pa.setCaCreateTime(new Date());
+					pa.setCaUrl("uploadImportFile\\cvrAttachment\\" + cvr.getCvrId() + "\\" + fileName);
+
+					cvrAttachmentDAO.save(pa);
+				}
+				else if (pa.getCaId() != null)
+				{
+					cvrAttachmentDAO.update(pa);
+				}
+			}
 		}
 		
 		for (CaseAttachment pa : attachmentList) {
 			if (pa.getCaId() == null && pa.getCaFlag().equals(CommonService.NORMAL_FLAG)) {
 				String fileName = FileUtil.saveUploadFile(pa.getAttachmentFile(),
-						uploadPath + "caseAttachment\\" + testCase.getTcId());
+						uploadPath + "uploadImportFile\\caseAttachment\\" + testCase.getTcId());
 
 				pa.setCaTestCase(testCase.getTcId());
 				pa.setCaCreateTime(new Date());
-				pa.setCaUrl(uploadPath + "caseAttachment\\" + testCase.getTcId() + "\\" + fileName);
+				pa.setCaUrl("uploadImportFile\\caseAttachment\\" + testCase.getTcId() + "\\" + fileName);
 
 				caseAttachmentDAO.save(pa);
 			}
@@ -1281,7 +1285,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
         return list.size()==0?null:list.get(0);
 	}
 	
-	private TestCase retrieveTestCase(String hqlStr)
+	private String retrieveTestCase(String hqlStr)
 	{	    	
     	MyQuery myQuery = new MyQuery();
     	myQuery.setPageSize(1);    	
@@ -1293,7 +1297,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 
         myQuery.setOffset(true);
        
-        List<TestCase>  list = testCaseDAO.find(myQuery);
+        List<String>  list = testCaseDAO.getBaseDAO().findEntity(myQuery);
         
         return list.size()==0?null:list.get(0);
 	}
@@ -1329,7 +1333,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		if(cvrSearchInfo.isSearchInfoEmpty())
 		{
 			hqlStr = "select a from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS ;
-			if(searchInfo.getModuleId() != null)
+			if(searchInfo.getProjectModule() != null)
 			{
 				hqlStr = hqlStr + " and a.tcModuleFunction in " + functionList;
 			}
@@ -1564,6 +1568,14 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 	public BugType getBugTypeById(Integer id) {
 		// TODO Auto-generated method stub
 		return bugTypeDAO.get(id);
+	}
+
+	public CvrAttachmentDAO getCvrAttachmentDAO() {
+		return cvrAttachmentDAO;
+	}
+
+	public void setCvrAttachmentDAO(CvrAttachmentDAO cvrAttachmentDAO) {
+		this.cvrAttachmentDAO = cvrAttachmentDAO;
 	}
 
 }

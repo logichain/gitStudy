@@ -57,7 +57,11 @@
 			<ref bean="baseDAO" />
 		</property>
 	</bean>
-	
+	<bean id="cvrAttachmentDAO" class="org.mds.test.bean.CvrAttachmentDAO">
+		<property name="baseDAO">
+			<ref bean="baseDAO" />
+		</property>
+	</bean>
 	
 	<!-- ************************** SERVICE SETTING *****************************-->
 	<bean id="testCaseService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -97,7 +101,10 @@
 				
 				<property name="caseTypeDAO">
 					<ref local="caseTypeDAO" />
-				</property>	
+				</property>
+				<property name="cvrAttachmentDAO">
+					<ref local="cvrAttachmentDAO" />
+				</property>			
 			</bean>
 		</property>
 		<property name="transactionAttributes">

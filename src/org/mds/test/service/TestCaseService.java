@@ -57,5 +57,4 @@ public interface TestCaseService extends Service {
 	public ImportantLevel getImportantLevelById(Integer id);
 	public BugType getBugTypeById(Integer id);
 	
-	public String getTestCaseCode(Integer mfId);
 }

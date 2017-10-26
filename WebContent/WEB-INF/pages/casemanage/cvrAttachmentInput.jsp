@@ -28,8 +28,7 @@
 <html:form action="casemanage.do" enctype="multipart/form-data" onsubmit="return checkFormValidate();" >
 	<html:errors />
 	
-	<input type="hidden" name="method" value="confirmAttachment">
-	<input type="hidden" name="opType" value="<%=request.getParameter("opType")%>">				
+	<input type="hidden" name="method" value="confirmCvrAttachment">			
 	<table class="win" width="98%" border="1">		
 		
 		<tr>
@@ -37,8 +36,8 @@
 				<bean:message bundle="project" key="attachment_selectfile" />£º
 			</td>
 			<td id="filetd" align="left">
-				<html:file property="caseInfo.currentAttachment.attachmentFile" styleId="selectFile" size="60"  onchange="document.getElementById('selectFile').value=this.value"></html:file>	
-				<html:hidden property="caseInfo.currentAttachment.caLocalUrl"/>				
+				<html:file property="caseInfo.currentCaseVersionReference.currentAttachment.attachmentFile" styleId="selectFile" size="60"  onchange="document.getElementById('selectFile').value=this.value"></html:file>	
+				<html:hidden property="caseInfo.currentCaseVersionReference.currentAttachment.caLocalUrl"/>				
 			</td>				
 		</tr>
 		
@@ -47,7 +46,7 @@
 				<bean:message bundle="project" key="attachment_filecode" />£º
 			</td>
 			<td align="left">						
-				<html:text property="caseInfo.currentAttachment.caCode" styleId="fileCode" size="12" maxlength="45"/>
+				<html:text property="caseInfo.currentCaseVersionReference.currentAttachment.caCode" styleId="fileCode" size="12" maxlength="45"/>
 			</td>
 		</tr>
 		<tr>
@@ -55,7 +54,7 @@
 				<bean:message bundle="project" key="attachment_filename" />£º
 			</td>
 			<td align="left">						
-				<html:text property="caseInfo.currentAttachment.caName" styleId="fileName" size="45" maxlength="100"/>
+				<html:text property="caseInfo.currentCaseVersionReference.currentAttachment.caName" styleId="fileName" size="45" maxlength="100"/>
 			</td>
 		</tr>
 		<tr>
@@ -63,7 +62,7 @@
 				<bean:message bundle="project" key="attachment_description" />£º
 			</td>
 			<td align="left">						
-				<html:text property="caseInfo.currentAttachment.caDescription" size="60" maxlength="200"/>
+				<html:text property="caseInfo.currentCaseVersionReference.currentAttachment.caDescription" size="60" maxlength="200"/>
 			</td>
 		</tr>
 		

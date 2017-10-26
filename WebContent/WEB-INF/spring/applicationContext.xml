@@ -45,6 +45,7 @@
 				<value>org/mds/test/bean/CaseVersionReference.hbm.xml</value>
 				<value>org/mds/test/bean/CaseAttachment.hbm.xml</value>
 				<value>org/mds/test/bean/CaseType.hbm.xml</value>
+				<value>org/mds/test/bean/CvrAttachment.hbm.xml</value>
 				
 				<value>org/mds/project/bean/ModuleFunction.hbm.xml</value>
 				<value>org/mds/project/bean/Project.hbm.xml</value>

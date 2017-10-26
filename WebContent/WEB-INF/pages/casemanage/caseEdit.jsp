@@ -36,11 +36,15 @@
 			</td>
 		</tr>	
 		<tr>			
-			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left" colspan="3">
-				<html:select styleId="editable-select2" styleClass="form-control" property="caseInfo.tcModuleFunction" style="width:180px">															
-					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
-				</html:select>	
+			<td align="right"><bean:message bundle="case" key="module"/>:</td>
+			<td align="left">
+				<html:text property="caseInfo.projectModule.pmName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseEdit',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+			</td>
+			<td align="right"><bean:message bundle="case" key="module_function"/>:</td>
+			<td align="left">	
+				<html:text property="caseInfo.moduleFunction.muName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseEdit',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>				
 		</tr>	
 		<tr>
@@ -83,7 +87,40 @@
 			</td>
 		</tr>
 	</table>
-	<fieldset style="width:99%;float:left;">
+	
+	
+	<table width="100%">
+		<tr>
+			<td width="50%" align="center">
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="test_step"/></legend>					
+					<html:textarea cols="60" rows="10" property="caseInfo.tcTestStep"></html:textarea>									
+				</fieldset>
+			</td>
+			<td align="center" rowspan="2" valign="top">				
+				<fieldset style="width:98%;float:left;">
+				<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
+				<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList" indexId="i">
+				<logic:notEqual name="am" property="caFlag" value="-1">
+					<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>"  width="200" height="200" border="1">		
+				</logic:notEqual>				
+				</logic:iterate>
+								
+				</fieldset>
+			</td>
+		</tr>
+		<tr>		
+			<td align="center">
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="intend_output"/></legend>					
+					<html:textarea cols="60" rows="5" property="caseInfo.tcIntendOutput"></html:textarea>										
+				</fieldset>
+			</td>
+		</tr>		
+	</table>
+	<table width="100%">
+	<tr><td>
+	<fieldset style="width:98%;float:left;">
 		<legend><bean:message bundle="case" key="test_result"/></legend>
 		<table class="sort-table" cellSpacing="1" cellPadding="1" width="100%" border="0">		
 			<thead>
@@ -101,68 +138,27 @@
 					<td align="center"><bean:write name="cvr" property="projectVersion.pvVersion"/></td>				
 					<td align="center">	
 						<logic:notEmpty name="cvr" property="testResult"><bean:write name="cvr" property="testResult.trName"/></logic:notEmpty>
-						
-<%-- 						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseResult"%>' style="width:120px">	 --%>
-<%-- 							<html:option value=""></html:option>									 --%>
-<%-- 							<html:optionsCollection name="testResultList" value="trId" label="trName"/>									 --%>
-<%-- 						</html:select> --%>
 					</td>				
 					<td align="center">
 						<logic:notEmpty name="cvr" property="importantLevel"><bean:write name="cvr" property="importantLevel.ilName"/></logic:notEmpty>
-						
-<%-- 						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrImportantLevel"%>' style="width:120px">	 --%>
-<%-- 							<html:option value=""></html:option>									 --%>
-<%-- 							<html:optionsCollection name="importantLevelList" value="ilId" label="ilName"/>									 --%>
-<%-- 						</html:select> --%>
 					</td>				
 					<td align="center">
 						<logic:notEmpty name="cvr" property="bugType"><bean:write name="cvr" property="bugType.btName"/></logic:notEmpty>
-						
-<%-- 						<html:select name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrBugType"%>' style="width:120px">	 --%>
-<%-- 							<html:option value=""></html:option>									 --%>
-<%-- 							<html:optionsCollection name="bugTypeList" value="btId" label="btName"/>									 --%>
-<%-- 						</html:select> --%>
 					</td>
 					<td align="left">
-						<bean:write name="cvr" property="cvrCaseOutput"/>
-<%-- 						<html:text name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseOutput"%>' size="93" maxlength="200"/> --%>
-						
+						<bean:write name="cvr" property="cvrCaseOutput"/>	
 					</td>
 				</tr>		
 				</logic:notEqual>
 			</logic:iterate>		
 		</table>
 	</fieldset>
-	
-	<table width="100%">
-		<tr>
-			<td width="50%" rowspan="2" align="center">
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_step"/></legend>					
-					<html:textarea cols="60" rows="30" property="caseInfo.tcTestStep"></html:textarea>									
-				</fieldset>
-			</td>
-			<td align="center">				
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_remark"/></legend>					
-					<html:textarea cols="60" rows="16" property="caseInfo.tcRemark"></html:textarea>										
-				</fieldset>
-			</td>
-		</tr>
-		<tr>		
-			<td align="center">
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="intend_output"/></legend>					
-					<html:textarea cols="60" rows="10" property="caseInfo.tcIntendOutput"></html:textarea>										
-				</fieldset>
-			</td>
-		</tr>
-				
-		<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>
-		<c:set var="caseInfo" value="${c}" scope="request" />
-		<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
-	</table>
-	
+		
+	<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>
+	<c:set var="caseInfo" value="${c}" scope="request" />
+	<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
+	</td></tr>
+</table>	
 </html:form>
 
 
@@ -170,12 +166,6 @@
 <script type="text/javascript" src="<html:rewrite forward='staticjavascript'/>"></script>
 
 <script language="JavaScript">	
-
-
-$('#editable-select2').editableSelect({
-	effects: 'slide'
-});
-
  function chgAction(obj,str){
 	obj.value=str;
  }

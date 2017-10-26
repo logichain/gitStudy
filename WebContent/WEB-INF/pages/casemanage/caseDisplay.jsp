@@ -73,8 +73,40 @@
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	</table>
-		
-	<fieldset style="width:99%;float:left;">
+						
+							
+	<table width="100%">
+		<tr>
+			<td width="50%" align="left">				
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="test_step"/></legend>
+					<html:textarea readonly="true" cols="56" rows="10" name="caseInfo" property="tcTestStep"></html:textarea>													
+				</fieldset>	
+			</td>
+			<td align="left" rowspan="2" valign="top">
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
+					<logic:iterate id="am" name="caseInfo" property="attachmentList">
+					<logic:notEqual name="am" property="caFlag" value="-1">
+						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
+					</logic:notEqual>				
+					</logic:iterate>			
+				</fieldset>
+			</td>
+		</tr>
+		<tr>
+			<td align="left">				
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="intend_output"/></legend>
+					<html:textarea readonly="true" cols="56" rows="5" name="caseInfo" property="tcIntendOutput"></html:textarea>							
+				</fieldset>
+			</td>
+			
+		</tr>
+	</table>
+
+
+	<fieldset style="width:98%;float:left;">
 	<legend><bean:message bundle="case" key="test_result"/></legend>
 		<table class="sort-table" cellSpacing="1" cellPadding="1" width="100%" border="0">		
 			<thead>
@@ -88,8 +120,8 @@
 			</thead>
 			<logic:iterate name="caseInfo" property="caseVersionReferenceList" id="cvr" indexId="i">	
 				<tr>	
-					<td align="center"><bean:write name="cvr" property="projectVersion.pvVersion"/></td>				
-					<td align="center">
+					<td align="center" rowspan="2"><bean:write name="cvr" property="projectVersion.pvVersion"/></td>				
+					<td align="center">&nbsp;
 						<logic:notEmpty name="cvr" property="testResult">
 							<bean:write name="cvr" property="testResult.trName"/>
 						</logic:notEmpty>						
@@ -104,40 +136,27 @@
 							<bean:write name="cvr" property="bugType.btName"/>
 						</logic:notEmpty>
 					</td>
-					<td align="left"><bean:write name="cvr" property="cvrCaseOutput"/></td>
+					<td align="left">
+						<html:textarea readonly="true" name="cvr" property="cvrCaseOutput" cols="60" rows="4"></html:textarea>
+					</td>
 				</tr>		
+				<tr>
+				
+				<td align="left" colspan="4">&nbsp;					
+					<logic:iterate id="am" name="cvr" property="attachmentList">
+					<logic:notEqual name="am" property="caFlag" value="-1">
+						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
+					</logic:notEqual>				
+					</logic:iterate>					
+				</td>
+				</tr>
 			</logic:iterate>		
 		</table>
-	</fieldset>
-							
-	<table width="100%">
-		<tr>
-			<td width="50%" rowspan="2" align="left">				
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<html:textarea readonly="true" cols="56" rows="30" name="caseInfo" property="tcTestStep"></html:textarea>													
-				</fieldset>	
-			</td>
-			<td align="left">
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_remark"/></legend>
-					<html:textarea readonly="true" cols="56" rows="16" name="caseInfo" property="tcRemark"></html:textarea>					
-				</fieldset>
-			</td>
-		</tr>
-		<tr>
-			<td align="left">				
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<html:textarea readonly="true" cols="56" rows="10" name="caseInfo" property="tcIntendOutput"></html:textarea>							
-				</fieldset>
-			</td>
-			
-		</tr>
-	</table>		
-
-	<table width="100%">		
+	</fieldset>		
+	
+	<table width="100%">	
 		<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
+
 	</table>
 			
 </html:form>	

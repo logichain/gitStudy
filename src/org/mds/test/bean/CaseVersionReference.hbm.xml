@@ -72,5 +72,12 @@
         <many-to-one name="projectVersion" lazy="false" column="cvr_project_version" class="org.mds.project.bean.ProjectVersion" cascade="none" unique="true" insert="false" update="false">
         </many-to-one>
         
+         <set name="attachmentSet" inverse="true" where=" ca_flag != -1" order-by="ca_id">
+            <key>
+                <column name="ca_case_version_reference" not-null="true"/>
+            </key>
+            <one-to-many class="org.mds.test.bean.CvrAttachment" />
+        </set>
+        
     </class>
 </hibernate-mapping>

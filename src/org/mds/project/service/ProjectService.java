@@ -28,6 +28,7 @@ public interface ProjectService extends Service {
 	
 	public Project getProjectById(Integer id);
 	public ProjectModule getProjectModuleById(Integer id);	
+	public ModuleFunction getModuleFunctionById(Integer id);	
 	
 	public void addTeamMember(Project project,UsrAccount ua);
 	public TeamMember addTeamMember(UsrAccount ua,Integer ProjectId);

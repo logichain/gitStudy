@@ -27,7 +27,9 @@
 					<bean:message bundle="project" key="version_code" />£º			
 					<bean:write name="version" property="pvVersion"/>					
 				</td>	
-				<td align="center"></td>					
+				<td align="left"><bean:message bundle="project" key="leader"/>£º
+					<bean:write name="version" property="testLeader.personName"/>								
+				</td>					
 				<td align="right">								
 					<a href="javascript:openDialog('projectmanage.do?method=editProjectVersion&id=<bean:write name="version" property="pvId"/>',760,360);"><img border="0" src="pages\images\icon\16x16\modify.gif"></a>
 					<logic:notEqual name="version" property="pvInit" value="1">
@@ -35,60 +37,15 @@
 					</logic:notEqual>
 				</td>
 			</tr>
+			
 			<tr>
-				<td>
-				<fieldset style="width:90%;float:left;">
-					<legend><bean:message bundle="project" key="develop"/></legend>
-					<table width="100%">
-						<tr>
-							<td align="right" width="20%"><bean:message bundle="project" key="leader"/>£º</td>
-							<td align="left">
-								<logic:notEmpty name="version" property="developLeader">
-									<bean:write name="version" property="developLeader.personName"/>
-								</logic:notEmpty>																			
-							</td>
-						</tr>
-						<tr>
-							<td align="right"><bean:message bundle="project" key="begin"/>£º</td>
-							<td align="left">
-								<bean:write name="version" property="pvDevelopBegin"/>								
-							</td>
-						</tr>
-						<tr>
-							<td align="right"><bean:message bundle="project" key="end"/>£º</td>
-							<td align="left">
-								<bean:write name="version" property="pvDevelopEnd"/>
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-				</td>
-				<td colspan="2">
-				<fieldset style="width:90%;float:left;">
-					<legend><bean:message bundle="project" key="test"/></legend>
-					<table width="100%">
-						<tr>
-							<td align="right" width="20%"><bean:message bundle="project" key="leader"/>£º</td>
-							<td align="left">
-								<bean:write name="version" property="testLeader.personName"/>								
-							</td>
-						</tr>
-						<tr>
-							<td align="right"><bean:message bundle="project" key="begin"/>£º</td>
-							<td align="left">
-								<bean:write name="version" property="pvTestBegin"/>
-							</td>
-						</tr>
-						<tr>
-							<td align="right"><bean:message bundle="project" key="end"/>£º</td>
-							<td align="left">
-								<bean:write name="version" property="pvTestEnd"/>
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-				</td>			
+				
 			</tr>
+			<tr>
+				<td align="left"><bean:message bundle="project" key="begin"/>£º	<bean:write name="version" property="pvTestBegin"/></td>
+				<td align="left"><bean:message bundle="project" key="end"/>£º<bean:write name="version" property="pvTestEnd"/></td>
+			</tr>
+					
 			<tr><td colspan="3">
 			<table width="100%">
 			<tr>

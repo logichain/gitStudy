@@ -6,8 +6,7 @@
 	<input type="hidden" name="method" value="searchTestCaseforReference">
 	<input type="hidden" name="id" value="">
 	<table CELLPADDING="2" CELLSPACING="0" width="100%" border="0">		
-		<tr><td width="10%" align="right" class="strong"><bean:message bundle="case" key="project"/>:</td>
-			<td width="15%" align="left" class="strong"><bean:write name="projectForm" property="projectInfo.PName"/></td>
+		<tr><td width="10%"></td><td width="15%"></td>
 			<td width="10%"></td><td width="15%"></td><td width="10%"></td><td width="15%"></td>
 			<td width="10%"></td><td></td>
 		</tr>			

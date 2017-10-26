@@ -64,4 +64,19 @@
 		<put name="title" value="测试用例版本关联"/>
 		<put name="body" value="/WEB-INF/pages/casemanage/caseListforReference.jsp" />
 	</definition>
+	
+	<definition name="projectModuleSelectPageDef" extends="inputBaseDef">
+		<put name="title" value="模块选择"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/projectModuleSelect.jsp" />
+	</definition>
+	<definition name="moduleFunctionSelectPageDef" extends="inputBaseDef">
+		<put name="title" value="功能点选择"/>
+		<put name="body" value="/WEB-INF/pages/casemanage/moduleFunctionSelect.jsp" />
+	</definition>
+	
+	<definition name="cvrAttachmentInputPageDef" extends="inputBaseDef">		
+		<put name="title" value="附件信息编辑"/>
+		<put name="header" value="/WEB-INF/pages/common/tiles/header_blank.jsp" />
+		<put name="body" value="/WEB-INF/pages/casemanage/cvrAttachmentInput.jsp" />
+	</definition>
 </tiles-definitions>

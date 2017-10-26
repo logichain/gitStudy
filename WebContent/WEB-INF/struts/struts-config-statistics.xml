@@ -16,6 +16,7 @@
 	<action-mappings>
 		<action path="/teststatistics" name="statisticsForm" parameter="method" type="org.mds.statistics.action.TestStatisticsAction" validate="false">
 			<forward name="statistics" path="statisticsPageDef" redirect="false" />
+			<forward name="projectStatistics" path="projectStatisticsPageDef" redirect="false" />
 			
 		</action>		
 	</action-mappings>

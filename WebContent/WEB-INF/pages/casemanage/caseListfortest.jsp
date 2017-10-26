@@ -5,26 +5,30 @@
 	<html:errors />
 	<input type="hidden" name="method" value="searchTestCase">
 	<input type="hidden" name="id" value="">
+	<table width="100%">
+		<tr>
+			<td align="left" class="strong">				
+				<bean:message bundle="project" key="project_name" />£º			
+				<bean:write name="caseForm" property="projectInfo.PName" />
+			</td>						
+		</tr>		
+	</table>
+
 	<table CELLPADDING="2" CELLSPACING="0" width="100%" border="0">		
-		<tr><td width="10%" align="right" class="strong"><bean:message bundle="case" key="project"/>:</td>
-			<td width="15%" align="left" class="strong"><bean:write name="caseForm" property="projectInfo.PName"/></td>
+		<tr><td width="10%"></td><td width="15%"></td>
 			<td width="10%"></td><td width="15%"></td><td width="10%"></td><td width="15%"></td>
 			<td width="10%"></td><td></td>
 		</tr>			
 		<tr>
 			<td align="right"><bean:message bundle="case" key="module"/>:</td>
 			<td align="left">
-				<html:select property="searchInfo.moduleId" style="width:120px">	
-					<html:option value=""></html:option>
-					<html:optionsCollection name="caseForm" property="projectInfo.moduleList" value="pmId" label="pmName"/>
-				</html:select>
+				<html:text property="searchInfo.projectModule.pmName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseList',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>:</td>
-			<td align="left">			
-				<html:select property="searchInfo.tcModuleFunction" style="width:120px">	
-					<html:option value=""></html:option>									
-					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
-				</html:select>			
+			<td align="left">	
+				<html:text property="searchInfo.moduleFunction.muName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseList',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="case_code"/>:</td><td align="left"><html:text property="searchInfo.tcCode" size="14"/></td>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>:</td><td align="left"><html:text property="searchInfo.tcTestObjective" size="14"/></td>
@@ -56,23 +60,11 @@
 					<html:optionsCollection name="caseStatusList" value="csId" label="csName"/>									
 				</html:select>
 			</td>
-			<td align="right"><bean:message bundle="case" key="create_time"/>:</td>
-			<td align="left">
-				<html:text property="searchInfo.tcCreateTimeStr" readonly="true" size="14" maxlength="32" onclick="SelectDate(this)"/>
-			</td>
+			
 			<td align="right"><bean:message bundle="case" key="create_user"/>:</td><td align="left"><html:text property="searchInfo.tcCreateUserStr" size="14"/></td>			
-		</tr>	
-		<tr>
-			<td align="right"><bean:message bundle="case" key="test_time"/>:</td>
-			<td align="left">
-				<html:text property="cvrSearchInfo.cvrTestTimeStr" readonly="true" size="14" maxlength="32" onclick="SelectDate(this)"/>
-			</td>
+					
 			<td align="right"><bean:message bundle="case" key="test_user"/>:</td><td align="left"><html:text property="cvrSearchInfo.cvrTestUserStr" size="14"/></td>			
-			<td align="right"><bean:message bundle="case" key="correct_time"/>:</td>
-			<td align="left">
-				<html:text property="cvrSearchInfo.cvrCorrectTimeStr" readonly="true" size="14" maxlength="32" onclick="SelectDate(this)"/>
-			</td>
-			<td align="right"><bean:message bundle="case" key="correct_user"/>:</td><td align="left"><html:text property="cvrSearchInfo.cvrCorrectUserStr" size="14"/></td>			
+								
 		</tr>		
 		<tr>
 			<td align="right"><bean:message bundle="case" key="important_level"/>:</td>
@@ -148,12 +140,12 @@
 	<table id="tb1" class="sort-table" cellSpacing="1" cellPadding="1" width="100%" border="0">					
 		<thead>
 			<tr id="node-0">
-				<td width="4%"><a href="javascript:expendhideall();"><font color="white">--</font></a></td>				
+				<td width="4%"><a href="javascript:expendhideall();"><font id="ehall" color="white">¡ü</font></a></td>				
 				<td width="20%" colspan="2" align="center"><bean:message bundle="case" key="module_function"/></td>
-				<td width="10%" align="center"><bean:message bundle="case" key="case_code"/></td>
+				<td width="9%" align="center"><bean:message bundle="case" key="case_code"/></td>
 				<td align="center"><bean:message bundle="case" key="test_objective"/></td>				
-				<td width="7%" align="center"><bean:message bundle="case" key="create_user"/></td>
-				<td width="12%" align="center"><bean:message bundle="case" key="create_time"/></td>				
+				<td width="6%" align="center"><bean:message bundle="case" key="create_user"/></td>
+				<td width="13%" align="center"><bean:message bundle="case" key="create_time"/></td>				
 				<td width="4%" align="center"><bean:message bundle="case" key="edit"/></td>				
 				<td width="4%" align="center"><bean:message bundle="case" key="delete"/></td>
 				<td width="4%" align="center"><bean:message bundle="case" key="display"/></td>
@@ -178,10 +170,10 @@
 				<% int a = i % 2;request.setAttribute("a",a);%>
 				<logic:equal name="a" value="0"><tr class="even"  id="<%="node-" + (i+1)%>"></logic:equal>
 				<logic:equal name="a" value="1"><tr class="odd" id="<%="node-" + (i+1)%>"></logic:equal>
-					<td align="center"><a href="javascript:expendhide('node-<%=(i+1) %>');"><%=i+1 %></a></td>							
+					<td align="left"><a href="javascript:expendhide('node-<%=(i+1) %>');"><%=i+1 %></a></td>							
 												
-					<td colspan="2" align="center"><bean:write name="c" property="moduleFunction.entireName"/></td>
-					<td align="center"><bean:write name="c" property="tcCode"/></td>
+					<td colspan="2" align="left"><bean:write name="c" property="moduleFunction.entireName"/></td>
+					<td align="left"><bean:write name="c" property="tcCode"/></td>
 					<td align="left" title='<bean:write name="c" property="tcTestObjective"/>'><bean:write name="c" property="tcTestObjective"/></td>
 					<td align="center"><bean:write name="c" property="createUser.personName"/></td>								
 					<td align="center"><bean:write name="c" property="tcCreateTimeStr"/></td>
@@ -286,6 +278,7 @@
  function expendhideall()
  {    
     var o = document.getElementById("tb1"), r0;
+    var ehref = document.getElementById("ehall");  	
     for(var i=0; i<o.rows.length; i++)
     {
     	r0 = o.rows[i];
@@ -298,10 +291,12 @@
     		if(r0.style.display == "none")
     		{
     			r0.style.display = "";
+    			ehref.innerHTML="¡ü";
     		}
     		else
     		{
     			r0.style.display = "none";
+    			ehref.innerHTML="¡ý";
     		}            
     	}        
     }

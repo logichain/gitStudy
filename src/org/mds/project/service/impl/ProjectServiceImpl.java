@@ -200,11 +200,11 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		for (ProjectAttachment pa : attachmentList) {
 			if (pa.getPaId() == null && pa.getPaFlag().equals(CommonService.NORMAL_FLAG)) {
 				String fileName = FileUtil.saveUploadFile(pa.getAttachmentFile(),
-						uploadPath + vtr.getPvProject() + "\\projectAttachment\\" + vtr.getPvId());
+						uploadPath + "uploadImportFile\\projectAttachment\\" + vtr.getPvId());
 
 				pa.setPaProjectVersion(vtr.getPvId());
 				pa.setPaCreateTime(createTime);
-				pa.setPaUrl(uploadPath + vtr.getPvProject() + "\\projectAttachment\\" + vtr.getPvId() + "\\" + fileName);
+				pa.setPaUrl("uploadImportFile\\projectAttachment\\" + vtr.getPvId() + "\\" + fileName);
 
 				projectAttachmentDAO.save(pa);
 			}
@@ -261,6 +261,23 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		return projectModuleDAO.get(id);
 	}
 
+	public static String getModuleFunctionListForSearch(ModuleFunction mfu) {
+		// TODO Auto-generated method stub
+		String rtn = "(";
+
+		for (ModuleFunction mf : mfu.getChildFunctionList()) {
+			rtn = rtn + mf.getMuId() + ",";
+		}
+
+		if (rtn.contains(",")) {
+			rtn = rtn.substring(0, rtn.length() - 1);
+		}
+
+		rtn = rtn + ")";
+
+		return rtn;
+	}
+	
 	public static String getModuleFunctionListForSearch(ProjectModule pm) {
 		// TODO Auto-generated method stub
 		String rtn = "(";
@@ -339,5 +356,11 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 
 	public void setMemberFunctionReferenceDAO(MemberFunctionReferenceDAO memberFunctionReferenceDAO) {
 		this.memberFunctionReferenceDAO = memberFunctionReferenceDAO;
+	}
+
+	@Override
+	public ModuleFunction getModuleFunctionById(Integer id) {
+		// TODO Auto-generated method stub
+		return moduleFunctionDAO.get(id);
 	}
 }

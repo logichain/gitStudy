@@ -1,6 +1,7 @@
 package org.mds.test.bean;
 
 import java.io.Serializable;
+
 import java.util.List;
 
 import org.king.framework.dao.BaseDAO;
@@ -8,7 +9,7 @@ import org.king.framework.dao.DAO;
 import org.king.framework.dao.MyQuery;
 import org.mds.common.CommonService;
 
-public class TestCaseDAO implements DAO {
+public class CvrAttachmentDAO implements DAO {
 	private BaseDAO baseDAO;
 	
 	public BaseDAO getBaseDAO() {
@@ -19,41 +20,42 @@ public class TestCaseDAO implements DAO {
 		this.baseDAO = baseDAO;
 	}
 	
-	public void delete(TestCase persistentInstance) {
+	public void delete(CvrAttachment persistentInstance) {
 		// TODO Auto-generated method stub
 //		this.delete(persistentInstance);
-		persistentInstance.setTcFlag(CommonService.DELETE_FLAG);
+		persistentInstance.setCaFlag(CommonService.DELETE_FLAG);
 		this.update(persistentInstance);
 	}
 
-	public List<TestCase> find(MyQuery myQuery) {
+	public List<CvrAttachment> find(MyQuery myQuery) {
 		// TODO Auto-generated method stub
 		return baseDAO.findEntity(myQuery);
 	}
 
-	public List<TestCase> find(String query) {
+	public List<CvrAttachment> find(String query) {
 		// TODO Auto-generated method stub
 		return baseDAO.findEntity(query);
 	}
+	
 
-	public TestCase get(Serializable id) {
+	public CvrAttachment get(Serializable id) {
 		// TODO Auto-generated method stub
-		return (TestCase) baseDAO.getEntity(TestCase.class,id);
+		return (CvrAttachment) baseDAO.getEntity(CvrAttachment.class,id);
 	}
 
 	
-	public void save(TestCase transientInstance) {
-		// TODO Auto-generated method stub	
+	public void save(CvrAttachment transientInstance) {
+		// TODO Auto-generated method stub
 		baseDAO.saveEntity(transientInstance);
 	}
 
-	public void update(TestCase transientInstance) {
+	public void update(CvrAttachment transientInstance) {
 		// TODO Auto-generated method stub
 		baseDAO.updateEntity(transientInstance);
-	}	
+	}
 	
-	public int getFindCount(String myQuery)
-	{
+	public int getFindCount(MyQuery myQuery) {
+		// TODO Auto-generated method stub
 		int rtn = 0;
 		List list = baseDAO.findEntity(myQuery);
 		if(list != null && !list.isEmpty())
@@ -70,4 +72,5 @@ public class TestCaseDAO implements DAO {
 		
 		return rtn;
 	}
+	
 }

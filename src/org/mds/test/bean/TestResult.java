@@ -11,6 +11,7 @@ public class TestResult extends org.king.framework.domain.BaseObject implements
 
 	public static Integer TestResult_PASSED = 1;//通过
 	public static Integer TestResult_FAILED = 2;//未通过
+	public static Integer TestResult_NA = 3;//NA
 	/**
 	 * 
 	 */

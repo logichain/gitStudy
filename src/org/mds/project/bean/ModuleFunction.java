@@ -112,6 +112,17 @@ public class ModuleFunction extends org.king.framework.domain.BaseObject impleme
 		return mf.getProjectModule().getPmName();		
 	}
 	
+	public ProjectModule getParentProjectModule() {
+		
+		ModuleFunction mf = this;
+		while(mf.parentFunction != null)
+		{
+			mf = mf.parentFunction;
+		}
+				
+		return mf.getProjectModule();		
+	}
+	
 	private String getParentFunctionEntireName(ModuleFunction mf,String name,boolean hasPmName)
 	{
 		String rtn = name;

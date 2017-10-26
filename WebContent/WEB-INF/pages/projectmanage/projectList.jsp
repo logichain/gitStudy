@@ -52,7 +52,7 @@
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="develop"/></td>
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="test"/></td>
 				<td rowspan="2" align="center"><bean:message bundle="project" key="remark"/></td>
-				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="task_status"/></td>
+				<td rowspan="2" width="5%" align="center"><bean:message bundle="security" key="account.enabled" /></td>
 				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="edit"/></td>
 				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="delete"/></td>				
 			</tr>
@@ -95,7 +95,7 @@
 							<td align="center"><bean:write name="p" property="initProjectVersion.testLeader.personName"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestBegin"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestEnd"/></td>
-							<td align="center"><bean:write name="p" property="PRemark"/></td>
+							<td align="center"><bean:write name="p" property="initProjectVersion.pvRemark"/></td>
 							<td align="center">
 								<logic:equal name="p" property="PStatus" value="1">
 									<input type="checkbox" checked onclick='chgAction(document.all.id,"<bean:write  name="p" property="PId" />");chgAction(document.all.method,"enableProject");projectForm.submit();'>

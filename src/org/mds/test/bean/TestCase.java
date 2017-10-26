@@ -1,7 +1,10 @@
 package org.mds.test.bean;
 
 import java.text.DateFormat;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +13,7 @@ import org.apache.struts.upload.FormFile;
 import org.king.security.domain.UsrAccount;
 import org.mds.common.CommonService;
 import org.mds.project.bean.ModuleFunction;
+import org.mds.project.bean.ProjectModule;
 import org.mds.project.bean.ProjectVersion;
 
 
@@ -43,7 +47,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	private Date tcCreateTime;
 		
 	private ModuleFunction moduleFunction;
-	private Integer moduleId;
+	private ProjectModule projectModule;
 	
 	private String tcCreateUserStr;
 	private String tcCreateTimeStr;
@@ -56,7 +60,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 		
 	private ArrayList<TestCorrectRecord> testCorrectRecordList = new ArrayList<TestCorrectRecord>();
 	private ArrayList<CaseVersionReference> caseVersionReferenceList = new ArrayList<CaseVersionReference>();
-	
+	private CaseVersionReference currentCaseVersionReference;
 	private ArrayList<CaseAttachment> attachmentList = new ArrayList<CaseAttachment>();
 	private CaseAttachment currentAttachment;
 	
@@ -206,19 +210,6 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 		return tcId + "," + tcCode;
 	}
 
-
-	public void setModuleId(Integer moduleId) {
-		this.moduleId = moduleId;
-	}
-
-	public Integer getModuleId() {
-		if(moduleId != null && moduleId.equals(0))
-		{
-			return null;
-		}
-		return moduleId;
-	}
-	
 	
 
 	public void setTcCreateTimeStr(String tcCreateTimeStr) {
@@ -289,6 +280,13 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	}
 
 	public ArrayList<CaseVersionReference> getCaseVersionReferenceList() {
+		
+		Collections.sort(caseVersionReferenceList,new Comparator<CaseVersionReference>(){
+			@Override
+			public int compare(CaseVersionReference arg0, CaseVersionReference arg1) {
+				// TODO Auto-generated method stub
+				return arg0.getCvrProjectVersion().compareTo(arg1.getCvrProjectVersion());
+			}});
 		
 		return caseVersionReferenceList;
 	}
@@ -410,6 +408,22 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 
 	public void setCaseType(CaseType caseType) {
 		this.caseType = caseType;
+	}
+
+	public ProjectModule getProjectModule() {
+		return projectModule;
+	}
+
+	public void setProjectModule(ProjectModule projectModule) {
+		this.projectModule = projectModule;
+	}
+
+	public CaseVersionReference getCurrentCaseVersionReference() {
+		return currentCaseVersionReference;
+	}
+
+	public void setCurrentCaseVersionReference(CaseVersionReference currentCaseVersionReference) {
+		this.currentCaseVersionReference = currentCaseVersionReference;
 	}
 
 }

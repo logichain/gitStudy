@@ -5,7 +5,7 @@
 	<html:errors />
 	
 	<input type="hidden" name="method" value="saveTestCaseCorrect">
-	<html:hidden property="caseInfo.moduleId"/>
+
 	<html:hidden property="caseInfo.tcModuleFunction"/>	
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">		
 		<tr><td width="50%"></td>

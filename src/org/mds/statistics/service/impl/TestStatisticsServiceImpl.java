@@ -13,46 +13,26 @@ import org.mds.test.service.impl.TestCaseServiceImpl;
 public class TestStatisticsServiceImpl extends BaseService implements TestStatisticsService 
 {
 	private TestCaseDAO testCaseDAO;
-	
-	
+			
 	public Integer searchTestCaseCount(Object[] args) {
 		// TODO Auto-generated method stub
 		Project projectInfo = (Project) args[0];		
 		TestCase caseInfo = (TestCase) args[1];
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference)args[2];
 		   		
-		String functionList = "";
-		if(args.length == 4)
-		{
-			functionList = (String) args[3];//有可能是“（）”
-		}		
+		String functionList = (String) args[3];//有可能是“（）”
+	
 		
 		String hqlStr = null;
 		
 		if(cvrSearchInfo.isSearchInfoEmpty())
 		{			
-			if(functionList.length() < 3)
-			{
-				hqlStr = "select count(distinct a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS;
-			}
-			else
-			{
-				hqlStr = "select count(distinct a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcModuleFunction in " + functionList;
-			}			
+			hqlStr = "select count(distinct a) from TestCase a where a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcModuleFunction in " + functionList;			
 		}
 		else
 		{
-			if(functionList.length() < 3)
-			{
-				hqlStr = "select count(distinct a) from TestCase a,CaseVersionReference e ,ModuleFunction b,ProjectModule c where a.tcModuleFunction = b.muId and b.muModule = c.pmId and c.pmProject = " + projectInfo.getPId() +
-				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and a.tcId = e.cvrTestCase and e.cvrFlag != " + CommonService.DELETE_FLAG ;
-			}
-			else
-			{
-				hqlStr = "select count(distinct a) from TestCase a,CaseVersionReference e where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList +
-				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;
-			}
-			
+			hqlStr = "select count(distinct a) from TestCase a,CaseVersionReference e where a.tcId = e.cvrTestCase and a.tcModuleFunction in " + functionList +
+				" and a.tcFlag != " + CaseStatus.DELETE_STATUS + " and e.cvrFlag != " + CommonService.DELETE_FLAG ;			
 		}
 
     	hqlStr = TestCaseServiceImpl.processQuerySql(caseInfo, hqlStr);

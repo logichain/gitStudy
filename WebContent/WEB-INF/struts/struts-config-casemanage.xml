@@ -29,11 +29,15 @@
 			<forward name="caseImport" path="importPageDef" redirect="false" />	
 			<forward name="refreshCaseInput" path="/WEB-INF/pages/casemanage/refreshCaseInput.jsp" redirect="false"/>
 			<forward name="refreshCaseEdit" path="/WEB-INF/pages/casemanage/refreshCaseEdit.jsp" redirect="false"/>
+			<forward name="refreshCaseList" path="/WEB-INF/pages/casemanage/refreshCaseList.jsp" redirect="false"/>
+			<forward name="refreshCaseTest" path="/WEB-INF/pages/casemanage/refreshCaseTest.jsp" redirect="false"/>
 			<forward name="attachmentInput" path="caseAttachmentInputPageDef" redirect="false" />
+			<forward name="cvrAttachmentInput" path="cvrAttachmentInputPageDef" redirect="false" />
 			
 			<forward name="caseExportByVersion" path="exportByVersionPageDef" redirect="false" />
-			
-			<forward name="refreshCaseList" path="/WEB-INF/pages/casemanage/refreshCaseList.jsp" redirect="false"/>
+				
+			<forward name="projectModuleSelect" path="projectModuleSelectPageDef" redirect="false" />
+			<forward name="moduleFunctionSelect" path="moduleFunctionSelectPageDef" redirect="false" />
 		</action>		
 	</action-mappings>
 </struts-config>

@@ -7,16 +7,16 @@ public class StatisticsData {
 	private Integer designCaseCount;
 	private Integer testCaseCount;
 	private Integer unpassCaseCount;
-	private Integer correctCaseCount;
+	private Integer NACaseCount;
 	private double percent;
 	
-	public StatisticsData(String title,Integer designCaseCount,Integer testCaseCount,Integer unpassCaseCount,Integer correctCaseCount)
+	public StatisticsData(String title,Integer designCaseCount,Integer testCaseCount,Integer unpassCaseCount,Integer NACaseCount)
 	{
 		this.title = title;
 		this.designCaseCount = designCaseCount;
 		this.testCaseCount = testCaseCount;
 		this.unpassCaseCount = unpassCaseCount;
-		this.correctCaseCount = correctCaseCount;
+		this.setNACaseCount(NACaseCount);
 	}
 	
 	public StatisticsData(String title,Integer designCaseCount)
@@ -71,11 +71,13 @@ public class StatisticsData {
 		this.unpassCaseCount = unpassCaseCount;
 	}
 
-	public Integer getCorrectCaseCount() {
-		return correctCaseCount;
+	public Integer getNACaseCount() {
+		return NACaseCount;
 	}
 
-	public void setCorrectCaseCount(Integer correctCaseCount) {
-		this.correctCaseCount = correctCaseCount;
+	public void setNACaseCount(Integer nACaseCount) {
+		NACaseCount = nACaseCount;
 	}
+
+
 }

@@ -5,7 +5,7 @@
 	<html:errors />
 	
 	<input type="hidden" name="method" value="saveTestCaseTest">
-	<html:hidden property="caseInfo.moduleId"/>
+	
 	<html:hidden property="caseInfo.tcModuleFunction"/>
 	<html:hidden property="caseInfo.tcCode"/>
 	<html:hidden property="caseInfo.tcTestObjective"/>
@@ -95,50 +95,74 @@
 					<th width="10%"><bean:message bundle="case" key="important_level"/></th>
 					<th width="10%"><bean:message bundle="case" key="bug_type"/></th>
 					<th><bean:message bundle="case" key="test_output"/></th>
+					<th width="5%"></th>
 				</tr>
 			</thead>
-			<logic:iterate name="caseForm" property="caseInfo.caseVersionReferenceList" id="cvr" indexId="i">
-				<logic:equal name="cvr" property="currentReference" value="true">
-				<tr>	
-					<td align="center"><bean:write name="cvr" property="projectVersion.pvVersion"/></td>				
-					<td align="center">	
-						<html:select styleId="testResult" name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseResult"%>' style="width:120px">	
-							<html:option value=""></html:option>									
-							<html:optionsCollection name="testResultList" value="trId" label="trName"/>									
-						</html:select>
-					</td>				
-					<td align="center">
-						<html:select  styleId="importLevel" name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrImportantLevel"%>' style="width:120px">	
-							<html:option value=""></html:option>									
-							<html:optionsCollection name="importantLevelList" value="ilId" label="ilName"/>									
-						</html:select>
-					</td>				
-					<td align="center">
-						<html:select  styleId="bugType" name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrBugType"%>' style="width:120px">	
-							<html:option value=""></html:option>									
-							<html:optionsCollection name="bugTypeList" value="btId" label="btName"/>									
-						</html:select>
-					</td>
-					<td align="left"><html:text styleId="output" name="caseForm" property='<%="caseInfo.caseVersionReferenceList[" + i + "].cvrCaseOutput"%>' size="93" maxlength="200"/></td>
-				</tr>	
-				</logic:equal>		
-			</logic:iterate>		
+				
+			<tr>	
+				<td align="center"><bean:write name="caseForm" property="caseInfo.currentCaseVersionReference.projectVersion.pvVersion"/></td>				
+				<td align="center" valign="top">	
+					<html:select styleId="testResult" property="caseInfo.currentCaseVersionReference.cvrCaseResult" style="width:90px">	
+														
+						<html:optionsCollection name="testResultList" value="trId" label="trName"/>									
+					</html:select>
+				</td>				
+				<td align="center" valign="top">
+					<html:select  styleId="importLevel" property="caseInfo.currentCaseVersionReference.cvrImportantLevel" style="width:90px">	
+						<html:option value=""></html:option>									
+						<html:optionsCollection name="importantLevelList" value="ilId" label="ilName"/>									
+					</html:select>
+				</td>				
+				<td align="center" valign="top">
+					<html:select  styleId="bugType" property="caseInfo.currentCaseVersionReference.cvrBugType" style="width:90px">	
+						<html:option value=""></html:option>									
+						<html:optionsCollection name="bugTypeList" value="btId" label="btName"/>									
+					</html:select>
+				</td>
+				<td align="left">
+					<html:textarea styleId="output" property="caseInfo.currentCaseVersionReference.cvrCaseOutput" cols="60" rows="4"></html:textarea>
+				</td>
+			</tr>	
+			<tr>
+				<td align="right">
+					<bean:message bundle="project" key="project_attachment" />£º
+				</td>
+				<td  colspan="4" align="left">
+					<div style="width:100%;height:20px;background:white;">
+					<logic:iterate id="am" name="caseForm" property="caseInfo.currentCaseVersionReference.attachmentList" indexId="i">
+					<logic:notEqual name="am" property="caFlag" value="-1">
+						<span title="<bean:write name="am" property="caLocalUrl"/>">
+							<bean:write name="am" property="caName"/>
+							<a href="casemanage.do?method=deleteCvrAttachment&index=<%=i %>"><img border="0" src="pages\images\icon\16x16\delete.gif"></a>£»
+						</span>		
+					</logic:notEqual>				
+					</logic:iterate>
+					</div>
+				</td>			
+				<td align="left">
+					<html:button property="" onclick="openDialog('casemanage.do?method=addCvrAttachment',600,240);"><bean:message bundle="project" key="button_addattachment"/></html:button>
+				</td>
+			</tr>	
 		</table>
 	</fieldset>
 	
 							
 	<table width="100%">
 		<tr>
-			<td width="50%" rowspan="2" align="left">				
+			<td width="50%" align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<html:textarea readonly="true" cols="60" rows="30" property="caseInfo.tcTestStep"></html:textarea>													
+					<html:textarea readonly="true" cols="60" rows="10" property="caseInfo.tcTestStep"></html:textarea>													
 				</fieldset>	
 			</td>
-			<td align="left">
+			<td align="left" rowspan="2" valign="top">
 				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_remark"/></legend>
-					<html:textarea readonly="true" cols="60" rows="16" property="caseInfo.tcRemark"></html:textarea>					
+					<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
+					<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList" indexId="i">
+					<logic:notEqual name="am" property="caFlag" value="-1">
+						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
+					</logic:notEqual>				
+					</logic:iterate>					
 				</fieldset>
 			</td>
 		</tr>
@@ -146,7 +170,7 @@
 			<td align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<html:textarea readonly="true" cols="60" rows="10" property="caseInfo.tcIntendOutput"></html:textarea>							
+					<html:textarea readonly="true" cols="60" rows="5" property="caseInfo.tcIntendOutput"></html:textarea>							
 				</fieldset>
 			</td>
 			
@@ -206,7 +230,28 @@
 	return true;
 }
 
+ function chgFormOnsubmit(str){  	
+ caseForm.onsubmit="function onsubmit(){" + str + "}";	
+}
 
+function submitForm()
+{
+	chgFormOnsubmit('return true;');
+	chgAction(document.all.method,'refreshCaseTest');
+	caseForm.submit();
+}
+
+function openDialog(loadpos,WWidth,WHeight)//Lock   Size 
+{   
+	submitForm();
+	
+	var WLeft = Math.ceil((window.screen.width - WWidth) / 2);   
+	var WTop = Math.ceil((window.screen.height - WHeight) / 2); 
+	var features = 'width=' + WWidth + 'px,' +	'height=' + WHeight + 'px,' + 'left=' + WLeft + 'px,' + 'top=' + WTop + 'px'; 
+		
+	WinOP = window.open(loadpos,"_blank",features); 
+	WinOP.focus();	   
+}	
 
 </script>
 

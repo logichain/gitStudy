@@ -33,15 +33,16 @@
 			</td>			
 		</tr>	
 		<tr>
-
+			<td align="right"><bean:message bundle="case" key="module"/>£º</td>
+			<td align="left">
+				<html:text property="caseInfo.projectModule.pmName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseInput',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
-			<td align="left">			
-				<html:select styleId="editable-select2" styleClass="form-control" property="caseInfo.tcModuleFunction" style="width:180px">	
-														
-					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
-				</html:select>			
-			</td>						
-			
+			<td align="left">	
+				<html:text property="caseInfo.moduleFunction.muName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseInput',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+			</td>
 		</tr>	
 		<tr>
 			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
@@ -86,21 +87,14 @@
 				
 	<table width="100%">
 		<tr>
-			<td width="50%" rowspan="2" align="center">
+			<td width="50%" align="center">
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_step"/></legend>					
 					<html:textarea cols="60" rows="30" property="caseInfo.tcTestStep"></html:textarea>									
 				</fieldset>
 			</td>
-			<td align="center">				
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_remark"/></legend>					
-					<html:textarea cols="60" rows="16" property="caseInfo.tcRemark"></html:textarea>										
-				</fieldset>
-			</td>
-		</tr>
-		<tr>		
-			<td align="center">
+				
+			<td align="center" valign="top">
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="intend_output"/></legend>					
 					<html:textarea cols="60" rows="10" property="caseInfo.tcIntendOutput"></html:textarea>										
@@ -118,9 +112,6 @@
 
 <script language="JavaScript">	
 
-$('#editable-select2').editableSelect({
-	effects: 'slide'
-});
 function chgAction(obj,str){
 	obj.value=str;
 }

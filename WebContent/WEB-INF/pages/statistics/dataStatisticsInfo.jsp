@@ -25,26 +25,24 @@
 -->
 </style>
 
-
-
 	<html:form action="teststatistics.do">
 		<html:errors />
 		<input type="hidden" name="method" value="dataStatistics">
+		<table width="100%">
+			<tr>
+				<td align="left" class="strong">				
+					<bean:message bundle="project" key="project_name" />£º			
+					<bean:write name="statisticsForm" property="projectInfo.PName" />
+				</td>						
+			</tr>				
+			<tr><td>&nbsp;</td></tr>
+		</table>
 		<table CELLPADDING="2" CELLSPACING="0" width="100%" border="0">		
-			<tr><td width="10%" align="right" class="strong"><bean:message bundle="case" key="project"/>:</td>
-				<td width="15%" align="left" class="strong"><bean:write name="statisticsForm" property="projectInfo.PName"/></td>
+			<tr><td width="10%"></td><td width="15%"></td>
 				<td width="10%"></td><td width="15%"></td><td width="10%"></td><td width="15%"></td>
 				<td width="10%"></td><td></td>
 			</tr>			
-			<tr>
-				<td align="right"><bean:message bundle="case" key="module"/>:</td>
-				<td align="left">
-					<html:select property="caseInfo.moduleId" style="width:120px">	
-						<html:option value=""></html:option>
-						<html:optionsCollection name="statisticsForm" property="projectInfo.moduleList" value="pmId" label="pmName"/>
-					</html:select>
-				</td>
-							
+			<tr>				
 				<td align="right"><bean:message bundle="project" key="version"/>:</td>
 				<td align="left">
 					<html:select property="cvrSearchInfo.cvrProjectVersion" style="width:120px">	
@@ -72,9 +70,7 @@
     <label for="radio1"><bean:message bundle="project" key="project_version" /></label>	
     <input type="radio" id="radio2" name="radios" onchange="displayChange(this.value);" value="moduleRefer">
     <label for="radio2"><bean:message bundle="case" key="module" /></label>	
-    <input type="radio" id="radio3" name="radios" onchange="displayChange(this.value);" value="functionRefer">
-    <label for="radio3"><bean:message bundle="case" key="module_function" /></label>
-     
+        
     <input type="radio" id="radio4" name="radios" onchange="displayChange(this.value);" value="userRefer">
     <label for="radio4"><bean:message bundle="case" key="test_user" /></label>	
      
@@ -97,7 +93,7 @@
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="correct_count"/></td>
+							<td><bean:message bundle="case" key="na_count"/></td>
 						</tr>
 					</thead>
 					<tbody>
@@ -108,7 +104,7 @@
 									<td><bean:write name="data" property="designCaseCount"/></td>
 									<td><bean:write name="data" property="testCaseCount"/></td>
 									<td><bean:write name="data" property="unpassCaseCount"/></td>
-									<td><bean:write name="data" property="correctCaseCount"/></td>
+									<td><bean:write name="data" property="NACaseCount"/></td>
 								</tr>
 							</logic:iterate>
 						</logic:present>
@@ -134,7 +130,7 @@
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="correct_count"/></td>
+							<td><bean:message bundle="case" key="na_count"/></td>
 						</tr>
 					</thead>
 					<tbody>
@@ -145,7 +141,7 @@
 									<td><bean:write name="data" property="designCaseCount"/></td>
 									<td><bean:write name="data" property="testCaseCount"/></td>
 									<td><bean:write name="data" property="unpassCaseCount"/></td>
-									<td><bean:write name="data" property="correctCaseCount"/></td>
+									<td><bean:write name="data" property="NACaseCount"/></td>
 								</tr>
 							</logic:iterate>
 						</logic:present>
@@ -155,44 +151,7 @@
 			</tr>
 		</table>
 	</div>
-	<div id="functionRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-				<logic:notEmpty name="functionSvgStr">
-					<%=request.getAttribute("functionSvgStr") %>
-				</logic:notEmpty>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td width="30%"><bean:message bundle="case" key="module_function"/></td>
-							<td><bean:message bundle="case" key="case_count"/></td>
-							<td><bean:message bundle="case" key="test_count"/></td>
-							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="correct_count"/></td>
-						</tr>
-					</thead>
-					<tbody>
-					<logic:present name="functionDataList">
-						<logic:iterate id="data" name="functionDataList">
-						<tr>
-							<td><bean:write name="data" property="title"/></td>
-							<td><bean:write name="data" property="designCaseCount"/></td>
-							<td><bean:write name="data" property="testCaseCount"/></td>
-							<td><bean:write name="data" property="unpassCaseCount"/></td>
-							<td><bean:write name="data" property="correctCaseCount"/></td>
-						</tr>
-						</logic:iterate>
-					</logic:present>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
-	
+		
 	<div id="userRefer" style="display:none;">
 		<table width="100%">
 			<tr>
@@ -209,7 +168,7 @@
 							<td><bean:message bundle="case" key="case_count"/></td>
 							<td><bean:message bundle="case" key="test_count"/></td>
 							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="correct_count"/></td>
+							<td><bean:message bundle="case" key="na_count"/></td>
 						</tr>
 					</thead>
 					<tbody>
@@ -220,7 +179,7 @@
 							<td><bean:write name="data" property="designCaseCount"/></td>
 							<td><bean:write name="data" property="testCaseCount"/></td>
 							<td><bean:write name="data" property="unpassCaseCount"/></td>
-							<td><bean:write name="data" property="correctCaseCount"/></td>
+							<td><bean:write name="data" property="NACaseCount"/></td>
 						</tr>
 						</logic:iterate>
 					</logic:present>
@@ -241,7 +200,7 @@
 
  function displayChange(divId)
  {
- 	var divList = ["versionRefer","moduleRefer","functionRefer","userRefer"];
+ 	var divList = ["versionRefer","moduleRefer","userRefer"];
  	for(var i=0;i<divList.length;i++)
  	{
  		if(divList[i] == divId)
@@ -254,4 +213,5 @@
  		}
  	}	
  }
+
 </script>

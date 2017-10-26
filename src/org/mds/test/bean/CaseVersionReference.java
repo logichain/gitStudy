@@ -1,7 +1,10 @@
 package org.mds.test.bean;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.king.security.domain.UsrAccount;
 import org.mds.common.CommonService;
@@ -51,9 +54,10 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 	private BugType bugType;
 	
 	private ProjectVersion projectVersion;
-	private boolean currentReference = false;
 	
 	private Integer referVersion;
+	private ArrayList<CvrAttachment> attachmentList = new ArrayList<CvrAttachment>();
+	private CvrAttachment currentAttachment;
 	
 	// Constructors
 
@@ -348,14 +352,6 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 		this.projectVersion = projectVersion;
 	}
 
-	public boolean isCurrentReference() {
-		return currentReference;
-	}
-
-	public void setCurrentReference(boolean currentReference) {
-		this.currentReference = currentReference;
-	}
-	
 	public boolean isSearchInfoEmpty()
 	{
 		boolean rtn = true;
@@ -413,6 +409,34 @@ public class CaseVersionReference extends org.king.framework.domain.BaseObject
 		this.referVersion = referVersion;
 	}
 
+	
+	public void setAttachmentList(ArrayList<CvrAttachment> attachmentList) {
+		this.attachmentList = attachmentList;
+	}
+
+	public ArrayList<CvrAttachment> getAttachmentList() {
+		return attachmentList;
+	}
+	
+	public Set<CvrAttachment> getAttachmentSet() {
+		Set<CvrAttachment> detailSet = new HashSet<CvrAttachment>();
+		detailSet.addAll(attachmentList);
+		
+		return detailSet;
+	}
+	
+	public void setAttachmentSet(Set<CvrAttachment> attachmentSet) {
+		attachmentList.clear();
+		attachmentList.addAll(attachmentSet);
+	}
+
+	public CvrAttachment getCurrentAttachment() {
+		return currentAttachment;
+	}
+
+	public void setCurrentAttachment(CvrAttachment currentAttachment) {
+		this.currentAttachment = currentAttachment;
+	}
 	
 	
 }

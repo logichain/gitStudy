@@ -1,6 +1,16 @@
 <%@page pageEncoding="GBK"%>
 <%@ include file="../common/include.jsp"%>
 
+<table width="100%">
+	<tr>
+		<td align="left" class="strong">				
+			<bean:message bundle="project" key="project_name" />£º			
+			<bean:write name="projectForm" property="projectInfo.PName" />
+		</td>						
+	</tr>
+		
+	<tr><td>&nbsp;</td></tr>
+</table>
 
 <logic:iterate name="projectForm" property="projectInfo.projectVersionList" id="version" indexId="i">
 

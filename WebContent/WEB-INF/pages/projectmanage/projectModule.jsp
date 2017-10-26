@@ -35,7 +35,7 @@
   	<tbody>
     	<logic:iterate name="projectForm" property="projectInfo.moduleList" id="module" indexId="i">    		
     		<tr id="<%="node-" + i%>">
-		    	<td class="droplist"><span class="parentNode"><%=i+1 %></span></td>
+		    	<td align="left" class="droplist"><span class="parentNode"><%=i+1 %></span></td>
 		    	<td><bean:write name="module" property="pmName"/></td>
 				<td><bean:write name="module" property="pmRemark"/></td>		      	
 		      	
@@ -47,7 +47,7 @@
 		    </tr>
     		<logic:iterate name="module" property="moduleFunctionList" id="mf" indexId="j">
     			<tr id="<%="node-" + i + "-" + j%>" class="<%="child-of-node-" + i%>">
-			        <td><span class="parentNode"><font color="red"><%=j+1 +")" %></font></span></td>
+			        <td align="center"><span class="parentNode"><font color="red"><%=j+1 +")" %></font></span></td>
 					<td><bean:write name="mf" property="muName"/></td>
 			        <td><bean:write name="mf" property="muRemark"/></td>
 			      	
@@ -60,7 +60,7 @@
 
 				<logic:iterate name="mf" property="childFunctionList" id="cmf" indexId="k">
 	    			<tr id="<%="node-" + i + "-" + j + "-" + k%>" class="<%="child-of-node-" + i + "-" + j%>">
-				        <td><span class="parentNode"><font color="blue"><%=k+1 +")" %></font></span></td>
+				        <td align="right"><span class="parentNode"><font color="blue"><%=k+1 +">" %></font></span></td>
 						<td><bean:write name="cmf" property="muName"/></td>
 				        <td><bean:write name="cmf" property="muRemark"/></td>
 				      	<td align="center">

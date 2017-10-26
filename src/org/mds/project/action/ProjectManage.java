@@ -177,9 +177,17 @@ public class ProjectManage extends BaseAction {
 				
 	private String getApplicaleFunctionList(Project projectInfo, TestCase searchInfo) {
 		String functionList = "";
-		if (searchInfo.getModuleId() != null) {
-			ProjectModule pm = projectService.getProjectModuleById(searchInfo.getModuleId());
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
+		if(searchInfo.getModuleFunction().getMuId() != null){
+			if(searchInfo.getModuleFunction().getChildFunctionList().size() == 0)
+			{
+				functionList = "(" + searchInfo.getModuleFunction().getMuId() + ")";
+			}
+			else
+			{
+				functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getModuleFunction());
+			}			
+		} else if (searchInfo.getProjectModule().getPmId() != null) {
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getProjectModule());
 		} else {
 			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
 		}

@@ -6,11 +6,11 @@
 	var index = url.indexOf("method=");
 	if(index == -1)
 	{
-		window.opener.location = url + "?method=resetSearchTestCase";
+		window.opener.location = url + "?method=searchTestCase&pager.offset=1";
 	}
 	else
 	{
-		window.opener.location = url.substring(0,index) + "method=resetSearchTestCase";		
+		window.opener.location = url.substring(0,index) + "method=searchTestCase&pager.offset=1";		
 	}		
 	
 	window.close();	

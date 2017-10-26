@@ -10,6 +10,11 @@
 		<put name="title" value="测试统计信息"/>
 		<put name="body" value="/WEB-INF/pages/statistics/dataStatisticsInfo.jsp" />
 	</definition>	
+	<definition name="projectStatisticsPageDef" extends="mainBaseDef">
+		<put name="title" value="测试统计信息"/>
+		<put name="body" value="/WEB-INF/pages/statistics/projectDataStatisticsInfo.jsp" />
+	</definition>
+	
 	
 	 
 </tiles-definitions>
