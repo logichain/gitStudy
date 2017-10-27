@@ -21,7 +21,7 @@
 					
 		</tr>
 	</table>	
-	<fieldset style="width:90%;float:left;border-color:blue;">
+	<fieldset style="width:90%;float:left;">
 	<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 		<tr>
 			<td width="10%"></td><td width="30%"></td><td width="10%"></td><td></td>

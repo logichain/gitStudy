@@ -7,11 +7,11 @@
 	<input type="hidden" name="method" value="saveTestCase">	
 	
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">		
-		<tr><td width="70%"></td>
-			<td align="center"><html:submit styleClass="savebutton">&nbsp;</html:submit></td>
-			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseNew');">&nbsp;</html:submit></td>
-			<td align="center"><html:submit styleClass="" onclick="chgAction(document.all.method,'saveTestCaseCopy');">copy new</html:submit></td>						
-			<td align="center"><html:reset styleClass="resetbutton">&nbsp;</html:reset></td>				
+		<tr><td width="60%"></td>
+			<td align="left"><html:submit styleClass="savebutton">&nbsp;</html:submit></td>
+			<td align="left"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseNew');">&nbsp;</html:submit></td>
+			<td align="left"><html:submit styleClass="savecopybutton" onclick="chgAction(document.all.method,'saveTestCaseCopy');">&nbsp;</html:submit></td>						
+			<td align="left"><html:reset styleClass="resetbutton">&nbsp;</html:reset></td>				
 		</tr>
 		<tr>
 			<td align="left" class="strong"><bean:message bundle="case" key="project"/>£º<bean:write name="caseForm" property="projectInfo.PName"/></td>

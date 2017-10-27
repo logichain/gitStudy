@@ -29,7 +29,7 @@
 	<html:errors />
 	
 	<input type="hidden" name="method" value="confirmCvrAttachment">			
-	<table class="win" width="98%" border="1">		
+	<table class="win" width="98%" border="0">		
 		
 		<tr>
 			<td width="20%" align="right">
@@ -70,7 +70,7 @@
 
 	<table class="win" width="100%" border="0">
 		
-		<tr><td width="70%"><img id="img1" width="60" height="60"><div id="large"></div></td>
+		<tr><td width="70%"><img id="img1" width="100" height="100"><div id="large"></div></td>
 			<td align="center" width="12%">
 				<html:submit styleClass="button">
 					<bean:message key="button.confirm" />

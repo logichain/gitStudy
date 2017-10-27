@@ -78,116 +78,113 @@
 
 <fieldset style="width:98%;float:left;">
 	<div id="versionRefer">
-		<table width="100%">
+		
+	<logic:notEmpty name="versionSvgStr">
+		<%=request.getAttribute("versionSvgStr") %>
+	</logic:notEmpty>
+	
+		<table class="sort-table" width="100%">
+		<thead>	
 			<tr>
-				<td width="60%">
-				<logic:notEmpty name="versionSvgStr">
-					<%=request.getAttribute("versionSvgStr") %>
-				</logic:notEmpty>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="project" key="project_version" /></td>
-							<td><bean:message bundle="case" key="case_count"/></td>
-							<td><bean:message bundle="case" key="test_count"/></td>
-							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="na_count"/></td>
-						</tr>
-					</thead>
-					<tbody>
-						<logic:present name="versionDataList">
-							<logic:iterate id="data" name="versionDataList">
-								<tr>
-									<td><bean:write name="data" property="title"/></td>
-									<td><bean:write name="data" property="designCaseCount"/></td>
-									<td><bean:write name="data" property="testCaseCount"/></td>
-									<td><bean:write name="data" property="unpassCaseCount"/></td>
-									<td><bean:write name="data" property="NACaseCount"/></td>
-								</tr>
-							</logic:iterate>
-						</logic:present>
-					</tbody>
-					</table>
-				</td>
+				<td><bean:message bundle="project" key="project_version" /></td>
+				<td><bean:message bundle="case" key="case_count"/></td>
+				<td><bean:message bundle="case" key="wait_count"/></td>
+				<td><bean:message bundle="case" key="test_count"/></td>
+				<td><bean:message bundle="case" key="bug_count"/></td>
+				<td><bean:message bundle="case" key="na_count"/></td>
+				<td><bean:message bundle="case" key="close_count"/></td>
 			</tr>
-		</table>		
+		</thead>
+		<tbody>
+			<logic:present name="versionDataList">
+				<logic:iterate id="data" name="versionDataList">
+					<tr>
+						<td><bean:write name="data" property="title"/></td>
+						<td><bean:write name="data" property="designCaseCount"/></td>
+						<td><bean:write name="data" property="waitTestCaseCount"/></td>
+						<td><bean:write name="data" property="testCaseCount"/></td>
+						<td><bean:write name="data" property="unpassCaseCount"/></td>
+						<td><bean:write name="data" property="NACaseCount"/></td>
+						<td><bean:write name="data" property="closeCaseCount"/></td>
+					</tr>
+				</logic:iterate>
+			</logic:present>
+		</tbody>
+		</table>
+				
 	</div>
 	<div id="moduleRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-				<logic:notEmpty name="moduleSvgStr">
-					<%=request.getAttribute("moduleSvgStr") %>
-				</logic:notEmpty>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="case" key="module"/></td>
-							<td><bean:message bundle="case" key="case_count"/></td>
-							<td><bean:message bundle="case" key="test_count"/></td>
-							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="na_count"/></td>
-						</tr>
-					</thead>
-					<tbody>
-						<logic:present name="versionDataList">
-							<logic:iterate id="data" name="moduleDataList">
-								<tr>
-									<td><bean:write name="data" property="title"/></td>
-									<td><bean:write name="data" property="designCaseCount"/></td>
-									<td><bean:write name="data" property="testCaseCount"/></td>
-									<td><bean:write name="data" property="unpassCaseCount"/></td>
-									<td><bean:write name="data" property="NACaseCount"/></td>
-								</tr>
-							</logic:iterate>
-						</logic:present>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
 		
-	<div id="userRefer" style="display:none;">
-		<table width="100%">
-			<tr>
-				<td width="60%">
-				<logic:notEmpty name="userSvgStr">
-					<%=request.getAttribute("userSvgStr") %>
-				</logic:notEmpty>
-				</td>
-				<td>
-					<table class="sort-table" width="100%">
-					<thead>	
-						<tr>
-							<td><bean:message bundle="case" key="test_user"/></td>
-							<td><bean:message bundle="case" key="case_count"/></td>
-							<td><bean:message bundle="case" key="test_count"/></td>
-							<td><bean:message bundle="case" key="bug_count"/></td>
-							<td><bean:message bundle="case" key="na_count"/></td>
-						</tr>
-					</thead>
-					<tbody>
-					<logic:present name="userDataList">
-						<logic:iterate id="data" name="userDataList">
+		<logic:notEmpty name="moduleSvgStr">
+			<%=request.getAttribute("moduleSvgStr") %>
+		</logic:notEmpty>
+		
+			<table class="sort-table" width="100%">
+			<thead>	
+				<tr>
+					<td><bean:message bundle="case" key="module"/></td>
+					<td><bean:message bundle="case" key="case_count"/></td>
+					<td><bean:message bundle="case" key="wait_count"/></td>
+					<td><bean:message bundle="case" key="test_count"/></td>
+					<td><bean:message bundle="case" key="bug_count"/></td>
+					<td><bean:message bundle="case" key="na_count"/></td>
+					<td><bean:message bundle="case" key="close_count"/></td>
+				</tr>
+			</thead>
+			<tbody>
+				<logic:present name="versionDataList">
+					<logic:iterate id="data" name="moduleDataList">
 						<tr>
 							<td><bean:write name="data" property="title"/></td>
 							<td><bean:write name="data" property="designCaseCount"/></td>
+							<td><bean:write name="data" property="waitTestCaseCount"/></td>
 							<td><bean:write name="data" property="testCaseCount"/></td>
 							<td><bean:write name="data" property="unpassCaseCount"/></td>
 							<td><bean:write name="data" property="NACaseCount"/></td>
+							<td><bean:write name="data" property="closeCaseCount"/></td>
 						</tr>
-						</logic:iterate>
-					</logic:present>
-					</tbody>
-					</table>
-				</td>
-			</tr>
-		</table>
+					</logic:iterate>
+				</logic:present>
+			</tbody>
+			</table>
+				
+	</div>
+		
+	<div id="userRefer" style="display:none;">
+		
+		<logic:notEmpty name="userSvgStr">
+			<%=request.getAttribute("userSvgStr") %>
+		</logic:notEmpty>
+		
+			<table class="sort-table" width="100%">
+			<thead>	
+				<tr>
+					<td><bean:message bundle="case" key="test_user"/></td>
+					<td><bean:message bundle="case" key="case_count"/></td>
+					<td><bean:message bundle="case" key="wait_count"/></td>
+					<td><bean:message bundle="case" key="test_count"/></td>
+					<td><bean:message bundle="case" key="bug_count"/></td>
+					<td><bean:message bundle="case" key="na_count"/></td>
+					<td><bean:message bundle="case" key="close_count"/></td>
+				</tr>
+			</thead>
+			<tbody>
+			<logic:present name="userDataList">
+				<logic:iterate id="data" name="userDataList">
+				<tr>
+					<td><bean:write name="data" property="title"/></td>
+					<td><bean:write name="data" property="designCaseCount"/></td>
+					<td><bean:write name="data" property="waitTestCaseCount"/></td>
+					<td><bean:write name="data" property="testCaseCount"/></td>
+					<td><bean:write name="data" property="unpassCaseCount"/></td>
+					<td><bean:write name="data" property="NACaseCount"/></td>
+					<td><bean:write name="data" property="closeCaseCount"/></td>
+				</tr>
+				</logic:iterate>
+			</logic:present>
+			</tbody>
+			</table>
+				
 	</div>
 	
 	

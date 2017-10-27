@@ -57,10 +57,9 @@ public class TestStatisticsAction extends BaseAction {
 	
 	public ActionForward projectDataStatistics(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{
-		DynaValidatorForm dform = (DynaValidatorForm) form;
 		List<Project> pList = projectService.getProjectList();
-		TestCase caseInfo = (TestCase) dform.get("caseInfo");
-		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
+		TestCase caseInfo = new TestCase();
+		CaseVersionReference cvrSearchInfo = new CaseVersionReference();
 				
 		List<Integer> countList = new ArrayList<Integer>();
 		List<String> dataInfoList = new ArrayList<String>();
@@ -69,6 +68,8 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allTestCount = 0;
 		Integer allUnpassCount = 0;
 		Integer allNACount = 0;
+		Integer allCloseCount = 0;
+		Integer allWaitTestCount = 0;
 		
 		for(Project p:pList)
 		{				
@@ -83,6 +84,14 @@ public class TestStatisticsAction extends BaseAction {
 					dataInfoList.add(p.getPName() +":" + designCaseCount);				
 					allDesignCount = allDesignCount+ designCaseCount;
 				}
+				
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+				Integer waitTestCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{p,caseInfo,cvrSearchInfo,functionList});
+				if(waitTestCaseCount >= 0)
+				{							
+					allWaitTestCount = allWaitTestCount+ waitTestCaseCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
 				
 				cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
 				Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{p,caseInfo,cvrSearchInfo,functionList});
@@ -114,11 +123,19 @@ public class TestStatisticsAction extends BaseAction {
 				cvrSearchInfo.setCvrCaseStatus(null);
 				cvrSearchInfo.setCvrCaseResult(null);
 				
-				statisticsDataList.add(new StatisticsData(p.getPName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount));
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.CLOSE_STATUS);
+				Integer closeCount = testStatisticsService.searchTestCaseCount(new Object[]{p,caseInfo,cvrSearchInfo,functionList});
+				if(closeCount >= 0)
+				{							
+					allCloseCount = allCloseCount+ closeCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
+				
+				statisticsDataList.add(new StatisticsData(p.getPName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount,closeCount,waitTestCaseCount));
 			}
 			else
 			{
-				statisticsDataList.add(new StatisticsData(p.getPName(),0,0,0,0));
+				statisticsDataList.add(new StatisticsData(p.getPName(),0,0,0,0,0,0));
 			}			
 		}
 		
@@ -134,7 +151,7 @@ public class TestStatisticsAction extends BaseAction {
 			}			
 		}
 		
-		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount));
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount,allCloseCount,allWaitTestCount));
 		request.setAttribute("projectDataList", statisticsDataList);
 		
 		return mapping.findForward("projectStatistics");
@@ -207,10 +224,12 @@ public class TestStatisticsAction extends BaseAction {
 		List<Integer> countList = new ArrayList<Integer>();
 		List<String> dataInfoList = new ArrayList<String>();
 		List<StatisticsData> statisticsDataList = new ArrayList<StatisticsData>();
-		Integer allDesignCount = 0;
+		Integer allDesignCount = 0;		
 		Integer allTestCount = 0;
 		Integer allUnpassCount = 0;
 		Integer allNACount = 0;
+		Integer allCloseCount = 0;
+		Integer allWaitTestCount = 0;
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);		
 		
@@ -224,6 +243,14 @@ public class TestStatisticsAction extends BaseAction {
 				dataInfoList.add(pv.getPvVersion() +":" + designCaseCount);				
 				allDesignCount = allDesignCount+ designCaseCount;
 			}
+						
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+			Integer waitTestCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(waitTestCaseCount >= 0)
+			{							
+				allWaitTestCount = allWaitTestCount+ waitTestCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
 			
 			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
 			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
@@ -255,7 +282,15 @@ public class TestStatisticsAction extends BaseAction {
 			cvrSearchInfo.setCvrCaseStatus(null);
 			cvrSearchInfo.setCvrCaseResult(null);
 			
-			statisticsDataList.add(new StatisticsData(pv.getPvVersion(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount));
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CLOSE_STATUS);
+			Integer closeCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(closeCount >= 0)
+			{							
+				allCloseCount = allCloseCount+ closeCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			statisticsDataList.add(new StatisticsData(pv.getPvVersion(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount,closeCount,waitTestCaseCount));
 		}
 		
 		double[] dataPercent = CakySvg.getPercent(countList);
@@ -271,7 +306,7 @@ public class TestStatisticsAction extends BaseAction {
 			}			
 		}
 		
-		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount));
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount,allCloseCount,allWaitTestCount));
 		request.setAttribute("versionDataList", statisticsDataList);
 	}
 	
@@ -290,6 +325,8 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allTestCount = 0;
 		Integer allUnpassCount = 0;
 		Integer allNACount = 0;
+		Integer allCloseCount = 0;
+		Integer allWaitTestCount = 0;
 				
 		for(ProjectModule pm:projectInfo.getModuleList())
 		{
@@ -303,6 +340,14 @@ public class TestStatisticsAction extends BaseAction {
 				allDesignCount = allDesignCount+ designCaseCount;
 			}
 			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+			Integer waitTestCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(waitTestCaseCount >= 0)
+			{							
+				allWaitTestCount = allWaitTestCount+ waitTestCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
 			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
 			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
 			if(testCaseCount >= 0)
@@ -310,7 +355,7 @@ public class TestStatisticsAction extends BaseAction {
 				allTestCount = allTestCount+ testCaseCount;
 			}
 			cvrSearchInfo.setCvrCaseStatus(null);
-			
+									
 			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
 			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
 			Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
@@ -331,7 +376,15 @@ public class TestStatisticsAction extends BaseAction {
 			cvrSearchInfo.setCvrCaseStatus(null);
 			cvrSearchInfo.setCvrCaseResult(null);
 			
-			statisticsDataList.add(new StatisticsData(pm.getPmName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount));
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CLOSE_STATUS);
+			Integer closeCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(closeCount >= 0)
+			{							
+				allCloseCount = allCloseCount+ closeCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
+			statisticsDataList.add(new StatisticsData(pm.getPmName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount,closeCount,waitTestCaseCount));
 			
 		}
 		
@@ -347,7 +400,7 @@ public class TestStatisticsAction extends BaseAction {
 				d.setPercent(d.getDesignCaseCount()*1.0/allDesignCount);
 			}			
 		}
-		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount));
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount,allCloseCount,allWaitTestCount));
 		
 		request.setAttribute("moduleDataList", statisticsDataList);
 				
@@ -368,6 +421,8 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allTestCount = 0;
 		Integer allUnpassCount = 0;
 		Integer allNACount = 0;
+		Integer allCloseCount = 0;
+		Integer allWaitTestCount = 0;
 		
 		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);	
 				
@@ -388,6 +443,14 @@ public class TestStatisticsAction extends BaseAction {
 				allDesignCount = allDesignCount+ designCaseCount;
 			}			
 			caseInfo.setTcCreateUser(null);
+			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+			Integer waitTestCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(waitTestCaseCount >= 0)
+			{							
+				allWaitTestCount = allWaitTestCount+ waitTestCaseCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
 			
 			cvrSearchInfo.setCvrTestUser(tm.getTmAccount());
 			
@@ -419,9 +482,17 @@ public class TestStatisticsAction extends BaseAction {
 			cvrSearchInfo.setCvrCaseStatus(null);
 			cvrSearchInfo.setCvrCaseResult(null);
 			
+			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CLOSE_STATUS);
+			Integer closeCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+			if(closeCount >= 0)
+			{							
+				allCloseCount = allCloseCount+ closeCount;
+			}
+			cvrSearchInfo.setCvrCaseStatus(null);
+			
 			cvrSearchInfo.setCvrTestUser(null);
 			
-			statisticsDataList.add(new StatisticsData(tm.getAccount().getPersonName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount));
+			statisticsDataList.add(new StatisticsData(tm.getAccount().getPersonName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount,closeCount,waitTestCaseCount));
 		}
 		
 		double[] dataPercent = CakySvg.getPercent(countList);
@@ -435,7 +506,7 @@ public class TestStatisticsAction extends BaseAction {
 				d.setPercent(d.getDesignCaseCount()*1.0/allDesignCount);
 			}			
 		}
-		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount));
+		statisticsDataList.add(new StatisticsData("All",allDesignCount,allTestCount,allUnpassCount,allNACount,allCloseCount,allWaitTestCount));
 		
 		request.setAttribute("userDataList", statisticsDataList);
 				

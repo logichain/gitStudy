@@ -103,6 +103,8 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 				continue;
 			}
 			IcoMenu m = new IcoMenu();
+			m.setIcon("img/project.gif");
+			m.setIconopen("img/project.gif");
 			m.setId(String.valueOf(100+p.getPId()));
 			m.setPid("1");
 			m.setMenuName(p.getPName());
@@ -111,6 +113,8 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 			menuList.add(m);
 					
 			m = new IcoMenu();
+			m.setIcon("img/project.gif");
+			m.setIconopen("img/project.gif");
 			m.setId(String.valueOf(100+p.getPId()));
 			m.setPid("3");
 			m.setMenuName(p.getPName());
@@ -119,6 +123,8 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 			menuList.add(m);
 			
 			m = new IcoMenu();
+			m.setIcon("img/project.gif");
+			m.setIconopen("img/project.gif");
 			m.setId(String.valueOf(100+p.getPId()));
 			m.setPid("6");
 			m.setMenuName(p.getPName());
@@ -127,6 +133,8 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 			menuList.add(m);
 			
 			m = new IcoMenu();
+			m.setIcon("img/project.gif");
+			m.setIconopen("img/project.gif");
 			m.setId(String.valueOf(100+p.getPId()));
 			m.setPid("7");
 			m.setMenuName(p.getPName());
@@ -135,6 +143,8 @@ public class CommonServiceImpl extends BaseService implements CommonService {
 			menuList.add(m);
 			
 			m = new IcoMenu();
+			m.setIcon("img/project.gif");
+			m.setIconopen("img/project.gif");
 			m.setId(String.valueOf(100+p.getPId()));
 			m.setPid("8");
 			m.setMenuName(p.getPName());

@@ -12,8 +12,8 @@
 			<td align="center"><html:submit styleClass="nextbutton" onclick="chgAction(document.all.method,'editTestCaseNext');chgFormOnsubmit('return true;');">&nbsp;</html:submit></td>	
 			
 			<td align="center"><html:submit styleClass="savebutton">&nbsp;</html:submit></td>
-			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseEditNext');">&nbsp;</html:submit></td>
-			<td align="center"><html:submit styleClass="" onclick="chgAction(document.all.method,'saveTestCaseCopy');">copy new</html:submit></td>						
+<%-- 			<td align="center"><html:submit styleClass="savenewbutton" onclick="chgAction(document.all.method,'saveTestCaseEditNext');">&nbsp;</html:submit></td> --%>
+			<td align="center"><html:submit styleClass="savecopybutton" onclick="chgAction(document.all.method,'saveTestCaseCopy');">&nbsp;</html:submit></td>						
 			<td align="center"><html:reset styleClass="resetbutton">&nbsp;</html:reset></td>				
 		</tr>
 		<tr>

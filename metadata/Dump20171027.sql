@@ -64,7 +64,7 @@ CREATE TABLE `case_attachment` (
   `ca_description` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`ca_id`),
   UNIQUE KEY `ca_id_UNIQUE` (`ca_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `case_status` (
 
 LOCK TABLES `case_status` WRITE;
 /*!40000 ALTER TABLE `case_status` DISABLE KEYS */;
-INSERT INTO `case_status` VALUES (-1,'删除',0),(1,'待测试',0),(2,'关闭',0),(3,'测试',0),(4,'修正',0);
+INSERT INTO `case_status` VALUES (-1,'删除',0),(1,'待测试',0),(2,'关闭',0),(3,'已测试',0),(4,'修正',0);
 /*!40000 ALTER TABLE `case_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ CREATE TABLE `case_version_reference` (
   `cvr_close_user` int(11) DEFAULT NULL,
   `cvr_close_time` datetime DEFAULT NULL,
   PRIMARY KEY (`cvr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=344 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,6 +161,39 @@ CREATE TABLE `case_version_reference` (
 LOCK TABLES `case_version_reference` WRITE;
 /*!40000 ALTER TABLE `case_version_reference` DISABLE KEYS */;
 /*!40000 ALTER TABLE `case_version_reference` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cvr_attachment`
+--
+
+DROP TABLE IF EXISTS `cvr_attachment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cvr_attachment` (
+  `ca_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ca_case_version_reference` int(11) NOT NULL,
+  `ca_code` varchar(45) NOT NULL,
+  `ca_name` varchar(100) NOT NULL,
+  `ca_url` varchar(100) NOT NULL,
+  `ca_flag` int(11) NOT NULL,
+  `ca_create_user` int(11) NOT NULL,
+  `ca_create_time` datetime NOT NULL,
+  `ca_local_url` varchar(100) DEFAULT NULL,
+  `ca_submit_date` date DEFAULT NULL,
+  `ca_description` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`ca_id`),
+  UNIQUE KEY `ca_id_UNIQUE` (`ca_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=gbk;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cvr_attachment`
+--
+
+LOCK TABLES `cvr_attachment` WRITE;
+/*!40000 ALTER TABLE `cvr_attachment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cvr_attachment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -218,7 +251,7 @@ CREATE TABLE `ico_menu` (
 
 LOCK TABLES `ico_menu` WRITE;
 /*!40000 ALTER TABLE `ico_menu` DISABLE KEYS */;
-INSERT INTO `ico_menu` VALUES ('0','-1','系统菜单','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,1),('1','0','用例管理','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,1),('2','0','项目管理','javascript: void(0);','1',NULL,NULL,NULL,NULL,2),('3','0','测试统计','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,3),('4','2','项目管理','projectmanage.do?method=resetSearchProject','1',NULL,NULL,NULL,NULL,2),('5','2','新建项目','projectmanage.do?method=createProject','1',NULL,NULL,NULL,NULL,1),('99','0','系统设置','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,9990),('9901','99','员工管理','accountManager.do?method=resetSearchAccount','1',NULL,NULL,NULL,NULL,9903),('9902','99','权限设置','accountSecurityManager.do?method=searchAccount','1',NULL,NULL,NULL,NULL,9902),('9904','99','修改密码','accountManager.do?method=load4ChangePWD',NULL,NULL,NULL,NULL,NULL,9904);
+INSERT INTO `ico_menu` VALUES ('0','-1','系统菜单','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,1),('1','0','用例管理','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,1),('2','0','项目管理','javascript: void(0);','1',NULL,NULL,NULL,NULL,2),('3','0','测试统计','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,3),('4','2','项目管理','projectmanage.do?method=resetSearchProject','1',NULL,NULL,NULL,NULL,2),('5','2','新建项目','projectmanage.do?method=createProject','1',NULL,NULL,NULL,NULL,1),('6','0','式样书管理',NULL,NULL,NULL,NULL,NULL,NULL,5),('7','0','成绩书管理',NULL,NULL,NULL,NULL,NULL,NULL,6),('8','0','用例版本关联',NULL,NULL,NULL,NULL,NULL,NULL,4),('9','2','项目总计','teststatistics.do?method=projectDataStatistics','1',NULL,NULL,NULL,NULL,3),('99','0','系统设置','javascript: void(0);',NULL,NULL,NULL,NULL,NULL,9990),('9901','99','员工管理','accountManager.do?method=resetSearchAccount','1',NULL,NULL,NULL,NULL,9903),('9902','99','权限设置','accountSecurityManager.do?method=searchAccount','1',NULL,NULL,NULL,NULL,9902),('9904','99','修改密码','accountManager.do?method=load4ChangePWD',NULL,NULL,NULL,NULL,NULL,9904);
 /*!40000 ALTER TABLE `ico_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +321,7 @@ CREATE TABLE `module_function` (
   `mu_flag` int(11) DEFAULT NULL,
   `mu_parent` int(11) DEFAULT NULL,
   PRIMARY KEY (`mu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -320,9 +353,10 @@ CREATE TABLE `project` (
   `p_flag` int(11) DEFAULT NULL,
   `p_create_user` int(11) DEFAULT NULL,
   `p_create_time` datetime DEFAULT NULL,
+  `p_status` int(11) DEFAULT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_id_UNIQUE` (`p_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -355,7 +389,7 @@ CREATE TABLE `project_attachment` (
   `pa_description` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`pa_id`),
   UNIQUE KEY `pa_id_UNIQUE` (`pa_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -381,7 +415,7 @@ CREATE TABLE `project_module` (
   `pm_remark` varchar(200) DEFAULT NULL,
   `pm_flag` int(11) DEFAULT NULL,
   PRIMARY KEY (`pm_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -417,7 +451,7 @@ CREATE TABLE `project_version` (
   `pv_init` int(11) DEFAULT NULL,
   PRIMARY KEY (`pv_id`),
   UNIQUE KEY `pv_id_UNIQUE` (`pv_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -443,7 +477,7 @@ CREATE TABLE `team_member` (
   `tm_flag` int(11) DEFAULT NULL,
   PRIMARY KEY (`tm_id`),
   UNIQUE KEY `tm_id_UNIQUE` (`tm_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -476,7 +510,7 @@ CREATE TABLE `test_case` (
   `tc_create_user` int(11) DEFAULT NULL,
   `tc_create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`tc_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=895 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -505,7 +539,7 @@ CREATE TABLE `test_correct_record` (
   `tcr_remark` varchar(100) DEFAULT NULL,
   `tcr_test_result` int(11) DEFAULT NULL,
   PRIMARY KEY (`tcr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=1009 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -565,7 +599,7 @@ CREATE TABLE `usr_account` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `account_name_UNIQUE` (`account_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=gbk;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -587,4 +621,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-10 16:57:34
+-- Dump completed on 2017-10-27  9:13:48
