@@ -1,29 +1,6 @@
 <%@page pageEncoding="GBK"%>
 <%@ include file="../common/include.jsp"%>
 
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5.min.js"></script>
-<script>
- $(function(){
- var gg = document.getElementById("img1");
- var ei = document.getElementById("large");
- gg.onmousemove = function(event){
-  event = event || window.event;
-  ei.style.display = "block";
-  ei.innerHTML = '<img style="border:1px solid gray;" src="' + this.src + '" />';
- }
- gg.onmouseout = function(){
-  ei.innerHTML = "";
-  ei.style.display = "none";
- } 
- $("#selectFile").change(function(){	
-  $("#img1").attr("src","file:///"+$("#selectFile").val());
- })
- });
-</script>
-<style type="text/css">
- #large{position:absolute;display:none;z-index:999;}
-</style>
-
 	
 <html:form action="casemanage.do" enctype="multipart/form-data" onsubmit="return checkFormValidate();" >
 	<html:errors />
@@ -37,7 +14,7 @@
 				<bean:message bundle="project" key="attachment_selectfile" />£º
 			</td>
 			<td id="filetd" align="left">
-				<html:file property="caseInfo.currentAttachment.attachmentFile" styleId="selectFile" size="60"  onchange="document.getElementById('selectFile').value=this.value"></html:file>	
+				<html:file property="caseInfo.currentAttachment.attachmentFile" accept="image/*" styleId="selectFile" size="60"  onchange="document.getElementById('selectFile').value=this.value"></html:file>	
 				<html:hidden property="caseInfo.currentAttachment.caLocalUrl"/>				
 			</td>				
 		</tr>
@@ -69,9 +46,8 @@
 		
 	</table>
 
-	<table class="win" width="100%" border="0">
-		
-		<tr><td width="70%"><img id="img1" width="100" height="100"><div id="large"></div></td>
+	<table class="win" width="100%" border="0">		
+		<tr><td width="70%"></td>
 			<td align="center" width="12%">
 				<html:submit styleClass="button">
 					<bean:message key="button.confirm" />

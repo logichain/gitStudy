@@ -40,6 +40,10 @@
 			<forward name="testResultOutput" path="testResultOutputPageDef" redirect="false" />
 			<forward name="caseVersionRefer" path="caseVersionReferPageDef" redirect="false" />
 			<forward name="refreshCaseVersionRefer" path="/WEB-INF/pages/projectmanage/refreshCaseVersionRefer.jsp" redirect="false"/>
+			
+			<forward name="projectModuleSelect" path="pmSelectPageDef" redirect="false" />
+			<forward name="moduleFunctionSelect" path="mfSelectPageDef" redirect="false" />
+			<forward name="refreshCaseReferSelect" path="/WEB-INF/pages/projectmanage/refreshCaseReferSelect.jsp" redirect="false"/>
 		</action>		
 	</action-mappings>
 </struts-config>

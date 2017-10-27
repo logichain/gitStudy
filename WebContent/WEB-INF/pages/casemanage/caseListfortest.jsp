@@ -100,10 +100,10 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="6" align="right">
-				<logic:equal name="accountPersonId" value='1'>
-					<a href="javascript:openDialog('casemanage.do?method=importTestCase',600,200);">”√¿˝µº»Î</a>
-				</logic:equal>
+			<td colspan="6" align="right">				
+				<html:button styleClass="importbutton" property="" onclick="javascript:openDialog('casemanage.do?method=importTestCase',600,200);">
+					&nbsp;
+				</html:button>
 				<html:submit styleClass="exportbutton" property="" onclick="chgAction(document.all.method,'exportTestCase');">
 					&nbsp;
 				</html:submit>

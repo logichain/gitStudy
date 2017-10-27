@@ -158,7 +158,7 @@
 			<td align="left" rowspan="2" valign="top">
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
-					<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList" indexId="i">
+					<logic:iterate id="am" name="caseForm" property="caseInfo.currentCaseVersionReference.attachmentList" indexId="i">
 					<logic:notEqual name="am" property="caFlag" value="-1">
 						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
 					</logic:notEqual>				

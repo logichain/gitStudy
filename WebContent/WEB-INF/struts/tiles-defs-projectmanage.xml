@@ -71,4 +71,14 @@
 		<put name="title" value="用例版本关联"/>
 		<put name="body" value="/WEB-INF/pages/projectmanage/caseVersionRefer.jsp" />
 	</definition>
+	
+	<definition name="pmSelectPageDef" extends="inputBaseDef">
+		<put name="title" value="模块选择"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/projectModuleSelect.jsp" />
+	</definition>
+	<definition name="mfSelectPageDef" extends="inputBaseDef">
+		<put name="title" value="功能点选择"/>
+		<put name="body" value="/WEB-INF/pages/projectmanage/moduleFunctionSelect.jsp" />
+	</definition>
+	
 </tiles-definitions>

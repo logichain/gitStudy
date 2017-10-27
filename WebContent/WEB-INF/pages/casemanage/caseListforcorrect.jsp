@@ -22,17 +22,13 @@
 		<tr>
 			<td align="right"><bean:message bundle="case" key="module"/>:</td>
 			<td align="left">
-				<html:select property="searchInfo.moduleId" style="width:120px">	
-					<html:option value=""></html:option>
-					<html:optionsCollection name="caseForm" property="projectInfo.moduleList" value="pmId" label="pmName"/>
-				</html:select>
+				<html:text property="searchInfo.projectModule.pmName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseList',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>:</td>
-			<td align="left">			
-				<html:select property="searchInfo.tcModuleFunction" style="width:120px">	
-					<html:option value=""></html:option>									
-					<html:optionsCollection name="caseForm" property="projectInfo.allModuleFunctionList" value="muId" label="entireName"/>									
-				</html:select>			
+			<td align="left">	
+				<html:text property="searchInfo.moduleFunction.muName" size="14" readonly="true"/>
+				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseList',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="case_code"/>:</td><td align="left"><html:text property="searchInfo.tcCode" size="14"/></td>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>:</td><td align="left"><html:text property="searchInfo.tcTestObjective" size="14"/></td>

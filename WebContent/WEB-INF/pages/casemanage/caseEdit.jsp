@@ -177,7 +177,7 @@
 	function submitForm()
 	{
 		chgFormOnsubmit('return true;');
-		chgAction(document.all.method,'refreshCaseInput');
+		chgAction(document.all.method,'refreshCaseEdit');
 		caseForm.submit();
 	}
 

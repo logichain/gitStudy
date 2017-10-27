@@ -244,7 +244,14 @@ public class TestCaseManage extends BaseAction {
 		}			
 	
 						
-		String fileName = pa.getCaUrl();				
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
+						
+		String fileName = uploadPath + pa.getCaUrl();			
+		
 		try {
 			response.setContentType(FileUtil.getContentType(fileName));
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName.substring(fileName.lastIndexOf("\\")+1));
@@ -445,7 +452,7 @@ public class TestCaseManage extends BaseAction {
 
 		searchInfo.setTcCreateUser(ua.getId());
 		searchInfo.setTcCreateUserStr(ua.getPersonName());
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -471,7 +478,7 @@ public class TestCaseManage extends BaseAction {
 
 		searchInfo.setTcCreateUser(ua.getId());
 		searchInfo.setTcCreateUserStr(ua.getPersonName());
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -486,25 +493,7 @@ public class TestCaseManage extends BaseAction {
 		return mapping.findForward("caseEdit");
 	}
 
-	private String getApplicaleFunctionList(Project projectInfo, TestCase searchInfo) {
-		String functionList = "";
-		if(searchInfo.getModuleFunction().getMuId() != null){
-			if(searchInfo.getModuleFunction().getChildFunctionList().size() == 0)
-			{
-				functionList = "(" + searchInfo.getModuleFunction().getMuId() + ")";
-			}
-			else
-			{
-				functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getModuleFunction());
-			}
-		} else if (searchInfo.getProjectModule().getPmId() != null) {
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getProjectModule());
-		} else {
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
-		}
 
-		return functionList;
-	}
 
 	/*
 	 * 当前适用版本
@@ -556,7 +545,7 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -579,7 +568,7 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -625,7 +614,7 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvr = caseInfo.getCurrentCaseVersionReference();
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -653,7 +642,7 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvr = caseInfo.getCurrentCaseVersionReference();
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -726,7 +715,7 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvr = caseInfo.getCurrentCaseVersionReference();
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -754,7 +743,7 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvr = caseInfo.getCurrentCaseVersionReference();
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -1032,7 +1021,7 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };		
 
 		testCase = testCaseService.getTestCaseNextEdit(args, testCase.getTcId());
@@ -1105,7 +1094,7 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
 		TestCase testCase = (TestCase) dform.get("caseInfo");
@@ -1162,7 +1151,7 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvr = testCase.getCurrentCaseVersionReference();
 		cvrSearchInfo.setCvrProjectVersion(cvr.getCvrProjectVersion());
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		Object[] args = { searchInfo, cvrSearchInfo, functionList };
 
@@ -1208,7 +1197,7 @@ public class TestCaseManage extends BaseAction {
 		CaseVersionReference cvrSearchInfo = new CaseVersionReference();
 		dform.set("cvrSearchInfo", cvrSearchInfo);
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		if ((projectInfo.isTeamMember(ua) || ua.getId().equals(1)) && functionList.length() > 2) {
 			Object[] args = { searchInfo, page, cvrSearchInfo, functionList };
@@ -1246,7 +1235,7 @@ public class TestCaseManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		if (functionList.length() > 2) {
 			Object[] args = { searchInfo, page, cvrSearchInfo, functionList };
@@ -1310,7 +1299,7 @@ public class TestCaseManage extends BaseAction {
 			cvrSearchInfo.setProjectVersion(projectService.getProjectVersionById(id));
 		}
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 		Object[] args = { searchInfo, projectInfo, cvrSearchInfo, functionList };
 
 		List<TestCase> caseList = testCaseService.getAllTestCase(args);

@@ -26,6 +26,7 @@ import org.mds.project.bean.TeamMember;
 import org.mds.project.bean.TeamMemberDAO;
 import org.mds.project.service.ProjectService;
 import org.mds.test.bean.CaseStatus;
+import org.mds.test.bean.TestCase;
 
 public class ProjectServiceImpl extends BaseService implements ProjectService {
 	private ProjectDAO projectDAO;
@@ -260,8 +261,28 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		// TODO Auto-generated method stub
 		return projectModuleDAO.get(id);
 	}
+	
+	public static String getApplicaleFunctionList(Project projectInfo, TestCase searchInfo) {
+		String functionList = "";
+		if(searchInfo.getModuleFunction() != null && searchInfo.getModuleFunction().getMuId() != null){
+			if(searchInfo.getModuleFunction().getChildFunctionList().size() == 0)
+			{
+				functionList = "(" + searchInfo.getModuleFunction().getMuId() + ")";
+			}
+			else
+			{
+				functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getModuleFunction());
+			}			
+		} else if (searchInfo.getProjectModule() != null && searchInfo.getProjectModule().getPmId() != null) {
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getProjectModule());
+		} else {
+			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
+		}
 
-	public static String getModuleFunctionListForSearch(ModuleFunction mfu) {
+		return functionList;
+	}
+
+	private static String getModuleFunctionListForSearch(ModuleFunction mfu) {
 		// TODO Auto-generated method stub
 		String rtn = "(";
 
@@ -295,7 +316,7 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		return rtn;
 	}
 
-	public static String getModuleFunctionListForSearch(ArrayList<ModuleFunction> functionList) {
+	private static String getModuleFunctionListForSearch(ArrayList<ModuleFunction> functionList) {
 		// TODO Auto-generated method stub
 		String rtn = "(";
 

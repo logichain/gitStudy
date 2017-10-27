@@ -73,7 +73,7 @@ public class TestStatisticsAction extends BaseAction {
 		
 		for(Project p:pList)
 		{				
-			String functionList = this.getApplicaleFunctionList(p, caseInfo);		
+			String functionList = ProjectServiceImpl.getApplicaleFunctionList(p, caseInfo);		
 								
 			if(functionList.length() > 2)
 			{
@@ -165,7 +165,7 @@ public class TestStatisticsAction extends BaseAction {
 		UsrAccount ua = (UsrAccount) request.getSession().getAttribute("accountPerson");
 		
 		TestCase caseInfo = (TestCase) dform.get("caseInfo");
-		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);	
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, caseInfo);	
 				
 		if(projectInfo.isTeamMember(ua) || ua.getId().equals(1))
 		{
@@ -184,26 +184,6 @@ public class TestStatisticsAction extends BaseAction {
 		return mapping.findForward("statistics");
 	}
 	
-	private String getApplicaleFunctionList(Project projectInfo,TestCase searchInfo)
-	{
-		String functionList = "";
-		if(searchInfo.getModuleFunction() != null && searchInfo.getModuleFunction().getMuId() != null){
-			if(searchInfo.getModuleFunction().getChildFunctionList().size() == 0)
-			{
-				functionList = "(" + searchInfo.getModuleFunction().getMuId() + ")";
-			}
-			else
-			{
-				functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getModuleFunction());
-			}
-		} else if(searchInfo.getModuleFunction() != null && searchInfo.getProjectModule().getPmId() != null){
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getProjectModule());
-		} else{
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
-		}
-				
-		return functionList;
-	}
 	
 	private void versionStatistics(ActionForm form,HttpServletRequest request)
 	{
@@ -231,7 +211,7 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allCloseCount = 0;
 		Integer allWaitTestCount = 0;
 		
-		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);		
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, caseInfo);		
 		
 		for(ProjectVersion pv:projectInfo.getProjectVersionList())
 		{
@@ -424,7 +404,7 @@ public class TestStatisticsAction extends BaseAction {
 		Integer allCloseCount = 0;
 		Integer allWaitTestCount = 0;
 		
-		String functionList = this.getApplicaleFunctionList(projectInfo, caseInfo);	
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, caseInfo);	
 				
 		ArrayList<TeamMember> tmList = projectInfo.getMemberList();		
 		for(TeamMember tm:tmList)

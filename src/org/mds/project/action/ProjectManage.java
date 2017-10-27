@@ -41,7 +41,43 @@ public class ProjectManage extends BaseAction {
 	private ProjectService projectService;
 	private TestCaseService testCaseService;
 
+	public ActionForward confirmModuleFunction(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;		
+		
+		String id = request.getParameter("id");
+		
+		ModuleFunction mf = projectService.getModuleFunctionById(Integer.parseInt(id));
+		
+		TestCase searchInfo = (TestCase) dform.get("searchInfo");
+		searchInfo.setModuleFunction(mf);		
+		
+		return mapping.findForward("refreshCaseReferSelect");
+	}
 	
+	public ActionForward selectModuleFunction(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{		
+		return  mapping.findForward("moduleFunctionSelect");
+	}
+	public ActionForward confirmProjectModule(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;	
+		String id = request.getParameter("id");
+				
+		ProjectModule pm = projectService.getProjectModuleById(Integer.parseInt(id));
+				
+		TestCase searchInfo = (TestCase) dform.get("searchInfo");			
+		searchInfo.setProjectModule(pm);
+		searchInfo.setModuleFunction(new ModuleFunction());			
+				
+		return mapping.findForward("refreshCaseReferSelect");
+	}
+	
+	public ActionForward selectProjectModule(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+				
+		return  mapping.findForward("projectModuleSelect");
+	}
 	public ActionForward caseVersionRefer(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{
 		DynaValidatorForm dform = (DynaValidatorForm) form;
@@ -124,10 +160,12 @@ public class ProjectManage extends BaseAction {
 			page = "0";
 		}
 
+		searchInfo.setProjectModule(new ProjectModule());
+		searchInfo.setModuleFunction(new ModuleFunction());
 		dform.set("searchInfo", searchInfo);
 		dform.set("cvrSearchInfo", cvrSearchInfo);
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		if ((projectInfo.isTeamMember(ua) || ua.getId().equals(1)) && functionList.length() > 2) {
 			Object[] args = { searchInfo, page, cvrSearchInfo, functionList };
@@ -147,6 +185,11 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("caseListForReference");
 	}
 	
+	public ActionForward refreshCaseReferSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		
+		return mapping.findForward("caseListForReference");
+	}
+	
 	public ActionForward searchTestCaseforReference(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		DynaValidatorForm dform = (DynaValidatorForm) form;
 
@@ -155,7 +198,7 @@ public class ProjectManage extends BaseAction {
 		TestCase searchInfo = (TestCase) dform.get("searchInfo");
 		CaseVersionReference cvrSearchInfo = (CaseVersionReference) dform.get("cvrSearchInfo");
 
-		String functionList = this.getApplicaleFunctionList(projectInfo, searchInfo);
+		String functionList = ProjectServiceImpl.getApplicaleFunctionList(projectInfo, searchInfo);
 
 		if (functionList.length() > 2) {
 			Object[] args = { searchInfo, page, cvrSearchInfo, functionList };
@@ -175,25 +218,6 @@ public class ProjectManage extends BaseAction {
 		return mapping.findForward("caseListForReference");
 	}
 				
-	private String getApplicaleFunctionList(Project projectInfo, TestCase searchInfo) {
-		String functionList = "";
-		if(searchInfo.getModuleFunction().getMuId() != null){
-			if(searchInfo.getModuleFunction().getChildFunctionList().size() == 0)
-			{
-				functionList = "(" + searchInfo.getModuleFunction().getMuId() + ")";
-			}
-			else
-			{
-				functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getModuleFunction());
-			}			
-		} else if (searchInfo.getProjectModule().getPmId() != null) {
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(searchInfo.getProjectModule());
-		} else {
-			functionList = ProjectServiceImpl.getModuleFunctionListForSearch(projectInfo.getAllModuleFunctionList());
-		}
-
-		return functionList;
-	}
 	
 	public ActionForward addAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 	{
@@ -286,8 +310,14 @@ public class ProjectManage extends BaseAction {
 				}
 			}			
 		}
+		
+		String uploadPath = request.getSession().getServletContext().getInitParameter("uploadFilePath");
+		if(!uploadPath.endsWith("\\"))
+		{
+			uploadPath = uploadPath + "\\";
+		}
 						
-		String fileName = pa.getPaUrl();				
+		String fileName = uploadPath + pa.getPaUrl();				
 		try {
 			response.setContentType(FileUtil.getContentType(fileName));
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName.substring(fileName.lastIndexOf("\\")+1));

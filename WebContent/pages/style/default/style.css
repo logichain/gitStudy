@@ -137,6 +137,14 @@ input.exportbutton
 	border:    0px;
 }
 
+input.importbutton
+{
+	BACKGROUND: url(./mis/import.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
 input.nextbutton
 {
 	BACKGROUND: url(./mis/next.jpg) no-repeat;
