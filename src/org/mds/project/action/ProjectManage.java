@@ -420,12 +420,7 @@ public class ProjectManage extends BaseAction {
 		
 		Project project = (Project)dform.get("projectInfo");
 		UsrAccount ua = accountService.findAccountById(Integer.parseInt(id));
-		if("dl".equals(opType))
-		{
-			project.getInitProjectVersion().setDevelopLeader(ua);
-			project.getInitProjectVersion().setPvDevelopLeader(ua.getId());
-		}
-		else if("tl".equals(opType))
+		if("tl".equals(opType))
 		{
 			project.getInitProjectVersion().setTestLeader(ua);
 			project.getInitProjectVersion().setPvTestLeader(ua.getId());
@@ -453,14 +448,7 @@ public class ProjectManage extends BaseAction {
 						
 			return mapping.findForward("refreshProjectInfo");
 		}
-		else if("vdl".equals(opType))
-		{
-			ProjectVersion vtr = (ProjectVersion)dform.get("versionInfo");			
-			vtr.setDevelopLeader(ua);
-			vtr.setPvDevelopLeader(ua.getId());
-			
-			return mapping.findForward("refreshVersionInput");
-		}
+	
 		else if("vtl".equals(opType))
 		{
 			ProjectVersion vtr = (ProjectVersion)dform.get("versionInfo");			
@@ -707,11 +695,7 @@ public class ProjectManage extends BaseAction {
 				
 		project.setProjectVersionList(vtrList);
 		
-		//当开发、测试leader不是项目成员时，自动添加为项目成员
-		if(project.getInitProjectVersion().getPvDevelopLeader() != null)
-		{
-			projectService.addTeamMember(project, project.getInitProjectVersion().getDevelopLeader());
-		}			
+		//当开发、测试leader不是项目成员时，自动添加为项目成员					
 		projectService.addTeamMember(project, project.getInitProjectVersion().getTestLeader());
 		
 		return this.resetSearchProject(mapping, dform, request, response);
@@ -737,7 +721,6 @@ public class ProjectManage extends BaseAction {
 		projectService.saveProjectVersion(vtr,uploadPath);
 		
 		//当开发、测试leader不是项目成员时，自动添加为项目成员
-		projectService.addTeamMember(project, vtr.getDevelopLeader());	
 		projectService.addTeamMember(project, vtr.getTestLeader());
 		
 		request.setAttribute("tabpageId","versionInfo");
@@ -853,7 +836,6 @@ public class ProjectManage extends BaseAction {
 		Project project = projectService.getProjectById(Integer.parseInt(pid));
 		
 		ProjectVersion vtr = new ProjectVersion();
-		vtr.setDevelopLeader(new UsrAccount());
 		vtr.setTestLeader(new UsrAccount());
 		vtr.setPvCreateUser(ua.getId());
 		vtr.setPvCreateTime(new Date());

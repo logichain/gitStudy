@@ -23,12 +23,12 @@
 			<td align="right"><bean:message bundle="case" key="module"/>:</td>
 			<td align="left">
 				<html:text property="searchInfo.projectModule.pmName" size="14" readonly="true"/>
-				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseList',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseList',600,500);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>:</td>
 			<td align="left">	
 				<html:text property="searchInfo.moduleFunction.muName" size="14" readonly="true"/>
-				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseList',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseList',600,500);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="case_code"/>:</td><td align="left"><html:text property="searchInfo.tcCode" size="14"/></td>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>:</td><td align="left"><html:text property="searchInfo.tcTestObjective" size="14"/></td>

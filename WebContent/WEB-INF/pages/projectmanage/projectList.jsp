@@ -49,7 +49,6 @@
 				<td rowspan="2" width="10%" align="center"><bean:message bundle="project" key="project_name"/></td>
 				<td rowspan="2" width="10%" align="center">≥ı º<bean:message bundle="project" key="project_version"/></td>
 				
-				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="develop"/></td>
 				<td colspan="3" width="25%" align="center"><bean:message bundle="project" key="test"/></td>
 				<td rowspan="2" align="center"><bean:message bundle="project" key="remark"/></td>
 				<td rowspan="2" width="5%" align="center"><bean:message bundle="security" key="account.enabled" /></td>
@@ -57,9 +56,6 @@
 				<td rowspan="2" width="5%" align="center"><bean:message bundle="project" key="delete"/></td>				
 			</tr>
 			<tr>
-				<td align="center"><bean:message bundle="project" key="leader"/></td>
-				<td align="center"><bean:message bundle="project" key="begin"/></td>
-				<td align="center"><bean:message bundle="project" key="end"/></td>	
 				<td align="center"><bean:message bundle="project" key="leader"/></td>
 				<td align="center"><bean:message bundle="project" key="begin"/></td>
 				<td align="center"><bean:message bundle="project" key="end"/></td>			
@@ -85,13 +81,7 @@
 							</td>							
 							<td align="center"><bean:write name="p" property="PName"/></td>					
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvVersion"/></td>		
-							<td align="center">
-								<logic:notEmpty name="p" property="initProjectVersion.developLeader">
-									<bean:write name="p" property="initProjectVersion.developLeader.personName"/>
-								</logic:notEmpty>
-							</td>
-							<td align="center"><bean:write name="p" property="initProjectVersion.pvDevelopBegin"/></td>
-							<td align="center"><bean:write name="p" property="initProjectVersion.pvDevelopEnd"/></td>
+							
 							<td align="center"><bean:write name="p" property="initProjectVersion.testLeader.personName"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestBegin"/></td>
 							<td align="center"><bean:write name="p" property="initProjectVersion.pvTestEnd"/></td>

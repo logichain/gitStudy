@@ -23,10 +23,8 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	private Integer pvId;
 	private Integer pvProject;
 	private String pvVersion;
-	private Integer pvDevelopLeader;
 	private Integer pvTestLeader;
-	private String pvDevelopBegin;
-	private String pvDevelopEnd;
+
 	private String pvTestBegin;
 	private String pvTestEnd;
 	private Integer pvFlag = CommonService.NORMAL_FLAG;
@@ -36,7 +34,6 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	private Date pvCreateTime;
 	private boolean selected;
 	
-	private UsrAccount developLeader = new UsrAccount();
 	private UsrAccount testLeader = new UsrAccount();
 	
 	private ArrayList<TestCase> applyCaseList = new ArrayList<TestCase>();
@@ -47,43 +44,7 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	/** default constructor */
 	public ProjectVersion() {
 	}
-
-	/** minimal constructor */
-	public ProjectVersion(Integer pvProject, String pvVersion,
-			Integer pvDevelopLeader, Integer pvTestLeader,
-			String pvDevelopBegin, String pvDevelopEnd, String pvTestBegin,
-			String pvTestEnd, Integer pvFlag) {
-		this.pvProject = pvProject;
-		this.pvVersion = pvVersion;
-		this.pvDevelopLeader = pvDevelopLeader;
-		this.pvTestLeader = pvTestLeader;
-		this.pvDevelopBegin = pvDevelopBegin;
-		this.pvDevelopEnd = pvDevelopEnd;
-		this.pvTestBegin = pvTestBegin;
-		this.pvTestEnd = pvTestEnd;
-		this.pvFlag = pvFlag;
-	}
-
-	/** full constructor */
-	public ProjectVersion(Integer pvProject, String pvVersion,
-			Integer pvDevelopLeader, Integer pvTestLeader,
-			String pvDevelopBegin, String pvDevelopEnd, String pvTestBegin,
-			String pvTestEnd, Integer pvFlag, String pvRemark,
-			Integer pvCreateUser, Date pvCreateTime) {
-		this.pvProject = pvProject;
-		this.pvVersion = pvVersion;
-		this.pvDevelopLeader = pvDevelopLeader;
-		this.pvTestLeader = pvTestLeader;
-		this.pvDevelopBegin = pvDevelopBegin;
-		this.pvDevelopEnd = pvDevelopEnd;
-		this.pvTestBegin = pvTestBegin;
-		this.pvTestEnd = pvTestEnd;
-		this.pvFlag = pvFlag;
-		this.pvRemark = pvRemark;
-		this.pvCreateUser = pvCreateUser;
-		this.pvCreateTime = pvCreateTime;
-	}
-
+	
 	// Property accessors
 
 	public Integer getPvId() {
@@ -110,14 +71,6 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 		this.pvVersion = pvVersion;
 	}
 
-	public Integer getPvDevelopLeader() {
-		return this.pvDevelopLeader;
-	}
-
-	public void setPvDevelopLeader(Integer pvDevelopLeader) {
-		this.pvDevelopLeader = pvDevelopLeader;
-	}
-
 	public Integer getPvTestLeader() {
 		return this.pvTestLeader;
 	}
@@ -126,31 +79,6 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 		this.pvTestLeader = pvTestLeader;
 	}
 
-	public String getPvDevelopBegin() {
-		if("".equals(pvDevelopBegin))
-		{
-			return null;
-		}
-		return this.pvDevelopBegin;
-	}
-
-	public void setPvDevelopBegin(String pvDevelopBegin) {
-		
-		this.pvDevelopBegin = pvDevelopBegin;
-	}
-
-	public String getPvDevelopEnd() {
-		if("".equals(pvDevelopEnd))
-		{
-			return null;
-		}
-		return this.pvDevelopEnd;
-	}
-
-	public void setPvDevelopEnd(String pvDevelopEnd) {
-	
-		this.pvDevelopEnd = pvDevelopEnd;
-	}
 
 	public String getPvTestBegin() {
 		if("".equals(pvTestBegin))
@@ -232,14 +160,6 @@ public class ProjectVersion extends org.king.framework.domain.BaseObject
 	public String toString() {
 		// TODO Auto-generated method stub
 		return pvId + pvVersion;
-	}
-
-	public void setDevelopLeader(UsrAccount developLeader) {
-		this.developLeader = developLeader;
-	}
-
-	public UsrAccount getDevelopLeader() {
-		return developLeader;
 	}
 
 	public void setTestLeader(UsrAccount testLeader) {

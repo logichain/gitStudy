@@ -31,7 +31,7 @@
 
 <script language="javascript">
     <!--
-    var clientheight = document.documentElement.clientHeight -60;
+    var clientheight = document.documentElement.clientHeight -80;
     clientheight = clientheight + 'px';
     
     document.getElementById('scrolldiv').style.height = clientheight;
@@ -90,7 +90,7 @@
     window.onload = fnLoad;
     window.onunload = fnUnload;
 	window.onresize = function(){
-		var clientheight = document.documentElement.clientHeight -60;
+		var clientheight = document.documentElement.clientHeight -80;
     	clientheight = clientheight + 'px';    
     	document.getElementById('scrolldiv').style.height = clientheight;
     	};

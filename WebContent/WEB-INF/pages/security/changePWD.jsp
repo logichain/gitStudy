@@ -34,10 +34,11 @@
 				<input name="newPWD2" type="password" size="15" maxlength="15">
 			<td>
 		</tr>
-
+		<tr><td>&nbsp;</td></tr>
 
 		<tr>
-			<td colspan="2" align="right">
+			<td></td>
+			<td align="center">
 				<html:submit styleClass="savebutton">
 					&nbsp;
 				</html:submit>

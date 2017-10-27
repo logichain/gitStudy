@@ -1,6 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-
 <%@ include file="./include.jsp"%>
 <html:html locale="true">
 <head>
@@ -12,32 +10,18 @@
 <link rel="icon" href="./pages/images/favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="./pages/images/favicon.ico" type="image/x-icon" />
 <link href="<c:url value="/pages/style/default/style.css"/>" type="text/css" rel="stylesheet"/>
-<script type="text/javascript" src="<c:url value='/pages/scripts/calendar.js'/>" charset="gbk"></script>
-
-<script type="text/javascript" src="<c:url value='/pages/editableselect/jquery.editable-select.min.js'/>" ></script>
-<link rel="stylesheet" type="text/css" href="/page/editableselect/jquery.editable-select.min.css" />
 </head>
 
 <body style="overflow-x:hidden;overflow-y:hidden;">
     <!---------------------- include header start --------------------------->
     <tiles:insert attribute="header"/>
     <!---------------------- include header end ----------------------------->
-    
-	<table border="1" width="100%" height="100%"><tr>
-	<td width="20%" valign="top">
-		<div id="scrolldivmenu" class="scroll">
-			<tiles:insert attribute="menu"/>	
-		</div>	
-	</td>
-	<td valign="top">
-		<div id="scrolldivbody" class="scroll">		
-	    <!---------------------- include body start ----------------------------->
-	    	<tiles:insert attribute="body"/>
-	    <!---------------------- include body end ------------------------------->
-	    </div>			
-	</td>	
-	</tr></table>
 	
+	<div id="scrolldiv" class="scroll">
+    <!---------------------- include body start ----------------------------->
+    <tiles:insert attribute="body"/>
+    <!---------------------- include body end ------------------------------->
+	</div>
     <!---------------------- include footer start --------------------------->
     <tiles:insert attribute="footer"/>
     <!---------------------- include footer end ----------------------------->   
@@ -47,12 +31,21 @@
 
 <script language="javascript">
     <!--
-    var clientheight = document.documentElement.clientHeight -90;
-    clientheight = clientheight + "px";
+    var clientheight = document.documentElement.clientHeight -50;
+    clientheight = clientheight + 'px';
     
-    document.getElementById("scrolldivmenu").style.height = clientheight;
-    document.getElementById("scrolldivbody").style.height = clientheight;
+    document.getElementById('scrolldiv').style.height = clientheight;
     
+    function openDialog(loadpos,WWidth,WHeight)//Lock   Size 
+	{   	
+		var WLeft = Math.ceil((window.screen.width - WWidth) / 2);   
+		var WTop = Math.ceil((window.screen.height - WHeight) / 2); 
+		var features = 'width=' + WWidth + 'px,' +	'height=' + WHeight + 'px,' + 'left=' + WLeft + 'px,' + 'top=' + WTop + 'px'; 
+			
+		WinOP = window.open(loadpos,"_blank",features); 
+		WinOP.focus();   
+	}
+
     function SetCookie(sName, sValue)
     {
         date = new Date();
@@ -81,29 +74,25 @@
     	window.onresize();
     	//document.documentElement.scrollLeft = GetCookie("scrollLeft");
         //document.documentElement.scrollTop = GetCookie("scrollTop");
-        document.getElementById("scrolldivmenu").scrollLeft = GetCookie("menuscrollLeft");
-        document.getElementById("scrolldivmenu").scrollTop = GetCookie("menuscrollTop");
-        document.getElementById("scrolldivbody").scrollLeft = GetCookie("bodyscrollLeft");
-        document.getElementById("scrolldivbody").scrollTop = GetCookie("bodyscrollTop");
+        document.getElementById("scrolldiv").scrollLeft = GetCookie("scrollLeft");
+        document.getElementById("scrolldiv").scrollTop = GetCookie("scrollTop");
+        
     }
 
     function fnUnload()
     {
         //SetCookie("scrollLeft", document.documentElement.scrollLeft);
         //SetCookie("scrollTop", document.documentElement.scrollTop );
-        SetCookie("menuscrollLeft", document.getElementById("scrolldivmenu").scrollLeft);
-        SetCookie("menuscrollTop", document.getElementById("scrolldivmenu").scrollTop );
-        SetCookie("bodyscrollLeft", document.getElementById("scrolldivbody").scrollLeft);
-        SetCookie("bodyscrollTop", document.getElementById("scrolldivbody").scrollTop );
+        SetCookie("scrollLeft", document.getElementById("scrolldiv").scrollLeft);
+        SetCookie("scrollTop", document.getElementById("scrolldiv").scrollTop );
     }
 
     window.onload = fnLoad;
     window.onunload = fnUnload;
 	window.onresize = function(){
-		var clientheight = document.documentElement.clientHeight -90;
-    	clientheight = clientheight + "px";    
-    	document.getElementById("scrolldivmenu").style.height = clientheight;
-    	document.getElementById("scrolldivbody").style.height = clientheight;
+		var clientheight = document.documentElement.clientHeight -50;
+    	clientheight = clientheight + 'px';    
+    	document.getElementById('scrolldiv').style.height = clientheight;
     	};
     // -->
 </script>

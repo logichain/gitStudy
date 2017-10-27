@@ -7,7 +7,7 @@
 <input type="hidden" name="method" value="saveProjectVersion">	
 <table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 	<tr>
-		<td width="10%">&nbsp;</td>
+		<td width="15%">&nbsp;</td><td width="30%"></td><td width="15%"></td>
 		<td></td>
 	</tr>
 	<tr>
@@ -15,72 +15,29 @@
 			<bean:message bundle="project" key="version_code" />£º		
 		</td>
 		<td align="left">	
-			<html:text property="versionInfo.pvVersion" size="45" maxlength="45"/>
+			<html:text property="versionInfo.pvVersion" size="18" maxlength="18"/>
 		</td>						
-		
-	</tr>
-</table>
-<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
-	<tr>
-		<td width="50%">&nbsp;</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="center">
-		<fieldset style="width:90%;float:center;">
-			<legend><bean:message bundle="project" key="develop"/></legend>
-			<table width="100%">
-				<tr>
-					<td align="right" width="25%"><bean:message bundle="project" key="leader"/>£º</td>
-					<td align="left">
-						<html:text property="versionInfo.developLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
-						<html:button property="" onclick="openDialogD('projectmanage.do?method=searchAccount&opType=vdl',800,420);">...</html:button>											
-					</td>
-				</tr>
-				<tr>
-					<td align="right"><bean:message bundle="project" key="begin"/>£º</td>
-					<td align="left"><html:text property="versionInfo.pvDevelopBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
-				</tr>
-				<tr>
-					<td align="right"><bean:message bundle="project" key="end"/>£º</td>
-					<td align="left"><html:text property="versionInfo.pvDevelopEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
-				</tr>
-			</table>
-		</fieldset>
+	
+		<td align="right"><bean:message bundle="project" key="leader"/>£º</td>
+		<td align="left">
+			<html:text property="versionInfo.testLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
+			<html:button property="" onclick="openDialogD('projectmanage.do?method=searchAccount&opType=vtl',800,420);">...</html:button>			
 		</td>
-		<td align="center">
-		<fieldset style="width:90%;float:center;">
-			<legend><bean:message bundle="project" key="test"/></legend>
-			<table width="100%">
-				<tr>
-					<td align="right" width="25%"><bean:message bundle="project" key="leader"/>£º</td>
-					<td align="left">
-						<html:text property="versionInfo.testLeader.personName" size="18" maxlength="100" readonly="true" style="background-color:LightGray;"/>		
-						<html:button property="" onclick="openDialogD('projectmanage.do?method=searchAccount&opType=vtl',800,420);">...</html:button>			
-					</td>
-				</tr>
-				<tr>
-					<td align="right"><bean:message bundle="project" key="begin"/>£º</td>
-					<td align="left"><html:text property="versionInfo.pvTestBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
-				</tr>
-				<tr>
-					<td align="right"><bean:message bundle="project" key="end"/>£º</td>
-					<td align="left"><html:text property="versionInfo.pvTestEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
-				</tr>
-			</table>
-		</fieldset>
-		</td>			
 	</tr>
-</table>
-<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
+	<tr><td>&nbsp;</td></tr>
 	<tr>
-		<td width="10%">&nbsp;</td><td width="80%"></td><td></td>		
+		<td align="right"><bean:message bundle="project" key="begin"/>£º</td>
+		<td align="left"><html:text property="versionInfo.pvTestBegin" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
+	
+		<td align="right"><bean:message bundle="project" key="end"/>£º</td>
+		<td align="left"><html:text property="versionInfo.pvTestEnd" readonly="true" size="18" maxlength="32" onclick="SelectDate(this);"/></td>
 	</tr>
+	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td align="right">
 			<bean:message bundle="project" key="remark" />£º
 		</td>
-		<td align="left">			
+		<td align="left" colspan="3">			
 			<html:text property="versionInfo.pvRemark" size="80" maxlength="200"/>
 		</td>	
 	</tr>
@@ -90,7 +47,7 @@
 		<td align="right">
 			<bean:message bundle="project" key="project_attachment" />£º
 		</td>
-		<td align="left">
+		<td align="left" colspan="2">
 			<div style="width:100%;height:20px;background:white;">
 			<logic:iterate id="am" name="projectForm" property="versionInfo.attachmentList" indexId="i">
 			<logic:notEqual name="am" property="paFlag" value="-1">	
@@ -108,7 +65,8 @@
 	</tr>	
 	<tr><td>&nbsp;</td></tr>
 	<tr>
-		<td colspan="2" align="right">
+		<td colspan="3" align="right"></td>
+		<td align="center">
 			<html:submit styleClass="savebutton">&nbsp;</html:submit>			
 			<html:button property="" onclick="window.close();" styleClass="button">
 				<bean:message key="button.cancel" />

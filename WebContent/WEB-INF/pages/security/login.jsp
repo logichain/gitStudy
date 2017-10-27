@@ -2,15 +2,15 @@
 <%@ include file="../common/include.jsp"%>
 
 <body>
-	
 				
-<table width="100%" height="100%" border="0">
+<table width="100%" height="100%" border="0" style="background-image:url('pages/style/default/mis/login.jpg');background-repeat:no-repeat;background-position:center center;">
 	<tr>
 		<td align="center" valign="middle">
 			
 			<table border="0" cellspacing="0" cellpadding="0">
+				<tr><td>&nbsp;</td></tr>
 				<html:form action="loginAction?method=login" target="_top" focus="name" onsubmit="return validateLoginForm(this);">		
-					<input type="hidden" name="DEST_URL" value='<%=request.getAttribute("DEST_URL") %>'/> 			
+					<input type="hidden" name="DEST_URL" value='<%=request.getAttribute("DEST_URL") %>'/> 		
 					<tr>
 						<td align="right" valign="middle"><bean:message bundle="security" key="user_name"/>£º</td>
 						<td align="left">

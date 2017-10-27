@@ -312,59 +312,66 @@ public class TestStatisticsAction extends BaseAction {
 		{
 			String functionList = ProjectServiceImpl.getModuleFunctionListForSearch(pm);
 						
-			Integer designCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(designCaseCount > 0)
+			if(functionList.length() > 2)
 			{
-				countList.add(designCaseCount);
-				dataInfoList.add(pm.getPmName() +":" + designCaseCount);
-				allDesignCount = allDesignCount+ designCaseCount;
+				Integer designCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+				if(designCaseCount > 0)
+				{
+					countList.add(designCaseCount);
+					dataInfoList.add(pm.getPmName() +":" + designCaseCount);
+					allDesignCount = allDesignCount+ designCaseCount;
+				}
+				
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
+				Integer waitTestCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+				if(waitTestCaseCount >= 0)
+				{							
+					allWaitTestCount = allWaitTestCount+ waitTestCaseCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
+				
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+				Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+				if(testCaseCount >= 0)
+				{							
+					allTestCount = allTestCount+ testCaseCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
+										
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+				cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
+				Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+				if(unpassCaseCount >= 0)
+				{							
+					allUnpassCount = allUnpassCount+ unpassCaseCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
+				cvrSearchInfo.setCvrCaseResult(null);
+				
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
+				cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_NA);		
+				Integer NACaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+				if(NACaseCount >= 0)
+				{							
+					allNACount = allNACount+ NACaseCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
+				cvrSearchInfo.setCvrCaseResult(null);
+				
+				cvrSearchInfo.setCvrCaseStatus(CaseStatus.CLOSE_STATUS);
+				Integer closeCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
+				if(closeCount >= 0)
+				{							
+					allCloseCount = allCloseCount+ closeCount;
+				}
+				cvrSearchInfo.setCvrCaseStatus(null);
+				
+				statisticsDataList.add(new StatisticsData(pm.getPmName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount,closeCount,waitTestCaseCount));
 			}
-			
-			cvrSearchInfo.setCvrCaseStatus(CaseStatus.WAIT_TEST_STATUS);
-			Integer waitTestCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(waitTestCaseCount >= 0)
-			{							
-				allWaitTestCount = allWaitTestCount+ waitTestCaseCount;
-			}
-			cvrSearchInfo.setCvrCaseStatus(null);
-			
-			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
-			Integer testCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(testCaseCount >= 0)
-			{							
-				allTestCount = allTestCount+ testCaseCount;
-			}
-			cvrSearchInfo.setCvrCaseStatus(null);
-									
-			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
-			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_FAILED);
-			Integer unpassCaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(unpassCaseCount >= 0)
-			{							
-				allUnpassCount = allUnpassCount+ unpassCaseCount;
-			}
-			cvrSearchInfo.setCvrCaseStatus(null);
-			cvrSearchInfo.setCvrCaseResult(null);
-			
-			cvrSearchInfo.setCvrCaseStatus(CaseStatus.TESTED_STATUS);
-			cvrSearchInfo.setCvrCaseResult(TestResult.TestResult_NA);		
-			Integer NACaseCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(NACaseCount >= 0)
-			{							
-				allNACount = allNACount+ NACaseCount;
-			}
-			cvrSearchInfo.setCvrCaseStatus(null);
-			cvrSearchInfo.setCvrCaseResult(null);
-			
-			cvrSearchInfo.setCvrCaseStatus(CaseStatus.CLOSE_STATUS);
-			Integer closeCount = testStatisticsService.searchTestCaseCount(new Object[]{projectInfo,caseInfo,cvrSearchInfo,functionList});
-			if(closeCount >= 0)
-			{							
-				allCloseCount = allCloseCount+ closeCount;
-			}
-			cvrSearchInfo.setCvrCaseStatus(null);
-			
-			statisticsDataList.add(new StatisticsData(pm.getPmName(),designCaseCount,testCaseCount,unpassCaseCount,NACaseCount,closeCount,waitTestCaseCount));
+			else
+			{
+				statisticsDataList.add(new StatisticsData(pm.getPmName(),0,0,0,0,0,0));
+			}	
 			
 		}
 		

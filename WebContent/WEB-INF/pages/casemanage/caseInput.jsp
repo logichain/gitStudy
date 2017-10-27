@@ -36,12 +36,12 @@
 			<td align="right"><bean:message bundle="case" key="module"/>£º</td>
 			<td align="left">
 				<html:text property="caseInfo.projectModule.pmName" size="14" readonly="true"/>
-				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseInput',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+				<a href="javascript:openDialog('casemanage.do?method=selectProjectModule&opType=caseInput',600,500);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
 			<td align="left">	
 				<html:text property="caseInfo.moduleFunction.muName" size="14" readonly="true"/>
-				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseInput',960,800);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
+				<a href="javascript:openDialog('casemanage.do?method=selectModuleFunction&opType=caseInput',600,500);"><img border="0" src="pages\images\icon\16x16\search.gif"></a>
 			</td>
 		</tr>	
 		<tr>

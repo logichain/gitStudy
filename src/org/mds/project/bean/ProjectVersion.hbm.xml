@@ -16,18 +16,11 @@
         <property name="pvVersion" type="java.lang.String">
             <column name="pv_version" length="45" not-null="true" />
         </property>
-        <property name="pvDevelopLeader" type="java.lang.Integer">
-            <column name="pv_develop_leader"  />
-        </property>
+        
         <property name="pvTestLeader" type="java.lang.Integer">
             <column name="pv_test_leader"  />
         </property>
-        <property name="pvDevelopBegin" type="java.lang.String">
-            <column name="pv_develop_begin" length="0" />
-        </property>
-        <property name="pvDevelopEnd" type="java.lang.String">
-            <column name="pv_develop_end" length="0" />
-        </property>
+        
         <property name="pvTestBegin" type="java.lang.String">
             <column name="pv_test_begin" length="0" />
         </property>
@@ -50,8 +43,6 @@
             <column name="pv_create_time" length="0" />
         </property>
         
-        <many-to-one name="developLeader" lazy="false" column="pv_develop_leader" class="org.king.security.domain.UsrAccount" cascade="none" unique="true" insert="false" update="false">
-        </many-to-one>
         <many-to-one name="testLeader" lazy="false" column="pv_test_leader" class="org.king.security.domain.UsrAccount" cascade="none" unique="true" insert="false" update="false">
         </many-to-one>
         
