@@ -4,7 +4,7 @@
 	<html:errors />
 	
 	<input type="hidden" name="method" value="displayTestCaseNext">
-	<input type="hidden" name="id" value="<bean:write name="caseInfo" property="tcId"/>">	
+	<input type="hidden" name="id" value="<bean:write name="caseForm" property="caseInfo.tcId"/>">	
 	
 	<table CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">		
 		<tr><td width="80%"></td>				
@@ -35,25 +35,25 @@
 			
 			<td align="right"><bean:message bundle="case" key="module_function"/>£º</td>
 			<td align="left" colspan="3">			
-				<bean:write name="caseInfo" property="moduleFunction.entireName"/>			
+				<bean:write name="caseForm" property="caseInfo.moduleFunction.entireName"/>			
 			</td>			
 		</tr>	
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="case_code"/>£º</td>
-			<td align="left"><bean:write name="caseInfo" property="tcCode"/></td>
+			<td align="left"><bean:write name="caseForm" property="caseInfo.tcCode"/></td>
 			<td align="right"><bean:message bundle="case" key="case_type"/>£º</td>
-			<td align="left"><bean:write name="caseInfo" property="caseType.ctName"/></td>
+			<td align="left"><bean:write name="caseForm" property="caseInfo.caseType.ctName"/></td>
 		</tr>	
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_objective"/>£º</td>
-			<td align="left" colspan="4"><bean:write name="caseInfo" property="tcTestObjective"/></td>			
+			<td align="left" colspan="4"><bean:write name="caseForm" property="caseInfo.tcTestObjective"/></td>			
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 			<td align="right"><bean:message bundle="case" key="test_content"/>£º</td>
-			<td colspan="4" align="left"><bean:write name="caseInfo" property="tcTestContent"/></td>
+			<td colspan="4" align="left"><bean:write name="caseForm" property="caseInfo.tcTestContent"/></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
@@ -62,7 +62,7 @@
 			</td>
 			<td  colspan="4" align="left">
 				<div style="width:98%;height:20px;background:white;">
-				<logic:iterate id="am" name="caseInfo" property="attachmentList" indexId="i">
+				<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList" indexId="i">
 				<logic:notEqual name="am" property="caFlag" value="-1">											
 					<a href="casemanage.do?method=downloadAttachment&id=<bean:write name="am" property="caId"/>"><bean:write name="am" property="caName"/></a>£»
 				</logic:notEqual>
@@ -80,13 +80,13 @@
 			<td width="50%" align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<html:textarea readonly="true" cols="56" rows="10" name="caseInfo" property="tcTestStep"></html:textarea>													
+					<html:textarea readonly="true" cols="56" rows="10" name="caseForm" property="caseInfo.tcTestStep"></html:textarea>													
 				</fieldset>	
 			</td>
 			<td align="left" rowspan="2" valign="top">
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
-					<logic:iterate id="am" name="caseInfo" property="attachmentList">
+					<logic:iterate id="am" name="caseForm" property="caseInfo.attachmentList">
 					<logic:notEqual name="am" property="caFlag" value="-1">
 						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
 					</logic:notEqual>				
@@ -98,7 +98,7 @@
 			<td align="left">				
 				<fieldset style="width:98%;float:left;">
 					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<html:textarea readonly="true" cols="56" rows="5" name="caseInfo" property="tcIntendOutput"></html:textarea>							
+					<html:textarea readonly="true" cols="56" rows="5" name="caseForm" property="caseInfo.tcIntendOutput"></html:textarea>							
 				</fieldset>
 			</td>
 			
@@ -118,7 +118,7 @@
 					<th><bean:message bundle="case" key="test_output"/></th>
 				</tr>
 			</thead>
-			<logic:iterate name="caseInfo" property="caseVersionReferenceList" id="cvr" indexId="i">	
+			<logic:iterate name="caseForm" property="caseInfo.caseVersionReferenceList" id="cvr" indexId="i">	
 				<tr>	
 					<td align="center" rowspan="2"><bean:write name="cvr" property="projectVersion.pvVersion"/></td>				
 					<td align="center">&nbsp;
@@ -155,8 +155,9 @@
 	</fieldset>		
 	
 	<table width="100%">	
+		<bean:define id="c" name="caseForm" property="caseInfo"></bean:define>
+		<c:set var="caseInfo" value="${c}" scope="request" />
 		<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
-
 	</table>
 			
 </html:form>	

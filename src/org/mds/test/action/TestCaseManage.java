@@ -532,7 +532,7 @@ public class TestCaseManage extends BaseAction {
 		TestCase testCase = testCaseService.getTestCaseById(Integer.valueOf(id));
 		this.initApplyProjectVersionInfo(testCase, projectInfo);
 
-		request.setAttribute("caseInfo", testCase);
+		dform.set("caseInfo", testCase);
 
 		return mapping.findForward("caseDisplay");
 	}
@@ -555,7 +555,7 @@ public class TestCaseManage extends BaseAction {
 		}
 		this.initApplyProjectVersionInfo(testCase, projectInfo);
 
-		request.setAttribute("caseInfo", testCase);
+		dform.set("caseInfo", testCase);
 
 		return mapping.findForward("caseDisplay");
 	}
@@ -578,7 +578,7 @@ public class TestCaseManage extends BaseAction {
 		}
 		this.initApplyProjectVersionInfo(testCase, projectInfo);
 
-		request.setAttribute("caseInfo", testCase);
+		dform.set("caseInfo", testCase);
 
 		return mapping.findForward("caseDisplay");
 	}
