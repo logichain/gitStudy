@@ -170,7 +170,6 @@
         <location>/404.jsp</location>
     </error-page>
     
- <jsp-config>
 	<!-- Struts Tag Library Descriptors -->
 	<taglib>
 		<taglib-uri>/tags/struts-bean</taglib-uri>
@@ -197,6 +196,6 @@
 		<taglib-uri>/tags/pager</taglib-uri>
 		<taglib-location>/WEB-INF/taglib/pager-taglib.tld</taglib-location>
 	</taglib>
-</jsp-config>		
+		
 </web-app>
 

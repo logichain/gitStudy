@@ -26,13 +26,13 @@
 	<tr>
 		<td align="right"><bean:message bundle="case" key="module"/>:</td>
 		<td align="left">
-		<logic:notEmpty name="caseForm" property="searchInfo.moduleFunction">
+		<logic:notEmpty name="caseForm" property="searchInfo.moduleFunction.muId">
 			<bean:write name="caseForm" property="searchInfo.moduleFunction.projectModuleName"/>
 		</logic:notEmpty>			
 		</td>
 		<td align="right"><bean:message bundle="case" key="module_function"/>:</td>
 		<td align="left">			
-		<logic:notEmpty name="caseForm" property="searchInfo.moduleFunction">
+		<logic:notEmpty name="caseForm" property="searchInfo.moduleFunction.muId">
 			<bean:write name="caseForm" property="searchInfo.moduleFunction.entireModuleFunctionName"/>
 		</logic:notEmpty>					
 		</td>
