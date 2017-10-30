@@ -133,14 +133,7 @@
 					</fieldset>
 				</td>
 			</tr>
-			<tr>
-				<td align="center"><bean:message bundle="case" key="test_remark"/></td>
-				<td align="left" colspan="5">
-					<fieldset style="width:98%;float: left;">
-						<bean:write name="c" property="tcRemark" filter="false"/>
-					</fieldset>
-				</td>							
-			</tr>
+		
 			<tr>
 				<td align="center"><bean:message bundle="case" key="intend_output"/></td>
 				<td align="left" colspan="5">

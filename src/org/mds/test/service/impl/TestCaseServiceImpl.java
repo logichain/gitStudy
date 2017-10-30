@@ -160,11 +160,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				tc.setTcFlag(CommonService.NORMAL_FLAG);
 				tc.setTcType(CaseType.CASE_TYPE_NORMAL);
 				tc.setTcCreateTime(operDate);	
-				if(project.getAllModuleFunctionList().size() > 0)
-				{
-					//设置一个默认的功能点，防止查询不到用例
-					tc.setTcModuleFunction(project.getAllModuleFunctionList().get(0).getMuId());
-				}
+				
 	
 				// 迭代行，默认从0开始
 				for (int i = 0; i < tb.numRows(); i++) {
@@ -191,7 +187,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 									content = content.substring(2);
 								}
 	
-								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
+								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]) || keyStr.contains(CommonService.IMPORT_COLUMN_NAME[0]))//功能点
 								{
 									String functionName = content;
 									
@@ -225,15 +221,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 								{
 									tc.setTcTestStep(content);
 								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[6]))//测试说明
-								{
-									tc.setTcRemark(content);
-								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[7]))//预期输出
+							
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[6]))//预期输出
 								{
 									tc.setTcIntendOutput(content);
 								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[10]))//创建人
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[9]))//创建人
 								{
 									String userName = content;
 									for(TeamMember tm:project.getMemberList())
@@ -245,7 +238,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 										}
 									}					
 								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[12]))//用例类型
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[11]))//用例类型
 								{
 									String caseType = content;
 									List<CaseType> typeList = caseTypeDAO.find("select a from CaseType a where  a.ctFlag != -1");
@@ -314,11 +307,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 				tc.setTcType(CaseType.CASE_TYPE_NORMAL);
 				tc.setTcFlag(CommonService.NORMAL_FLAG);
 				tc.setTcCreateTime(operDate);	
-				if(project.getAllModuleFunctionList().size() > 0)
-				{
-					//设置一个默认的功能点，防止查询不到用例
-					tc.setTcModuleFunction(project.getAllModuleFunctionList().get(0).getMuId());
-				}
+				
 				
 				
 				// 迭代行，默认从0开始
@@ -344,7 +333,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 								}	
 								
 								
-								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]))//功能点
+								if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[1]) || keyStr.contains(CommonService.IMPORT_COLUMN_NAME[0]))//功能点
 								{
 									String functionName = content;
 									if(functionName != null && !functionName.isEmpty())
@@ -377,15 +366,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 								{
 									tc.setTcTestStep(content);
 								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[6]))//测试说明
-								{
-									tc.setTcRemark(content);
-								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[7]))//预期输出
+								
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[6]))//预期输出
 								{
 									tc.setTcIntendOutput(content);
 								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[10]))//创建人
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[9]))//创建人
 								{
 									String userName = content;
 									for(TeamMember tm:project.getMemberList())
@@ -397,7 +383,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 										}
 									}					
 								}
-								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[12]))//用例类型
+								else if(keyStr.contains(CommonService.IMPORT_COLUMN_NAME[11]))//用例类型
 								{
 									String caseType = content;
 									List<CaseType> typeList = caseTypeDAO.find("select a from CaseType a where  a.ctFlag != -1");
@@ -489,11 +475,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 			tc.setTcType(CaseType.CASE_TYPE_NORMAL);
 			tc.setTcFlag(CommonService.NORMAL_FLAG);
 			tc.setTcCreateTime(operDate);
-			if(project.getAllModuleFunctionList().size() > 0)
-			{
-				//设置一个默认的功能点，防止查询不到用例
-				tc.setTcModuleFunction(project.getAllModuleFunctionList().get(0).getMuId());
-			}
+			
 									
 			for (int j = 0; j < cols; j++) {
 				String colName = st.getCell(j,colNameRow).getContents().trim();
@@ -532,15 +514,12 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 					{
 						tc.setTcTestStep(st.getCell(j, i).getContents().trim());
 					}
-					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[6]))//测试说明
-					{
-						tc.setTcRemark(st.getCell(j, i).getContents().trim());
-					}
-					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[7]))//预期输出
+					
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[6]))//预期输出
 					{
 						tc.setTcIntendOutput(st.getCell(j, i).getContents().trim());
 					}
-					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[10]))//创建人
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[9]))//创建人
 					{
 						String userName = st.getCell(j, i).getContents().trim();
 						for(TeamMember tm:project.getMemberList())
@@ -552,7 +531,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 							}
 						}					
 					}
-					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[12]))//用例类型
+					else if(colName.contains(CommonService.IMPORT_COLUMN_NAME[11]))//用例类型
 					{
 						String caseType = st.getCell(j, i).getContents().trim();
 						List<CaseType> typeList = caseTypeDAO.find("select a from CaseType a where  a.ctFlag != -1");
@@ -711,15 +690,7 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 					lbl.setCellFormat(cf);
 				}							
 				wst.addCell(lbl);
-				
-				//测试说明
-				cf = wst.getWritableCell(6,i).getCellFormat();
-				lbl = new Label(6,i, tc.getTcRemark());
-				if(cf != null)
-				{
-					lbl.setCellFormat(cf);
-				}							
-				wst.addCell(lbl);
+							
 				
 				//预期输出
 				cf = wst.getWritableCell(7,i).getCellFormat();
@@ -1052,11 +1023,6 @@ public class TestCaseServiceImpl extends BaseService implements TestCaseService 
 		{
 			hqlStr = hqlStr + " and a.tcIntendOutput like '%" + searchInfo.getTcIntendOutput() + "%'";
 		}
-
-		if(searchInfo.getTcRemark() != null && !searchInfo.getTcRemark().isEmpty())
-		{
-			hqlStr = hqlStr + " and a.tcRemark like '%" + searchInfo.getTcRemark() + "%'";
-		}		
 
 		if(searchInfo.getTcCreateTimeStr() != null && !searchInfo.getTcCreateTimeStr().isEmpty())
 		{

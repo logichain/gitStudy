@@ -123,12 +123,7 @@
 				<html:textarea readonly="true" cols="60" rows="30" property="caseInfo.tcTestStep"></html:textarea>													
 			</fieldset>	
 		</td>
-		<td align="left">
-			<fieldset style="width:98%;float:left;">
-				<legend><bean:message bundle="case" key="test_remark"/></legend>
-				<html:textarea cols="60" rows="16" property="caseInfo.tcRemark"></html:textarea>					
-			</fieldset>
-		</td>
+		
 	</tr>
 	<tr>
 		<td align="left">				

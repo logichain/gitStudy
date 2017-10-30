@@ -40,7 +40,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	private String tcTestStep = "";
 	private String tcIntendOutput="";
 	private Integer tcFlag = CommonService.NORMAL_FLAG;
-	private String tcRemark = "";
+
 	private Integer tcType;
 	
 	private Integer tcCreateUser;
@@ -76,24 +76,6 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 		this.tcId = tcId;
 	}
 
-	/** full constructor */
-	public TestCase(Integer tcId, Integer tcModuleFunction, String tcCode,
-			String tcTestObjective, String tcTestContent, String tcTestStep,
-			String tcIntendOutput, String tcTestOutput, Integer tcTestResult,
-			String tcRemark, Integer tcStatus, Integer tcCreateUser,
-			Date tcCreateTime, Integer tcTestUser, Date tcTestTime,
-			Integer tcCorrectUser, Date tcCorrectTime) {
-		this.tcId = tcId;
-		this.tcModuleFunction = tcModuleFunction;
-		this.tcCode = tcCode;
-		this.tcTestObjective = tcTestObjective;
-		this.tcTestContent = tcTestContent;
-		this.tcTestStep = tcTestStep;
-		this.tcIntendOutput = tcIntendOutput;
-		this.tcRemark = tcRemark;
-		this.tcCreateUser = tcCreateUser;
-		this.tcCreateTime = tcCreateTime;
-	}
 
 	// Property accessors
 
@@ -156,17 +138,6 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 	public void setTcIntendOutput(String tcIntendOutput) {
 		this.tcIntendOutput = tcIntendOutput;
 	}
-
-	
-	public String getTcRemark() {
-		return this.tcRemark;
-	}
-
-	public void setTcRemark(String tcRemark) {
-		this.tcRemark = tcRemark;
-	}
-
-	
 
 	public Integer getTcCreateUser() {
 		return this.tcCreateUser;
@@ -334,7 +305,7 @@ public class TestCase extends org.king.framework.domain.BaseObject implements ja
 		rtn.setTcTestObjective(tcTestObjective);
 		rtn.setTcTestContent(tcTestContent);
 		rtn.setTcTestStep(tcTestStep);
-		rtn.setTcRemark(tcRemark);
+
 		rtn.setTcIntendOutput(tcIntendOutput);
 		rtn.setTcCreateUser(tcCreateUser);
 		rtn.setTcCreateTime(tcCreateTime);
