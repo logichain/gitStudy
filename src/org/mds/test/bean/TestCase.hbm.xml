@@ -31,9 +31,7 @@
         <property name="tcFlag" type="java.lang.Integer">
             <column name="tc_flag" />
         </property>        
-        <property name="tcRemark" type="java.lang.String">
-            <column name="tc_remark" length="1000" />
-        </property>        
+            
         <property name="tcCreateUser" type="java.lang.Integer">
             <column name="tc_create_user" />
         </property>
