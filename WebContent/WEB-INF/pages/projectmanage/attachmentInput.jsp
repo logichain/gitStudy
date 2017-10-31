@@ -73,12 +73,12 @@ function checkFormValidate()
 		return false;
 	} 
 	
-	var code = document.getElementById("fileCode").value;	
-	if(code == "")
-	{
-		alert("文件编号不能为空");
-		return false;
-	} 
+// 	var code = document.getElementById("fileCode").value;	
+// 	if(code == "")
+// 	{
+// 		alert("文件编号不能为空");
+// 		return false;
+// 	} 
 	
 	var name = document.getElementById("fileName").value;	
 	if(name == "")
