@@ -226,6 +226,22 @@ public class TestCaseManage extends BaseAction {
 		return rtn;	
 	}
 	
+	public ActionForward deleteCvrAttachment(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	{
+		DynaValidatorForm dform = (DynaValidatorForm) form;
+		String opType = request.getParameter("opType");
+		
+		TestCase caseInfo = (TestCase) dform.get("caseInfo");
+		String index = request.getParameter("index");
+				
+		CvrAttachment ca = caseInfo.getCurrentCaseVersionReference().getAttachmentList().get(Integer.parseInt(index));
+		ca.setCaFlag(CommonService.DELETE_FLAG);
+		
+		this.prepareMetaData(request);
+												
+		return mapping.findForward("caseTest");	
+	}
+	
 	public ActionForward downloadAttachment(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
 	{	
 		DynaValidatorForm dform = (DynaValidatorForm) form;
