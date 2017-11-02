@@ -19,15 +19,20 @@
 	<legend><bean:message bundle="project" key="project_version"/> <%=i+1 %></legend>
 		<table class="win" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" border="0">
 			<tr>
-				<td width="50%"></td>
-				<td></td><td></td>
+				<td width="10%"></td><td width="35%"></td>
+				<td width="10%"></td><td width="35%"></td><td></td>
 			</tr>
 			<tr>
-				<td align="left">
-					<bean:message bundle="project" key="version_code" />£º			
+				<td align="right">
+					<bean:message bundle="project" key="version_code" />£º
+				</td>					
+				<td align="left">			
 					<bean:write name="version" property="pvVersion"/>					
 				</td>	
-				<td align="left"><bean:message bundle="project" key="leader"/>£º
+				<td align="right">
+					<bean:message bundle="project" key="leader"/>£º
+				</td>					
+				<td align="left">	
 					<bean:write name="version" property="testLeader.personName"/>								
 				</td>					
 				<td align="right">								
@@ -42,17 +47,25 @@
 				
 			</tr>
 			<tr>
-				<td align="left"><bean:message bundle="project" key="begin"/>£º	<bean:write name="version" property="pvTestBegin"/></td>
-				<td align="left"><bean:message bundle="project" key="end"/>£º<bean:write name="version" property="pvTestEnd"/></td>
+				<td align="right">
+					<bean:message bundle="project" key="begin"/>£º
+				</td>					
+				<td align="left">	
+					<bean:write name="version" property="pvTestBegin"/>
+				</td>
+				<td align="right">
+					<bean:message bundle="project" key="end"/>£º
+				</td>					
+				<td align="left">
+					<bean:write name="version" property="pvTestEnd"/>				
+				</td>
 			</tr>
 					
-			<tr><td colspan="3">
-			<table width="100%">
 			<tr>
-				<td width="6%" align="right">
+				<td align="right">
 					<bean:message bundle="project" key="remark" />£º	
 				</td>
-				<td align="left">			
+				<td align="left" colspan="3">			
 					<bean:write name="version" property="pvRemark"/>
 				</td>			
 			</tr>	
@@ -61,7 +74,7 @@
 				<td align="right">
 					<bean:message bundle="project" key="project_attachment" />£º
 				</td>
-				<td align="left">
+				<td align="left" colspan="3">
 					<div style="width:98%;height:20px;background:white;"> 
 					<logic:iterate id="am" name="version" property="attachmentList" indexId="j">
 						<a href="projectmanage.do?method=downloadAttachment&id=<bean:write name='am' property='paId'/>" title="<bean:write name="am" property="paLocalUrl"/>">
@@ -71,9 +84,7 @@
 					</div>
 				</td>			
 				
-			</tr>	
-			</table>
-			</td></tr>
+			</tr>				
 		</table>
 	</fieldset>				
 </logic:iterate>		

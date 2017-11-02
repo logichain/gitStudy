@@ -174,7 +174,8 @@
 				<tr>
 					<td><bean:write name="data" property="title"/></td>
 					<td><bean:write name="data" property="designCaseCount"/></td>
-					<td><bean:write name="data" property="waitTestCaseCount"/></td>
+					<td>--</td>
+<%-- 					<td><bean:write name="data" property="waitTestCaseCount"/></td> --%>
 					<td><bean:write name="data" property="testCaseCount"/></td>
 					<td><bean:write name="data" property="unpassCaseCount"/></td>
 					<td><bean:write name="data" property="NACaseCount"/></td>

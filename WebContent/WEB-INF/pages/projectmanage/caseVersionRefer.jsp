@@ -63,7 +63,7 @@
 				<td align="right">
 					<bean:message bundle="project" key="project_attachment" />£º
 				</td>
-				<td align="left" colspan="4">
+				<td align="left" colspan="3">
 					<div style="width:98%;height:20px;background:white;"> 
 					<logic:iterate id="am" name="version" property="attachmentList" indexId="j">
 						<a href="projectmanage.do?method=downloadAttachment&id=<bean:write name='am' property='paId'/>" title="<bean:write name="am" property="paLocalUrl"/>">

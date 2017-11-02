@@ -88,26 +88,7 @@
 		return false;
 	} 
 	
-	var lp = document.getElementsByName("versionInfo.developLeader.personName")[0].value
-	if(lp == "")
-	{
-		alert("开发组长  不能为空");
-		return false;
-	} 
-	
-	var lb = document.getElementsByName("versionInfo.pvDevelopBegin")[0].value
-	if(lb == "")
-	{
-		alert("开发开始时间  不能为空");
-		return false;
-	}
-	var le = document.getElementsByName("versionInfo.pvDevelopEnd")[0].value
-	if(le == "")
-	{
-		alert("开发结束时间  不能为空");
-		return false;
-	}
-	
+		
 	var tp = document.getElementsByName("versionInfo.testLeader.personName")[0].value
 	if(tp == "")
 	{
