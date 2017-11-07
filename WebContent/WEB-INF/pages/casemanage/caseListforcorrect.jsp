@@ -60,23 +60,12 @@
 					<html:optionsCollection name="caseStatusList" value="csId" label="csName"/>									
 				</html:select>
 			</td>
-			<td align="right"><bean:message bundle="case" key="create_time"/>:</td>
-			<td align="left">
-				<html:text property="searchInfo.tcCreateTimeStr" readonly="true" size="14" maxlength="32" onclick="SelectDate(this)"/>
-			</td>
+			
 			<td align="right"><bean:message bundle="case" key="create_user"/>:</td><td align="left"><html:text property="searchInfo.tcCreateUserStr" size="14"/></td>			
-		</tr>	
-		<tr>
-			<td align="right"><bean:message bundle="case" key="test_time"/>:</td>
-			<td align="left">
-				<html:text property="cvrSearchInfo.cvrTestTimeStr" readonly="true" size="14" maxlength="32" onclick="SelectDate(this)"/>
-			</td>
+		
 			<td align="right"><bean:message bundle="case" key="test_user"/>:</td><td align="left"><html:text property="cvrSearchInfo.cvrTestUserStr" size="14"/></td>			
-			<td align="right"><bean:message bundle="case" key="correct_time"/>:</td>
-			<td align="left">
-				<html:text property="cvrSearchInfo.cvrCorrectTimeStr" readonly="true" size="14" maxlength="32" onclick="SelectDate(this)"/>
-			</td>
-			<td align="right"><bean:message bundle="case" key="correct_user"/>:</td><td align="left"><html:text property="cvrSearchInfo.cvrCorrectUserStr" size="14"/></td>			
+			
+						
 		</tr>		
 		<tr>
 			<td align="right"><bean:message bundle="case" key="important_level"/>:</td>
@@ -141,14 +130,14 @@
 			<tr id="node-0">
 				<td width="4%"><a href="javascript:expendhideall();"><font color="white">--</font></a></td>
 				
-				<td width="16%" colspan="2" align="center"><bean:message bundle="case" key="module_function"/></td>
-				<td width="8%" align="center"><bean:message bundle="case" key="case_code"/></td>
+				<td width="24%" colspan="2" align="center"><bean:message bundle="case" key="module_function"/></td>
+				<td width="12%" align="center"><bean:message bundle="case" key="case_code"/></td>
 				<td align="center"><bean:message bundle="case" key="test_objective"/></td>				
-				<td width="7%" align="center"><bean:message bundle="case" key="create_user"/></td>
-				<td width="7%" align="center"><bean:message bundle="case" key="create_time"/></td>				
-				<td width="7%" align="center"><bean:message bundle="case" key="edit"/></td>				
-				<td width="7%" align="center"><bean:message bundle="case" key="delete"/></td>
-				<td width="7%" align="center"><bean:message bundle="case" key="display"/></td>
+				<td width="6%" align="center"><bean:message bundle="case" key="create_user"/></td>
+				<td width="13%" align="center"><bean:message bundle="case" key="create_time"/></td>				
+				<td width="4%" align="center"><bean:message bundle="case" key="edit"/></td>				
+				<td width="4%" align="center"><bean:message bundle="case" key="delete"/></td>
+				<td width="4%" align="center"><bean:message bundle="case" key="display"/></td>
 			</tr>
 			<tr id="node-0-0">
 				<td ></td>

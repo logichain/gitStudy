@@ -84,6 +84,37 @@
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 	</table>		
+								
+	<table width="100%">
+		<tr>
+			<td width="50%" align="left">				
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="test_step"/></legend>
+					<html:textarea readonly="true" cols="60" rows="10" property="caseInfo.tcTestStep"></html:textarea>													
+				</fieldset>	
+			</td>
+			<td align="left" rowspan="2" valign="top">
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
+					<logic:iterate id="am" name="caseForm" property="caseInfo.currentCaseVersionReference.attachmentList" indexId="i">
+					<logic:notEqual name="am" property="caFlag" value="-1">
+						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
+					</logic:notEqual>				
+					</logic:iterate>					
+				</fieldset>
+			</td>
+		</tr>
+		<tr>
+			<td align="left">				
+				<fieldset style="width:98%;float:left;">
+					<legend><bean:message bundle="case" key="intend_output"/></legend>
+					<html:textarea readonly="true" cols="60" rows="5" property="caseInfo.tcIntendOutput"></html:textarea>							
+				</fieldset>
+			</td>
+			
+		</tr>
+		
+	</table>
 	
 	<fieldset style="width:99%;float:left;">
 	<legend><bean:message bundle="case" key="test_result"/></legend>
@@ -145,37 +176,9 @@
 			</tr>	
 		</table>
 	</fieldset>
-	
-							
-	<table width="100%">
-		<tr>
-			<td width="50%" align="left">				
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="test_step"/></legend>
-					<html:textarea readonly="true" cols="60" rows="10" property="caseInfo.tcTestStep"></html:textarea>													
-				</fieldset>	
-			</td>
-			<td align="left" rowspan="2" valign="top">
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="case_attachment_preview"/></legend>
-					<logic:iterate id="am" name="caseForm" property="caseInfo.currentCaseVersionReference.attachmentList" indexId="i">
-					<logic:notEqual name="am" property="caFlag" value="-1">
-						<img src="<bean:write name="am" property="caUrl"/>" title="<bean:write name="am" property="caName"/>" width="200" height="200" border="1">		
-					</logic:notEqual>				
-					</logic:iterate>					
-				</fieldset>
-			</td>
-		</tr>
-		<tr>
-			<td align="left">				
-				<fieldset style="width:98%;float:left;">
-					<legend><bean:message bundle="case" key="intend_output"/></legend>
-					<html:textarea readonly="true" cols="60" rows="5" property="caseInfo.tcIntendOutput"></html:textarea>							
-				</fieldset>
-			</td>
-			
-		</tr>
-				
+		
+		
+	<table width="100%">			
 		<bean:define id="ci" name="caseForm" property="caseInfo"></bean:define>
 		<c:set var="caseInfo" value="${ci}" scope="request" />
 		<c:import url="/WEB-INF/pages/casemanage/recordList.jsp"></c:import>
