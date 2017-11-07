@@ -203,9 +203,7 @@
 		<html:submit styleClass="confirmbutton" onclick="chgAction(document.all.method,'confirmTestCaseforReference');">
 			&nbsp;
 		</html:submit>
-		<html:button property="" onclick="window.close();" styleClass="button">
-			<bean:message key="button.cancel" />
-		</html:button>	
+		<html:button property="" onclick="window.close();" styleClass="cancelbutton">&nbsp;</html:button>	
 	</td>	
 </tr>		
 </table>

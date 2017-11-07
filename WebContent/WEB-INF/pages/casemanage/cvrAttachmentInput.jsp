@@ -48,14 +48,10 @@
 		
 		<tr><td width="70%"></td>
 			<td align="center" width="12%">
-				<html:submit styleClass="button">
-					<bean:message key="button.confirm" />
-				</html:submit>						
+				<html:submit styleClass="confirmbutton">&nbsp;</html:submit>					
 			</td>
 			<td align="center" width="12%">
-				<html:button property="" onclick="window.close();" styleClass="button">
-					<bean:message key="button.cancel" />
-				</html:button>		
+				<html:button property="" onclick="window.close();" styleClass="cancelbutton">&nbsp;</html:button>		
 			</td>					
 		</tr>
 	</table>		

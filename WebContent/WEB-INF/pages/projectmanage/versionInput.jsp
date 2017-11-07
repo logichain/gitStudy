@@ -68,8 +68,8 @@
 		<td colspan="3" align="right"></td>
 		<td align="center">
 			<html:submit styleClass="savebutton">&nbsp;</html:submit>			
-			<html:button property="" onclick="window.close();" styleClass="button">
-				<bean:message key="button.cancel" />
+			<html:button property="" onclick="window.close();" styleClass="cancelbutton">
+				&nbsp;
 			</html:button>
 		</td>
 	</tr>

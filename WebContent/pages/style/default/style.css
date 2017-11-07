@@ -91,6 +91,14 @@ input.confirmbutton
 	border:    0px;
 }
 
+input.cancelbutton
+{
+	BACKGROUND: url(./mis/cancel.jpg) no-repeat;
+	width:     60px;
+	height:    23px;
+	border:    0px;
+}
+
 input.savenewbutton
 {
 	BACKGROUND: url(./mis/savenew.jpg) no-repeat;
